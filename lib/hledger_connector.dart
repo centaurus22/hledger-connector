@@ -4,5 +4,6 @@
 library;
 
 export 'src/hledger_connector_base.dart';
+export 'src/record.dart';
 
 // TODO: Export any libraries intended for clients of this package.
