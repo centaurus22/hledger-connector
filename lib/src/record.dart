@@ -17,7 +17,7 @@ class Transaction {
   });
 }
 
-/// A [Transaction] is composed of this.
+/// A [Transaction] is composed of two or more of this.
 class SubTransaction {
   /// The [Account] the units are transferred from or too.
   Account account;
