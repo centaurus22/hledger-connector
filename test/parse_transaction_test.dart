@@ -18,4 +18,9 @@ void main() {
       var result = parseTransaction(transaction);
       expect(result.substring(0,result.length), '\n2026-01-02 First Transaction\n');
     });
+    test('date with only a year', () {
+      var transaction = Transaction(date: DateTime(2026), subTransactions: []);
+      var result = parseTransaction(transaction);
+      expect(result.substring(0,result.length), '\n2026-01-01\n');
+    });
 }
