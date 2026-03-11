@@ -9,7 +9,7 @@ String parseTransaction(Transaction transaction) {
   } else {
     description = '';
   }
-  
+
   return '\n$dateString$description\n';
 }
 
@@ -18,5 +18,5 @@ String _formatDate(DateTime date) {
 }
 
 String _padLeft(int value) {
-  return value.toString().padLeft(2,'0');
+  return value.toString().padLeft(2, '0');
 }

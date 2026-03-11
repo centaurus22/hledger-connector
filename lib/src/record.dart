@@ -30,7 +30,7 @@ class SubTransaction {
 }
 
 /// The amount transferred in a [SubTransaction].
-/// 
+///
 /// In this base class the optional unit is written in front of the amount. In
 /// the child class [SuffixedAmount], the unit is written behind the amount.
 class Amount {
@@ -45,7 +45,7 @@ class Amount {
 }
 
 /// Child class of the [Amount].
-/// 
+///
 /// The difference of this and the base class ist that the unit is written after
 /// the amount.
 class SuffixedAmount extends Amount {
