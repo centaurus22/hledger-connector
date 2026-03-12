@@ -4,29 +4,51 @@ import 'package:test/test.dart';
 import 'package:hledger_connector/src/parse_transaction.dart';
 
 void main() {
+  var defaultSubtransaction = SubTransaction(
+    account: Account(main: 'assets'),
+    amount: Amount(amount: 10),
+  );
+
   test('if transaction starts with a date', () {
     var transaction = Transaction(
       date: DateTime(2026, 01, 01),
-      subTransactions: [],
+      subTransactions: [defaultSubtransaction],
     );
     var result = parseTransaction(transaction);
-    expect(result.substring(0, result.length), '\n2026-01-01\n');
+    expect(result.runtimeType, Success);
+    if (result is Success) {
+      expect(result.value.substring(0, result.value.length), '\n2026-01-01\n');
+    }
   });
   test('if description is rendered', () {
     var transaction = Transaction(
       date: DateTime(2026, 01, 02),
       description: 'First Transaction',
-      subTransactions: [],
+      subTransactions: [defaultSubtransaction],
     );
     var result = parseTransaction(transaction);
-    expect(
-      result.substring(0, result.length),
-      '\n2026-01-02 First Transaction\n',
-    );
+    expect(result.runtimeType, Success);
+    if (result is Success) {
+      expect(
+        result.value.substring(0, result.value.length),
+        '\n2026-01-02 First Transaction\n',
+      );
+    }
   });
   test('date with only a year', () {
+    var transaction = Transaction(
+      date: DateTime(2026),
+      subTransactions: [defaultSubtransaction],
+    );
+    var result = parseTransaction(transaction);
+    expect(result.runtimeType, Success);
+    if (result is Success) {
+      expect(result.value.substring(0, result.value.length), '\n2026-01-01\n');
+    }
+  });
+  test('transaction with no subtransactions', () {
     var transaction = Transaction(date: DateTime(2026), subTransactions: []);
     var result = parseTransaction(transaction);
-    expect(result.substring(0, result.length), '\n2026-01-01\n');
+    expect(result.runtimeType, Error);
   });
 }

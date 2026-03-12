@@ -1,6 +1,10 @@
 import 'record.dart';
 
-String parseTransaction(Transaction transaction) {
+Result parseTransaction(Transaction transaction) {
+  if (transaction.subTransactions.isEmpty) {
+    return Error(message: 'The transactions contains no sub-transactions');
+  }
+
   var dateString = _formatDate(transaction.date);
 
   String description;
@@ -10,7 +14,7 @@ String parseTransaction(Transaction transaction) {
     description = '';
   }
 
-  return '\n$dateString$description\n';
+  return Success(value: '\n$dateString$description\n');
 }
 
 String _formatDate(DateTime date) {

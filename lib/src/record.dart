@@ -68,3 +68,38 @@ class Account {
   /// This requires the [main] account and the optional [sub] account as a List.
   Account({required this.main, this.sub});
 }
+
+/// A result of a function which can be a [Success] or an [Error].
+///
+/// This is the sealed base class. Its children are used in functions that can
+/// return an [Error] instead of a of an expected value ([Success])
+/// or additional [warnings].
+sealed class Result {
+  /// A list of warnings.
+  final List<String> warnings = [];
+}
+
+/// This is returned when functions are executed correctly.
+///
+/// It can contain additional [warnings].
+/// The sealed base class is the [Result]. The other [Result] ist a [Error].
+class Success extends Result {
+  /// The embedded value.
+  final String value;
+
+  /// This requires the embedded [value].
+  Success({required this.value});
+}
+
+/// This is returned when a parameter is not valid.
+///
+/// It can contain additional [warnings].
+/// The sealed base class ist the [Result]. The other [Result] ist a [Success].
+/// when the function executed correctly.
+class Error extends Result {
+  /// The error message.
+  final String message;
+
+  /// This requires the error [message].
+  Error({required this.message});
+}
