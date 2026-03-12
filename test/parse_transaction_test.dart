@@ -4,15 +4,21 @@ import 'package:test/test.dart';
 import 'package:hledger_connector/src/parse_transaction.dart';
 
 void main() {
-  var defaultSubtransaction = SubTransaction(
-    account: Account(main: 'assets'),
-    amount: Amount(amount: 10),
-  );
+  var basisSubtransactions = [
+    SubTransaction(
+      account: Account(main: 'assets'),
+      amount: Amount(amount: 10),
+    ),
+    SubTransaction(
+      account: Account(main: 'expenses'),
+      amount: Amount(amount: -10),
+    ),
+  ];
 
   test('if transaction starts with a date', () {
     var transaction = Transaction(
       date: DateTime(2026, 01, 01),
-      subTransactions: [defaultSubtransaction],
+      subTransactions: basisSubtransactions,
     );
     var result = parseTransaction(transaction);
     expect(result.runtimeType, Success);
@@ -24,7 +30,7 @@ void main() {
     var transaction = Transaction(
       date: DateTime(2026, 01, 02),
       description: 'First Transaction',
-      subTransactions: [defaultSubtransaction],
+      subTransactions: basisSubtransactions,
     );
     var result = parseTransaction(transaction);
     expect(result.runtimeType, Success);
@@ -38,7 +44,7 @@ void main() {
   test('date with only a year', () {
     var transaction = Transaction(
       date: DateTime(2026),
-      subTransactions: [defaultSubtransaction],
+      subTransactions: basisSubtransactions,
     );
     var result = parseTransaction(transaction);
     expect(result.runtimeType, Success);
@@ -48,6 +54,23 @@ void main() {
   });
   test('transaction with no subtransactions', () {
     var transaction = Transaction(date: DateTime(2026), subTransactions: []);
+    var result = parseTransaction(transaction);
+    expect(result.runtimeType, Error);
+  });
+  test('unbalanced transaction', () {
+    var transaction = Transaction(
+      date: DateTime(2026),
+      subTransactions: [
+        SubTransaction(
+          account: Account(main: 'assets'),
+          amount: Amount(amount: 10),
+        ),
+        SubTransaction(
+          account: Account(main: 'expenses'),
+          amount: Amount(amount: -5),
+        ),
+      ],
+    );
     var result = parseTransaction(transaction);
     expect(result.runtimeType, Error);
   });

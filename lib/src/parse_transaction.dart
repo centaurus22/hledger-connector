@@ -1,8 +1,10 @@
 import 'record.dart';
 
 Result parseTransaction(Transaction transaction) {
-  if (transaction.subTransactions.isEmpty) {
-    return Error(message: 'The transactions contains no sub-transactions');
+  var checkResult = _checkSubTransactions(transaction.subTransactions);
+
+  if (checkResult is Error) {
+    return checkResult;
   }
 
   var dateString = _formatDate(transaction.date);
@@ -15,6 +17,23 @@ Result parseTransaction(Transaction transaction) {
   }
 
   return Success(value: '\n$dateString$description\n');
+}
+
+Result _checkSubTransactions(List<SubTransaction> subTransactions) {
+  if (subTransactions.isEmpty) {
+    return Error(message: 'The transactions contains no sub-transactions');
+  }
+
+  var balance = subTransactions.fold(
+    0.0,
+    (balance, subTransaction) => balance + subTransaction.amount.amount,
+  );
+
+  if (balance == 0.0) {
+    return Success(value: balance);
+  }
+
+  return Error(message: 'The transaction is unbalanced. The sum should be 0.');
 }
 
 String _formatDate(DateTime date) {
