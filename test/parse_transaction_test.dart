@@ -14,7 +14,6 @@ void main() {
       amount: Amount(amount: -10),
     ),
   ];
-
   test('if transaction starts with a date', () {
     var transaction = Transaction(
       date: DateTime(2026, 01, 01),
