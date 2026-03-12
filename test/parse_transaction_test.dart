@@ -73,4 +73,21 @@ void main() {
     var result = parseTransaction(transaction);
     expect(result.runtimeType, Error);
   });
+  test('balanced transaction with floating point numbers', () {
+    var transaction = Transaction(
+      date: DateTime(2026),
+      subTransactions: [
+        SubTransaction(
+          account: Account(main: 'assets'),
+          amount: Amount(amount: -0.000004),
+        ),
+        SubTransaction(
+          account: Account(main: 'expenses'),
+          amount: Amount(amount: 0.000004),
+        ),
+      ],
+    );
+    var result = parseTransaction(transaction);
+    expect(result.runtimeType, Success);
+  });
 }
