@@ -132,4 +132,25 @@ void main() {
     var result = parseTransaction(transaction);
     expect(result.runtimeType, Success);
   });
+  test('invalid multi-conversion transaction', () {
+    var transaction = Transaction(
+      date: DateTime(2026),
+      subTransactions: [
+        SubTransaction(
+          account: Account(main: 'assets:bank 1'),
+          amount: Amount(amount: 5, unit: 'USD'),
+        ),
+        SubTransaction(
+          account: Account(main: 'assets:bank 1'),
+          amount: Amount(amount: 5, unit: 'GPB'),
+        ),
+        SubTransaction(
+          account: Account(main: 'assets:bank 2'),
+          amount: Amount(amount: -10, unit: '€'),
+        ),
+      ],
+    );
+    var result = parseTransaction(transaction);
+    expect(result.runtimeType, Error);
+  });
 }
