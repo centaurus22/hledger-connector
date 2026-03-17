@@ -32,11 +32,17 @@ Result _checkSubTransactions(List<SubTransaction> subTransactions) {
         _updateBalances(balances, subTransaction.amount),
   );
 
+  if (balances.length == 1 && balances[balances.keys.first] != 0) {
+    return Error(
+      message: 'This transaction is unbalanced. The sum should be 0.',
+    );
+  }
+
+  var mCError =
+      'This multi-commodity transaction is unbalanced. The sum should be 0.';
   for (var balance in balances.entries) {
     if (balance.value != 0) {
-      return Error(
-        message: 'The transaction is unbalanced. The sum should be 0.',
-      );
+      return Error(message: mCError);
     }
   }
 
