@@ -22,10 +22,7 @@ void main() {
     var result = parseTransaction(transaction);
     expect(result.runtimeType, Success);
     if (result is Success) {
-      expect(
-        result.value.substring(0, result.value.length),
-        '\n\n2026-01-01\n',
-      );
+      expect(result.value.substring(0, 13), '\n\n2026-01-01\n');
     }
   });
   test('if description is rendered', () {
@@ -38,7 +35,7 @@ void main() {
     expect(result.runtimeType, Success);
     if (result is Success) {
       expect(
-        result.value.substring(0, result.value.length),
+        result.value.substring(0, 31),
         '\n\n2026-01-02 First Transaction\n',
       );
     }
@@ -51,10 +48,7 @@ void main() {
     var result = parseTransaction(transaction);
     expect(result.runtimeType, Success);
     if (result is Success) {
-      expect(
-        result.value.substring(0, result.value.length),
-        '\n\n2026-01-01\n',
-      );
+      expect(result.value.substring(0, 13), '\n\n2026-01-01\n');
     }
   });
   test('transaction with no sub-transactions', () {
@@ -179,5 +173,24 @@ void main() {
     );
     var result = parseTransaction(transaction);
     expect(result.runtimeType, Success);
+  });
+  test('sub-transactions in output', () {
+    var transaction = Transaction(
+      date: DateTime(2026),
+      subTransactions: basisSubTransactions,
+    );
+    var realResult = parseTransaction(transaction);
+    var expectedResult =
+        '\n\n'
+        '2026-01-01\n'
+        '    assets     10.0\n'
+        '    expenses  -10.0';
+    expect(realResult.runtimeType, Success);
+    if (realResult is Success) {
+      expect(
+        realResult.value.substring(0, realResult.value.length),
+        expectedResult,
+      );
+    }
   });
 }

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'record.dart';
 
 Result parseTransaction(Transaction transaction) {
@@ -16,7 +18,9 @@ Result parseTransaction(Transaction transaction) {
     description = '';
   }
 
-  return Success(value: '\n\n$dateString$description\n');
+  String subTransactions = _formatSubTransactions(transaction.subTransactions);
+
+  return Success(value: '\n\n$dateString$description$subTransactions');
 }
 
 Result _checkSubTransactions(List<SubTransaction> subTransactions) {
@@ -26,7 +30,7 @@ Result _checkSubTransactions(List<SubTransaction> subTransactions) {
 
   Map<String, double> balances = {};
 
-  var balance = subTransactions.fold(
+  subTransactions.fold(
     balances,
     (balances, subTransaction) =>
         _updateBalances(balances, subTransaction.amount),
@@ -52,7 +56,7 @@ Result _checkSubTransactions(List<SubTransaction> subTransactions) {
   //hledger allows conversion transactions with exactly two participating units
   if ((numberNegativeBalances == 1 && numberPositiveBalances == 1) ||
       (numberPositiveBalances == 0 && numberNegativeBalances == 0)) {
-    return Success(value: balance);
+    return Success(value: true);
   }
 
   var mCError =
@@ -80,4 +84,42 @@ String _formatDate(DateTime date) {
 
 String _padLeft(int value) {
   return value.toString().padLeft(2, '0');
+}
+
+String _formatSubTransactions(List<SubTransaction> subTransactions) {
+  int maxAccountNameLength = subTransactions.fold(
+    0,
+    (maxAccountNameLength, subTransactions) =>
+        max(maxAccountNameLength, subTransactions.account.main.length),
+  );
+  
+  int maxAmountLength = subTransactions.fold(
+    0,
+    (maxAmountLength, subTransactions) =>
+        max(maxAmountLength, subTransactions.amount.amount.toString().length),
+  );
+
+  String subTransactionsString = subTransactions.fold(
+    '',
+    (subTransactionsString, subTransaction) =>
+        subTransactionsString +
+        _formatSubTransaction(
+          subTransaction,
+          maxAccountNameLength,
+          maxAmountLength,
+        ),
+  );
+
+  return subTransactionsString;
+}
+
+String _formatSubTransaction(
+  SubTransaction subTransaction,
+  int maxAccountNameLength,
+  int maxAmountLength,
+) {
+  return '\n    '
+      '${subTransaction.account.main.padRight(maxAccountNameLength)}'
+      '  '
+      '${subTransaction.amount.amount.toString().padLeft(maxAmountLength)}';
 }
