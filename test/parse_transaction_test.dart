@@ -153,4 +153,25 @@ void main() {
     var result = parseTransaction(transaction);
     expect(result.runtimeType, Error);
   });
+  test('valid conversion transaction with one reduced value', () {
+    var transaction = Transaction(
+      date: DateTime(2026),
+      subTransactions: [
+        SubTransaction(
+          account: Account(main: 'assets:bank 2'),
+          amount: Amount(amount: 9, unit: '€'),
+        ),
+        SubTransaction(
+          account: Account(main: 'assets:bank 1'),
+          amount: Amount(amount: 5, unit: 'USD'),
+        ),
+        SubTransaction(
+          account: Account(main: 'assets:bank 2'),
+          amount: Amount(amount: -10, unit: '€'),
+        ),
+      ],
+    );
+    var result = parseTransaction(transaction);
+    expect(result.runtimeType, Success);
+  });
 }
