@@ -4,7 +4,7 @@ import 'package:test/test.dart';
 import 'package:hledger_connector/src/parse_transaction.dart';
 
 void main() {
-  var basisSubtransactions = [
+  var basisSubTransactions = [
     SubTransaction(
       account: Account(main: 'assets'),
       amount: Amount(amount: 10),
@@ -17,7 +17,7 @@ void main() {
   test('if transaction starts with a date', () {
     var transaction = Transaction(
       date: DateTime(2026, 01, 01),
-      subTransactions: basisSubtransactions,
+      subTransactions: basisSubTransactions,
     );
     var result = parseTransaction(transaction);
     expect(result.runtimeType, Success);
@@ -29,7 +29,7 @@ void main() {
     var transaction = Transaction(
       date: DateTime(2026, 01, 02),
       description: 'First Transaction',
-      subTransactions: basisSubtransactions,
+      subTransactions: basisSubTransactions,
     );
     var result = parseTransaction(transaction);
     expect(result.runtimeType, Success);
@@ -43,7 +43,7 @@ void main() {
   test('date with only a year', () {
     var transaction = Transaction(
       date: DateTime(2026),
-      subTransactions: basisSubtransactions,
+      subTransactions: basisSubTransactions,
     );
     var result = parseTransaction(transaction);
     expect(result.runtimeType, Success);
@@ -51,7 +51,7 @@ void main() {
       expect(result.value.substring(0, result.value.length), '\n2026-01-01\n');
     }
   });
-  test('transaction with no subtransactions', () {
+  test('transaction with no sub-transactions', () {
     var transaction = Transaction(date: DateTime(2026), subTransactions: []);
     var result = parseTransaction(transaction);
     expect(result.runtimeType, Error);
