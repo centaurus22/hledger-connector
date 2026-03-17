@@ -193,4 +193,26 @@ void main() {
       );
     }
   });
+  test('sub-transactions with unit', () {
+    var transaction = Transaction(
+      date: DateTime(2026, 04, 03),
+      subTransactions: [
+        SubTransaction(account: Account(main: 'expenses'), amount: Amount(value: 4, unit: '\$')),
+        SubTransaction(account: Account(main: 'assets'), amount: Amount(value: -4, unit: '\$')),
+      ]
+    );
+    var realResult = parseTransaction(transaction);
+    var expectedResult =
+        '\n\n'
+        '2026-04-03\n'
+        '    expenses   \$4.0\n'
+        '    assets    \$-4.0';
+    expect(realResult.runtimeType, Success);
+    if (realResult is Success) {
+      expect(
+        realResult.value.substring(0, realResult.value.length),
+        expectedResult,
+      );
+    }
+  });
 }
