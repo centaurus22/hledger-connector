@@ -22,7 +22,10 @@ void main() {
     var result = parseTransaction(transaction);
     expect(result.runtimeType, Success);
     if (result is Success) {
-      expect(result.value.substring(0, result.value.length), '\n2026-01-01\n');
+      expect(
+        result.value.substring(0, result.value.length),
+        '\n\n2026-01-01\n',
+      );
     }
   });
   test('if description is rendered', () {
@@ -36,7 +39,7 @@ void main() {
     if (result is Success) {
       expect(
         result.value.substring(0, result.value.length),
-        '\n2026-01-02 First Transaction\n',
+        '\n\n2026-01-02 First Transaction\n',
       );
     }
   });
@@ -48,7 +51,10 @@ void main() {
     var result = parseTransaction(transaction);
     expect(result.runtimeType, Success);
     if (result is Success) {
-      expect(result.value.substring(0, result.value.length), '\n2026-01-01\n');
+      expect(
+        result.value.substring(0, result.value.length),
+        '\n\n2026-01-01\n',
+      );
     }
   });
   test('transaction with no sub-transactions', () {

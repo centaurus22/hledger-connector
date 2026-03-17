@@ -16,7 +16,7 @@ Result parseTransaction(Transaction transaction) {
     description = '';
   }
 
-  return Success(value: '\n$dateString$description\n');
+  return Success(value: '\n\n$dateString$description\n');
 }
 
 Result _checkSubTransactions(List<SubTransaction> subTransactions) {
