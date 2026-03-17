@@ -114,14 +114,14 @@ String _formatSubTransactions(List<SubTransaction> subTransactions) {
 }
 
 int _calcAmountLength(Amount amount) {
-  var amountLength =
-      (amount.unit ?? '').length + amount.value.toString().length;
+  var valueLength = amount.value.toString().length;
+  var unit = amount.unit;
 
-  if (amount is SuffixedAmount && amount.unit != null) {
-    return amountLength + 1;
+  if (amount is SuffixedAmount) {
+    return valueLength + (unit != null ? unit.length + 1 : 0);
   }
 
-  return amountLength;
+  return valueLength + (unit != null ? unit.length : 0);
 }
 
 String _formatSubTransaction(
@@ -142,6 +142,7 @@ String _formatAmount(Amount amount) {
     unit = unit != null ? ' $unit' : '';
     return '${amount.value.toString()}$unit';
   } else {
-    return '${unit ?? ''}${amount.value.toString()}';
+    unit = unit ?? '';
+    return '$unit${amount.value.toString()}';
   }
 }

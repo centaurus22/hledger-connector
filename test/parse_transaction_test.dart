@@ -243,7 +243,6 @@ void main() {
         '    assets      \$4.0';
     expect(realResult.runtimeType, Success);
     if (realResult is Success) {
-      print(realResult.value);
       expect(
         realResult.value.substring(0, realResult.value.length),
         expectedResult,
