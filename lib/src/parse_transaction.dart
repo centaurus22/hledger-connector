@@ -38,15 +38,27 @@ Result _checkSubTransactions(List<SubTransaction> subTransactions) {
     );
   }
 
-  var mCError =
-      'This multi-commodity transaction is unbalanced. The sum should be 0.';
+  var numberPositiveBalances = 0;
+  var numberNegativeBalances = 0;
+
   for (var balance in balances.entries) {
-    if (balance.value != 0) {
-      return Error(message: mCError);
+    if (balance.value > 0) {
+      numberPositiveBalances += 1;
+    } else if (balance.value < 0) {
+      numberNegativeBalances += 1;
     }
   }
 
-  return Success(value: balance);
+  //hledger allows conversion transactions with exactly two participating units
+  if ((numberNegativeBalances == 1 && numberPositiveBalances == 1) ||
+      (numberPositiveBalances == 0 && numberNegativeBalances == 0)) {
+    return Success(value: balance);
+  }
+
+  var mCError =
+      'This multi-commodity transaction is unbalanced. The sum should be 0.';
+
+  return Error(message: mCError);
 }
 
 Map<String, double> _updateBalances(
