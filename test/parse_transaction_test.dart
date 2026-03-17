@@ -197,9 +197,15 @@ void main() {
     var transaction = Transaction(
       date: DateTime(2026, 04, 03),
       subTransactions: [
-        SubTransaction(account: Account(main: 'expenses'), amount: Amount(value: 4, unit: '\$')),
-        SubTransaction(account: Account(main: 'assets'), amount: Amount(value: -4, unit: '\$')),
-      ]
+        SubTransaction(
+          account: Account(main: 'expenses'),
+          amount: Amount(value: 4, unit: '\$'),
+        ),
+        SubTransaction(
+          account: Account(main: 'assets'),
+          amount: Amount(value: -4, unit: '\$'),
+        ),
+      ],
     );
     var realResult = parseTransaction(transaction);
     var expectedResult =
@@ -219,9 +225,15 @@ void main() {
     var transaction = Transaction(
       date: DateTime(2026, 02, 03),
       subTransactions: [
-        SubTransaction(account: Account(main: 'expenses'), amount: SuffixedAmount(value: -4, unit: '€')),
-        SubTransaction(account: Account(main: 'assets'), amount: Amount(value: 4, unit: '\$')),
-      ]
+        SubTransaction(
+          account: Account(main: 'expenses'),
+          amount: SuffixedAmount(value: -4, unit: '€'),
+        ),
+        SubTransaction(
+          account: Account(main: 'assets'),
+          amount: Amount(value: 4, unit: '\$'),
+        ),
+      ],
     );
     var realResult = parseTransaction(transaction);
     var expectedResult =
@@ -242,9 +254,15 @@ void main() {
     var transaction = Transaction(
       date: DateTime(2026, 02, 03),
       subTransactions: [
-        SubTransaction(account: Account(main: 'expenses'), amount: SuffixedAmount(value: 4)),
-        SubTransaction(account: Account(main: 'assets'), amount: SuffixedAmount(value: -4)),
-      ]
+        SubTransaction(
+          account: Account(main: 'expenses'),
+          amount: SuffixedAmount(value: 4),
+        ),
+        SubTransaction(
+          account: Account(main: 'assets'),
+          amount: SuffixedAmount(value: -4),
+        ),
+      ],
     );
     var realResult = parseTransaction(transaction);
     var expectedResult =

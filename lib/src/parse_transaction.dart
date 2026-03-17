@@ -114,8 +114,9 @@ String _formatSubTransactions(List<SubTransaction> subTransactions) {
 }
 
 int _calcAmountLength(Amount amount) {
-  var amountLength =  (amount.unit ?? '').length + amount.value.toString().length;
-  
+  var amountLength =
+      (amount.unit ?? '').length + amount.value.toString().length;
+
   if (amount is SuffixedAmount && amount.unit != null) {
     return amountLength + 1;
   }
