@@ -90,4 +90,29 @@ void main() {
     var result = parseTransaction(transaction);
     expect(result.runtimeType, Success);
   });
+  test('balanced transaction with more than one unit', () {
+    var transaction = Transaction(
+      date: DateTime(2026),
+      subTransactions: [
+        SubTransaction(
+          account: Account(main: 'assets'),
+          amount: Amount(amount: 10, unit: '€'),
+        ),
+        SubTransaction(
+          account: Account(main: 'assets'),
+          amount: Amount(amount: 5, unit: 'USD'),
+        ),
+        SubTransaction(
+          account: Account(main: 'expenses'),
+          amount: Amount(amount: -10, unit: '€'),
+        ),
+        SubTransaction(
+          account: Account(main: 'assets'),
+          amount: Amount(amount: -5, unit: 'USD'),
+        ),
+      ],
+    );
+    var result = parseTransaction(transaction);
+    expect(result.runtimeType, Success);
+  });
 }

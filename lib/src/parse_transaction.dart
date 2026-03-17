@@ -24,16 +24,36 @@ Result _checkSubTransactions(List<SubTransaction> subTransactions) {
     return Error(message: 'The transactions contains no sub-transactions');
   }
 
+  Map<String, double> balances = {};
+
   var balance = subTransactions.fold(
-    0.0,
-    (balance, subTransaction) => balance + subTransaction.amount.amount,
+    balances,
+    (balances, subTransaction) =>
+        _updateBalances(balances, subTransaction.amount),
   );
 
-  if (balance == 0.0) {
-    return Success(value: balance);
+  for (var balance in balances.entries) {
+    if (balance.value != 0) {
+      return Error(
+        message: 'The transaction is unbalanced. The sum should be 0.',
+      );
+    }
   }
 
-  return Error(message: 'The transaction is unbalanced. The sum should be 0.');
+  return Success(value: balance);
+}
+
+Map<String, double> _updateBalances(
+  Map<String, double> balances,
+  Amount amount,
+) {
+  var unit = amount.unit;
+  var value = amount.amount;
+
+  unit ??= ' ';
+  balances[unit] = (balances[unit] ?? 0) + value;
+
+  return balances;
 }
 
 String _formatDate(DateTime date) {
