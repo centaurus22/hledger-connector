@@ -7,11 +7,11 @@ void main() {
   var basisSubTransactions = [
     SubTransaction(
       account: Account(main: 'assets'),
-      amount: Amount(amount: 10),
+      amount: Amount(value: 10),
     ),
     SubTransaction(
       account: Account(main: 'expenses'),
-      amount: Amount(amount: -10),
+      amount: Amount(value: -10),
     ),
   ];
   test('if transaction starts with a date', () {
@@ -62,11 +62,11 @@ void main() {
       subTransactions: [
         SubTransaction(
           account: Account(main: 'assets'),
-          amount: Amount(amount: 10),
+          amount: Amount(value: 10),
         ),
         SubTransaction(
           account: Account(main: 'expenses'),
-          amount: Amount(amount: -5),
+          amount: Amount(value: -5),
         ),
       ],
     );
@@ -79,11 +79,11 @@ void main() {
       subTransactions: [
         SubTransaction(
           account: Account(main: 'assets'),
-          amount: Amount(amount: -0.000004),
+          amount: Amount(value: -0.000004),
         ),
         SubTransaction(
           account: Account(main: 'expenses'),
-          amount: Amount(amount: 0.000004),
+          amount: Amount(value: 0.000004),
         ),
       ],
     );
@@ -96,19 +96,19 @@ void main() {
       subTransactions: [
         SubTransaction(
           account: Account(main: 'assets'),
-          amount: Amount(amount: 10, unit: '€'),
+          amount: Amount(value: 10, unit: '€'),
         ),
         SubTransaction(
           account: Account(main: 'assets'),
-          amount: Amount(amount: 5, unit: 'USD'),
+          amount: Amount(value: 5, unit: 'USD'),
         ),
         SubTransaction(
           account: Account(main: 'expenses'),
-          amount: Amount(amount: -10, unit: '€'),
+          amount: Amount(value: -10, unit: '€'),
         ),
         SubTransaction(
           account: Account(main: 'assets'),
-          amount: Amount(amount: -5, unit: 'USD'),
+          amount: Amount(value: -5, unit: 'USD'),
         ),
       ],
     );
@@ -121,11 +121,11 @@ void main() {
       subTransactions: [
         SubTransaction(
           account: Account(main: 'assets:bank 1'),
-          amount: Amount(amount: 5, unit: 'USD'),
+          amount: Amount(value: 5, unit: 'USD'),
         ),
         SubTransaction(
           account: Account(main: 'assets:bank 2'),
-          amount: Amount(amount: -10, unit: '€'),
+          amount: Amount(value: -10, unit: '€'),
         ),
       ],
     );
@@ -138,15 +138,15 @@ void main() {
       subTransactions: [
         SubTransaction(
           account: Account(main: 'assets:bank 1'),
-          amount: Amount(amount: 5, unit: 'USD'),
+          amount: Amount(value: 5, unit: 'USD'),
         ),
         SubTransaction(
           account: Account(main: 'assets:bank 1'),
-          amount: Amount(amount: 5, unit: 'GPB'),
+          amount: Amount(value: 5, unit: 'GPB'),
         ),
         SubTransaction(
           account: Account(main: 'assets:bank 2'),
-          amount: Amount(amount: -10, unit: '€'),
+          amount: Amount(value: -10, unit: '€'),
         ),
       ],
     );
@@ -159,15 +159,15 @@ void main() {
       subTransactions: [
         SubTransaction(
           account: Account(main: 'assets:bank 2'),
-          amount: Amount(amount: 9, unit: '€'),
+          amount: Amount(value: 9, unit: '€'),
         ),
         SubTransaction(
           account: Account(main: 'assets:bank 1'),
-          amount: Amount(amount: 5, unit: 'USD'),
+          amount: Amount(value: 5, unit: 'USD'),
         ),
         SubTransaction(
           account: Account(main: 'assets:bank 2'),
-          amount: Amount(amount: -10, unit: '€'),
+          amount: Amount(value: -10, unit: '€'),
         ),
       ],
     );

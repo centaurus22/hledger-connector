@@ -35,13 +35,13 @@ class SubTransaction {
 /// the child class [SuffixedAmount], the unit is written behind the amount.
 class Amount {
   /// The amount that is transferred.
-  double amount;
+  double value;
 
   /// The optional unit.
   String? unit;
 
-  /// The [amount] is required. Optionally a [unit] can be added.
-  Amount({required this.amount, this.unit});
+  /// The [value] is required. Optionally a [unit] can be added.
+  Amount({required this.value, this.unit});
 }
 
 /// Child class of the [Amount].
@@ -49,8 +49,8 @@ class Amount {
 /// The difference of this and the base class ist that the unit is written after
 /// the amount.
 class SuffixedAmount extends Amount {
-  /// The [amount] is required. Optionally a [unit] can be added.
-  SuffixedAmount({required super.amount, super.unit});
+  /// The [value] is required. Optionally a [unit] can be added.
+  SuffixedAmount({required super.value, super.unit});
 }
 
 /// This represents an account string in hledger.

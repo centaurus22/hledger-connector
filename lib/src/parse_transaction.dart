@@ -70,7 +70,7 @@ Map<String, double> _updateBalances(
   Amount amount,
 ) {
   var unit = amount.unit;
-  var value = amount.amount;
+  var value = amount.value;
 
   unit ??= ' ';
   balances[unit] = (balances[unit] ?? 0) + value;
@@ -92,11 +92,11 @@ String _formatSubTransactions(List<SubTransaction> subTransactions) {
     (maxAccountNameLength, subTransactions) =>
         max(maxAccountNameLength, subTransactions.account.main.length),
   );
-  
+
   int maxAmountLength = subTransactions.fold(
     0,
     (maxAmountLength, subTransactions) =>
-        max(maxAmountLength, subTransactions.amount.amount.toString().length),
+        max(maxAmountLength, subTransactions.amount.value.toString().length),
   );
 
   String subTransactionsString = subTransactions.fold(
@@ -121,5 +121,5 @@ String _formatSubTransaction(
   return '\n    '
       '${subTransaction.account.main.padRight(maxAccountNameLength)}'
       '  '
-      '${subTransaction.amount.amount.toString().padLeft(maxAmountLength)}';
+      '${subTransaction.amount.value.toString().padLeft(maxAmountLength)}';
 }
