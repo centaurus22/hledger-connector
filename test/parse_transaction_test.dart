@@ -215,4 +215,49 @@ void main() {
       );
     }
   });
+  test('sub-transactions with suffixed unit', () {
+    var transaction = Transaction(
+      date: DateTime(2026, 02, 03),
+      subTransactions: [
+        SubTransaction(account: Account(main: 'expenses'), amount: SuffixedAmount(value: -4, unit: '€')),
+        SubTransaction(account: Account(main: 'assets'), amount: Amount(value: 4, unit: '\$')),
+      ]
+    );
+    var realResult = parseTransaction(transaction);
+    var expectedResult =
+        '\n\n'
+        '2026-02-03\n'
+        '    expenses  -4.0 €\n'
+        '    assets      \$4.0';
+    expect(realResult.runtimeType, Success);
+    if (realResult is Success) {
+      print(realResult.value);
+      expect(
+        realResult.value.substring(0, realResult.value.length),
+        expectedResult,
+      );
+    }
+  });
+  test('suffixed amount without a unit', () {
+    var transaction = Transaction(
+      date: DateTime(2026, 02, 03),
+      subTransactions: [
+        SubTransaction(account: Account(main: 'expenses'), amount: SuffixedAmount(value: 4)),
+        SubTransaction(account: Account(main: 'assets'), amount: SuffixedAmount(value: -4)),
+      ]
+    );
+    var realResult = parseTransaction(transaction);
+    var expectedResult =
+        '\n\n'
+        '2026-02-03\n'
+        '    expenses   4.0\n'
+        '    assets    -4.0';
+    expect(realResult.runtimeType, Success);
+    if (realResult is Success) {
+      expect(
+        realResult.value.substring(0, realResult.value.length),
+        expectedResult,
+      );
+    }
+  });
 }
