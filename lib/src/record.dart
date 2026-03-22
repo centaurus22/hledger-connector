@@ -104,9 +104,14 @@ class Error extends Result {
   Error({required this.message});
 }
 
+/// A file.
 class File {
+  /// The name of this file.
   final String name;
+
+  /// The path to this file without this file's name.
   final List<String>? path;
 
+  /// Requires the [name] of this and an optional [path].
   File({required this.name, this.path});
 }
