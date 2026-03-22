@@ -188,7 +188,7 @@ void main() {
     expect(realResult.runtimeType, Success);
     if (realResult is Success) {
       expect(
-        realResult.value.substring(0, realResult.value.length),
+        realResult.value,
         expectedResult,
       );
     }
@@ -216,7 +216,7 @@ void main() {
     expect(realResult.runtimeType, Success);
     if (realResult is Success) {
       expect(
-        realResult.value.substring(0, realResult.value.length),
+        realResult.value,
         expectedResult,
       );
     }
@@ -244,7 +244,7 @@ void main() {
     expect(realResult.runtimeType, Success);
     if (realResult is Success) {
       expect(
-        realResult.value.substring(0, realResult.value.length),
+        realResult.value,
         expectedResult,
       );
     }
@@ -272,7 +272,7 @@ void main() {
     expect(realResult.runtimeType, Success);
     if (realResult is Success) {
       expect(
-        realResult.value.substring(0, realResult.value.length),
+        realResult.value,
         expectedResult,
       );
     }
