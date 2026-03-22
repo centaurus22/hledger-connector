@@ -103,3 +103,10 @@ class Error extends Result {
   /// This requires the error [message].
   Error({required this.message});
 }
+
+class File {
+  final String name;
+  final List<String>? path;
+
+  File({required this.name, this.path});
+}
