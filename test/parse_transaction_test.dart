@@ -187,10 +187,7 @@ void main() {
         '    expenses  -10.0';
     expect(realResult.runtimeType, Success);
     if (realResult is Success) {
-      expect(
-        realResult.value,
-        expectedResult,
-      );
+      expect(realResult.value, expectedResult);
     }
   });
   test('sub-transactions with unit', () {
@@ -215,10 +212,7 @@ void main() {
         '    assets    \$-4.0';
     expect(realResult.runtimeType, Success);
     if (realResult is Success) {
-      expect(
-        realResult.value,
-        expectedResult,
-      );
+      expect(realResult.value, expectedResult);
     }
   });
   test('sub-transactions with suffixed unit', () {
@@ -243,10 +237,7 @@ void main() {
         '    assets      \$4.0';
     expect(realResult.runtimeType, Success);
     if (realResult is Success) {
-      expect(
-        realResult.value,
-        expectedResult,
-      );
+      expect(realResult.value, expectedResult);
     }
   });
   test('suffixed amount without a unit', () {
@@ -271,10 +262,7 @@ void main() {
         '    assets    -4.0';
     expect(realResult.runtimeType, Success);
     if (realResult is Success) {
-      expect(
-        realResult.value,
-        expectedResult,
-      );
+      expect(realResult.value, expectedResult);
     }
   });
 }
