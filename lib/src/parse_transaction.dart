@@ -11,17 +11,13 @@ Result parseTransaction(Transaction transaction) {
 
   var dateString = _formatDate(transaction.date);
 
-  String description;
-  if (transaction.description != null) {
-    description = ' ${transaction.description!}';
-  } else {
-    description = '';
-  }
-  description += '\n';
+  var description = transaction.description != null
+      ? ' ${transaction.description}'
+      : '';
 
   String subTransactions = _formatSubTransactions(transaction.subTransactions);
 
-  return Success(value: '\n$dateString$description$subTransactions');
+  return Success(value: '\n$dateString$description\n$subTransactions');
 }
 
 Result _checkSubTransactions(List<SubTransaction> subTransactions) {
@@ -130,8 +126,7 @@ String _formatSubTransaction(
   int maxAccountNameLength,
   int maxAmountLength,
 ) {
-  return 
-      '    '
+  return '    '
       '${subTransaction.account.main.padRight(maxAccountNameLength)}'
       '  '
       '${_formatAmount(subTransaction.amount).padLeft(maxAmountLength)}'
