@@ -34,10 +34,7 @@ void main() {
     var result = parseTransaction(transaction);
     expect(result.runtimeType, Success);
     if (result is Success) {
-      expect(
-        result.value.substring(0, 30),
-        '\n2026-01-02 First Transaction\n',
-      );
+      expect(result.value.substring(0, 30), '\n2026-01-02 First Transaction\n');
     }
   });
   test('date with only a year', () {
