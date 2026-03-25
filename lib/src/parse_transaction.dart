@@ -9,12 +9,8 @@ Result parseTransaction(Transaction transaction) {
     return checkResult;
   }
 
-  var dateString = _formatDate(transaction.date);
-
-  var description = transaction.description != null
-      ? ' ${transaction.description}'
-      : '';
-
+  String dateString = _formatDate(transaction.date);
+  String description = _formatDescription(transaction.description);
   String subTransactions = _formatSubTransactions(transaction.subTransactions);
 
   return Success(value: '\n$dateString$description\n$subTransactions');
@@ -73,6 +69,10 @@ Map<String, double> _updateBalances(
   balances[unit] = (balances[unit] ?? 0) + value;
 
   return balances;
+}
+
+String _formatDescription(String? description) {
+  return description != null ? ' $description' : '';
 }
 
 String _formatDate(DateTime date) {
