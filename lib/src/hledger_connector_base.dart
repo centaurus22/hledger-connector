@@ -2,7 +2,7 @@ import 'parse_transaction.dart';
 import 'write_to_file.dart';
 import 'record.dart';
 
-Result addTransaction(Transaction transaction, File file) {
+Result addTransaction(Transaction transaction, JournalFile file) {
   var parsedTransaction = parseTransaction(transaction);
 
   switch (parsedTransaction) {

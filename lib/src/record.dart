@@ -105,7 +105,7 @@ class Error extends Result {
 }
 
 /// A file.
-class File {
+class JournalFile {
   /// The name of this file.
   final String name;
 
@@ -113,5 +113,5 @@ class File {
   final List<String>? path;
 
   /// Requires the [name] of this and an optional [path].
-  File({required this.name, this.path});
+  JournalFile({required this.name, this.path});
 }

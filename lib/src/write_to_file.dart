@@ -1,13 +1,13 @@
 import 'record.dart';
 
-import 'dart:io' as io;
+import 'dart:io';
 
-Result writeToFile(String content, File file) {
+Result writeToFile(String content, JournalFile file) {
   final fileName = fromFile(file);
 
   try {
-    final ioFile = io.File(fileName);
-    ioFile.writeAsString(content);
+    final file = File(fileName);
+    file.writeAsString(content);
   } catch (e) {
     return Error(message: '$e');
   }
@@ -15,7 +15,7 @@ Result writeToFile(String content, File file) {
   return Success(value: content);
 }
 
-String fromFile(File file) {
+String fromFile(JournalFile file) {
   if (file.path == null) {
     return file.name;
   }
