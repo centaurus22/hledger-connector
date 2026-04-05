@@ -1,39 +1,65 @@
-<!-- 
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+A dart library to connect with the
+[hledger plain text accounting system](https://hledger.org/).
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/tools/pub/writing-package-pages). 
+## License
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/to/develop-packages). 
--->
-
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+This work is provided under the terms of the MIT license. Please take a look at
+the LICENSE file for the full text.
 
 ## Features
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+My lib solves the following problems:
+### Current features
 
-## Getting started
+* Generate journal entries and write it to a journal file with
+* a date and an optional description,
+* sub transactions between to more more accounts,
+* prefixed or suffixed units,
+* simple conversion transactions.
+* Creates new journal files if necessary.
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+### Planned features
+
+* Create `Account` record from a default account string (eg.: "assets:cash").
+* Create a `JournalFile` record from a file path.
+* Read and filter journal information from a journal via hledger binary.
+* Add comments to journal entries.
+
+If you need any feature please [contact](#contact) me.
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder. 
-
+The following Dart record structure
 ```dart
-const like = 'sample';
+import 'package:hledger_connector/hledger_connector.dart';
+
+var file = JournalFile(name: 'test.journal');
+
+var transaction = Transaction(
+  date: DateTime(2026,1,1),
+  subTransactions: [
+    SubTransaction(
+      account: Account(main: 'assets', sub: ['cash']),
+      amount: Amount(value: -5, unit: '\$')
+    ),
+    SubTransaction(
+      account: Account(main: 'expenses', sub: ['food']),
+      amount: Amount(value: 5, unit '\$')
+    )
+  ]);
+
+  final result = await addTransaction(transaction, file);
+```
+This adds the following transaction to the journal:
+
+```hledger
+2026-01-01 Example transaction
+    assets:cash    $-5.0
+    expenses:food   $5.0
 ```
 
-## Additional information
+For more usage examples, see the `example/` directory.
 
-TODO: Tell users more about the package: where to find more information, how to 
-contribute to the package, how to file issues, what response they can expect 
-from the package authors, and more.
+## Contact
+
+If you have any questions just drop a message at mail@centaurus22.de.
