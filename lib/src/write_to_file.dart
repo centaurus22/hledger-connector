@@ -1,13 +1,19 @@
+import 'functions.dart';
 import 'record.dart';
 
 import 'dart:io';
 
-Result writeToFile(String content, JournalFile file) {
-  final fileName = fromFile(file);
+Future<Result> writeToFile(String content, JournalFile file) async {
+  final fileName = _fromFile(file);
 
   try {
     final file = File(fileName);
-    file.writeAsString(content, mode: FileMode.append);
+
+    if (await file.exists() == false || await file.length() == 0) {
+      await file.writeAsString(fileHeader());
+    }
+
+    await file.writeAsString(content, mode: FileMode.append);
   } catch (e) {
     return Error(message: '$e');
   }
@@ -15,7 +21,7 @@ Result writeToFile(String content, JournalFile file) {
   return Success(value: content);
 }
 
-String fromFile(JournalFile file) {
+String _fromFile(JournalFile file) {
   if (file.path == null) {
     return file.name;
   }
@@ -23,4 +29,9 @@ String fromFile(JournalFile file) {
   final filePath = file.path;
   final path = filePath!.fold('', (path, pathElement) => '$pathElement/$path');
   return '$path/${file.name}';
+}
+
+String fileHeader() {
+  final date = formatToIsoDate(DateTime.now());
+  return '; Journal created $date by hledger-connector';
 }
