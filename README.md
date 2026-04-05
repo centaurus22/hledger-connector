@@ -8,7 +8,8 @@ the LICENSE file for the full text.
 
 ## Features
 
-My lib solves the following problems:
+These are the problems my library solves.
+
 ### Current features
 
 * Generate journal entries and write it to a journal file with
