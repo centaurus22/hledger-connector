@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'functions.dart';
 import 'record.dart';
 
 Result parseTransaction(Transaction transaction) {
@@ -76,11 +77,7 @@ String _formatDescription(String? description) {
 }
 
 String _formatDate(DateTime date) {
-  return '${date.year}-${_padLeft(date.month)}-${_padLeft(date.day)}';
-}
-
-String _padLeft(int value) {
-  return value.toString().padLeft(2, '0');
+  return formatToIsoDate(date);
 }
 
 String _formatSubTransactions(List<SubTransaction> subTransactions) {
