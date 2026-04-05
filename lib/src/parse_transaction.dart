@@ -86,8 +86,10 @@ String _padLeft(int value) {
 String _formatSubTransactions(List<SubTransaction> subTransactions) {
   int maxAccountNameLength = subTransactions.fold(
     0,
-    (maxAccountNameLength, subTransactions) =>
-        max(maxAccountNameLength, subTransactions.account.main.length),
+    (maxAccountNameLength, subTransaction) => max(
+      maxAccountNameLength,
+      _formatAccount(subTransaction.account).length,
+    ),
   );
 
   int maxAmountLength = subTransactions.fold(
@@ -110,6 +112,15 @@ String _formatSubTransactions(List<SubTransaction> subTransactions) {
   return subTransactionsString;
 }
 
+String _formatAccount(Account account) {
+  var subAccounts = account.sub;
+  var subAccountsString = subAccounts != null
+      ? ':${subAccounts.join(':')}'
+      : '';
+
+  return account.main + subAccountsString;
+}
+
 int _calcAmountLength(Amount amount) {
   var valueLength = amount.value.toString().length;
   var unit = amount.unit;
@@ -128,7 +139,7 @@ String _formatSubTransaction(
 ) {
   return '\n'
       '    '
-      '${subTransaction.account.main.padRight(maxAccountNameLength)}'
+      '${_formatAccount(subTransaction.account).padRight(maxAccountNameLength)}'
       '  '
       '${_formatAmount(subTransaction.amount).padLeft(maxAmountLength)}';
 }

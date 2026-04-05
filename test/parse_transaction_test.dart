@@ -265,4 +265,29 @@ void main() {
       expect(realResult.value, expectedResult);
     }
   });
+  test('transaction with sub account', () {
+    var transaction = Transaction(
+      date: DateTime(2026, 02, 03),
+      subTransactions: [
+        SubTransaction(
+          account: Account(main: 'expenses'),
+          amount: Amount(value: 4),
+        ),
+        SubTransaction(
+          account: Account(main: 'assets', sub: ['cash']),
+          amount: Amount(value: -4),
+        ),
+      ],
+    );
+    var realResult = parseTransaction(transaction);
+    var expectedResult =
+        '\n\n'
+        '2026-02-03\n'
+        '    expenses      4.0\n'
+        '    assets:cash  -4.0';
+    expect(realResult.runtimeType, Success);
+    if (realResult is Success) {
+      expect(realResult.value, expectedResult);
+    }
+  });
 }
