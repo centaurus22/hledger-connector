@@ -7,7 +7,7 @@ Result writeToFile(String content, JournalFile file) {
 
   try {
     final file = File(fileName);
-    file.writeAsString(content);
+    file.writeAsString(content, mode: FileMode.append);
   } catch (e) {
     return Error(message: '$e');
   }
