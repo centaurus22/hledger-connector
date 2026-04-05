@@ -13,7 +13,7 @@ Result parseTransaction(Transaction transaction) {
   String description = _formatDescription(transaction.description);
   String subTransactions = _formatSubTransactions(transaction.subTransactions);
 
-  return Success(value: '\n$dateString$description\n$subTransactions');
+  return Success(value: '\n\n$dateString$description$subTransactions');
 }
 
 Result _checkSubTransactions(List<SubTransaction> subTransactions) {
@@ -126,11 +126,11 @@ String _formatSubTransaction(
   int maxAccountNameLength,
   int maxAmountLength,
 ) {
-  return '    '
+  return '\n'
+      '    '
       '${subTransaction.account.main.padRight(maxAccountNameLength)}'
       '  '
-      '${_formatAmount(subTransaction.amount).padLeft(maxAmountLength)}'
-      '\n';
+      '${_formatAmount(subTransaction.amount).padLeft(maxAmountLength)}';
 }
 
 String _formatAmount(Amount amount) {
