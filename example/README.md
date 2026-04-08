@@ -26,7 +26,7 @@ var transaction = Transaction(
 
 final result = await addTransaction(transaction, file);
 ```
-This adds the following transaction to the journal:
+adds the following transaction to the journal:
 
 ```hledger
 2026-01-01 Example transaction
@@ -59,7 +59,7 @@ var transaction = Transaction(
 
 final result = await addTransaction(transaction, file);
 ```
-and this is the resulting journal entry:
+And this is the resulting journal entry:
 
 ```hledger
 2026-01-01
@@ -93,7 +93,7 @@ var transaction = Transaction(
   var result = await addTransaction(transaction, file);
 ```
 
-the result is the following:
+The result is the following:
 
 ```hledger
 2026-01-01 Conversion example
