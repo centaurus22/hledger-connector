@@ -100,3 +100,31 @@ The result is the following:
     assets:account1     $-5.0
     expenses:account2  4.28 €
 ```
+
+## Error example
+
+This is an example with unit conversion:
+
+```dart
+import 'package:hledger_connector/hledger_connector.dart';
+
+var file = JournalFile(name: 'test.journal');
+
+var transaction = Transaction(
+  date: DateTime(2026,1,1),
+  description: 'Conversion example',
+  subTransactions: [
+    SubTransaction(
+      account: Account(main: 'assets', sub: ['account1']),
+      amount: Amount(value: -5, unit: '\$')
+    ),
+  ]);
+
+  var result = await addTransaction(transaction, file);
+
+  if  (result is Error) {
+    print(result.message)
+  }
+```
+
+prints out `This transaction is unbalanced. The sum should be 0.`

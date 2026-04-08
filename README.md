@@ -19,6 +19,8 @@ These are the problems my library solves.
   * simple conversion transactions.
 * Conversion transactions.
 * Creates a new journal files if necessary.
+* Returns a Success record when everything works correctly or an Error record
+  which contains an error message.
 
 ### Planned features
 
