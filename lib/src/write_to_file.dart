@@ -22,13 +22,14 @@ Future<Result> writeToFile(String content, JournalFile file) async {
 }
 
 String _fromFile(JournalFile file) {
-  if (file.path == null) {
+  var path = file.path;
+
+  if (path == null) {
     return file.name;
   }
 
-  final filePath = file.path;
-  final path = filePath!.fold('', (path, pathElement) => '$pathElement/$path');
-  return '$path/${file.name}';
+  final pathString = path.fold('', (path, pathElement) => '$pathElement/$path');
+  return '$pathString/${file.name}';
 }
 
 String fileHeader() {
