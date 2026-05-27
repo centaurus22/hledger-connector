@@ -6,11 +6,11 @@ import 'package:hledger_connector/src/parse_transaction.dart';
 void main() {
   var basisSubTransactions = [
     SubTransaction(
-      account: Account(main: 'assets'),
+      account: 'assets',
       amount: Amount(value: 10),
     ),
     SubTransaction(
-      account: Account(main: 'expenses'),
+      account: 'expenses',
       amount: Amount(value: -10),
     ),
   ];
@@ -61,11 +61,11 @@ void main() {
       date: DateTime(2026),
       subTransactions: [
         SubTransaction(
-          account: Account(main: 'assets'),
+          account: 'assets',
           amount: Amount(value: 10),
         ),
         SubTransaction(
-          account: Account(main: 'expenses'),
+          account: 'expenses',
           amount: Amount(value: -5),
         ),
       ],
@@ -78,11 +78,11 @@ void main() {
       date: DateTime(2026),
       subTransactions: [
         SubTransaction(
-          account: Account(main: 'assets'),
+          account: 'assets',
           amount: Amount(value: -0.000004),
         ),
         SubTransaction(
-          account: Account(main: 'expenses'),
+          account: 'expenses',
           amount: Amount(value: 0.000004),
         ),
       ],
@@ -95,19 +95,19 @@ void main() {
       date: DateTime(2026),
       subTransactions: [
         SubTransaction(
-          account: Account(main: 'assets'),
+          account: 'assets',
           amount: Amount(value: 10, unit: '€'),
         ),
         SubTransaction(
-          account: Account(main: 'assets'),
+          account: 'assets',
           amount: Amount(value: 5, unit: 'USD'),
         ),
         SubTransaction(
-          account: Account(main: 'expenses'),
+          account: 'expenses',
           amount: Amount(value: -10, unit: '€'),
         ),
         SubTransaction(
-          account: Account(main: 'assets'),
+          account: 'assets',
           amount: Amount(value: -5, unit: 'USD'),
         ),
       ],
@@ -120,11 +120,11 @@ void main() {
       date: DateTime(2026),
       subTransactions: [
         SubTransaction(
-          account: Account(main: 'assets:bank 1'),
+          account: 'assets:bank 1',
           amount: Amount(value: 5, unit: 'USD'),
         ),
         SubTransaction(
-          account: Account(main: 'assets:bank 2'),
+          account: 'assets:bank 2',
           amount: Amount(value: -10, unit: '€'),
         ),
       ],
@@ -137,15 +137,15 @@ void main() {
       date: DateTime(2026),
       subTransactions: [
         SubTransaction(
-          account: Account(main: 'assets:bank 1'),
+          account: 'assets:bank 1',
           amount: Amount(value: 5, unit: 'USD'),
         ),
         SubTransaction(
-          account: Account(main: 'assets:bank 1'),
+          account: 'assets:bank 1',
           amount: Amount(value: 5, unit: 'GPB'),
         ),
         SubTransaction(
-          account: Account(main: 'assets:bank 2'),
+          account: 'assets:bank 2',
           amount: Amount(value: -10, unit: '€'),
         ),
       ],
@@ -158,15 +158,15 @@ void main() {
       date: DateTime(2026),
       subTransactions: [
         SubTransaction(
-          account: Account(main: 'assets:bank 2'),
+          account: 'assets:bank 2',
           amount: Amount(value: 9, unit: '€'),
         ),
         SubTransaction(
-          account: Account(main: 'assets:bank 1'),
+          account: 'assets:bank',
           amount: Amount(value: 5, unit: 'USD'),
         ),
         SubTransaction(
-          account: Account(main: 'assets:bank 2'),
+          account: 'assets:bank 2',
           amount: Amount(value: -10, unit: '€'),
         ),
       ],
@@ -195,11 +195,11 @@ void main() {
       date: DateTime(2026, 04, 03),
       subTransactions: [
         SubTransaction(
-          account: Account(main: 'expenses'),
+          account: 'expenses',
           amount: Amount(value: 4, unit: '\$'),
         ),
         SubTransaction(
-          account: Account(main: 'assets'),
+          account: 'assets',
           amount: Amount(value: -4, unit: '\$'),
         ),
       ],
@@ -220,11 +220,11 @@ void main() {
       date: DateTime(2026, 02, 03),
       subTransactions: [
         SubTransaction(
-          account: Account(main: 'expenses'),
+          account: 'expenses',
           amount: SuffixedAmount(value: -4, unit: '€'),
         ),
         SubTransaction(
-          account: Account(main: 'assets'),
+          account: 'assets',
           amount: Amount(value: 4, unit: '\$'),
         ),
       ],
@@ -245,11 +245,11 @@ void main() {
       date: DateTime(2026, 02, 03),
       subTransactions: [
         SubTransaction(
-          account: Account(main: 'expenses'),
+          account: 'expenses',
           amount: SuffixedAmount(value: 4),
         ),
         SubTransaction(
-          account: Account(main: 'assets'),
+          account: 'assets',
           amount: SuffixedAmount(value: -4),
         ),
       ],
@@ -270,11 +270,11 @@ void main() {
       date: DateTime(2026, 02, 03),
       subTransactions: [
         SubTransaction(
-          account: Account(main: 'expenses'),
+          account: 'expenses',
           amount: Amount(value: 4),
         ),
         SubTransaction(
-          account: Account(main: 'assets', sub: ['cash']),
+          account: 'assets:cash',
           amount: Amount(value: -4),
         ),
       ],
