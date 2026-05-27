@@ -3,7 +3,16 @@ import 'record.dart';
 
 import 'dart:io';
 
-Future<Result> writeToFile(String content, JournalFile file) async {
+Future<Result> writeToFile(Result contentResult, JournalFile file) async {
+  switch (contentResult) {
+    case Error _:
+      return contentResult;
+    case Success _:
+      return _writeToFile(contentResult.value, file);
+  }
+}
+
+Future<Result> _writeToFile(String content, JournalFile file) async {
   final fileName = _fromFile(file);
 
   try {
