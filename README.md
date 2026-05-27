@@ -53,7 +53,7 @@ var transaction = Transaction(
     )
   ]);
 
-  final result = await addTransaction(transaction, file);
+final result = await addTransaction(transaction, file);
 ```
 
 This adds the following transaction to the journal:
