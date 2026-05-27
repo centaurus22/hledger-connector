@@ -3,6 +3,7 @@ import 'dart:math';
 import 'functions.dart';
 import 'record.dart';
 
+/// Use Case: Convert a transaction object to a hledger journal entry
 Result parseTransaction(Transaction transaction) {
   var checkResult = _checkSubTransactions(transaction.subTransactions);
 

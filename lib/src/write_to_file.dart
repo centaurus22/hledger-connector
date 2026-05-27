@@ -3,6 +3,7 @@ import 'record.dart';
 
 import 'dart:io';
 
+/// Use Case: Write the transaction to file
 Future<Result> writeToFile(Result contentResult, JournalFile file) async {
   switch (contentResult) {
     case Error _:
