@@ -23,6 +23,16 @@ Result _checkSubTransactions(List<SubTransaction> subTransactions) {
     return Error(message: 'The transactions contains no sub-transactions');
   }
 
+  for (var subTransaction in subTransactions) {
+    /// hledger do not accept empty account names.
+    if (subTransaction.account.isEmpty) {
+      return Error(
+        message:
+            'A valid hledger account name is required. Eg: assets:cash, expenses:food:eating out.',
+      );
+    }
+  }
+
   Map<String, double> balances = {};
 
   subTransactions.fold(
@@ -84,10 +94,8 @@ String _formatDate(DateTime date) {
 String _formatSubTransactions(List<SubTransaction> subTransactions) {
   int maxAccountNameLength = subTransactions.fold(
     0,
-    (maxAccountNameLength, subTransaction) => max(
-      maxAccountNameLength,
-      subTransaction.account.length,
-    ),
+    (maxAccountNameLength, subTransaction) =>
+        max(maxAccountNameLength, subTransaction.account.length),
   );
 
   int maxAmountLength = subTransactions.fold(

@@ -5,14 +5,8 @@ import 'package:hledger_connector/src/parse_transaction.dart';
 
 void main() {
   var basisSubTransactions = [
-    SubTransaction(
-      account: 'assets',
-      amount: Amount(value: 10),
-    ),
-    SubTransaction(
-      account: 'expenses',
-      amount: Amount(value: -10),
-    ),
+    SubTransaction(account: 'assets', amount: Amount(value: 10)),
+    SubTransaction(account: 'expenses', amount: Amount(value: -10)),
   ];
   test('if transaction starts with a date', () {
     var transaction = Transaction(
@@ -60,14 +54,8 @@ void main() {
     var transaction = Transaction(
       date: DateTime(2026),
       subTransactions: [
-        SubTransaction(
-          account: 'assets',
-          amount: Amount(value: 10),
-        ),
-        SubTransaction(
-          account: 'expenses',
-          amount: Amount(value: -5),
-        ),
+        SubTransaction(account: 'assets', amount: Amount(value: 10)),
+        SubTransaction(account: 'expenses', amount: Amount(value: -5)),
       ],
     );
     var result = parseTransaction(transaction);
@@ -77,14 +65,8 @@ void main() {
     var transaction = Transaction(
       date: DateTime(2026),
       subTransactions: [
-        SubTransaction(
-          account: 'assets',
-          amount: Amount(value: -0.000004),
-        ),
-        SubTransaction(
-          account: 'expenses',
-          amount: Amount(value: 0.000004),
-        ),
+        SubTransaction(account: 'assets', amount: Amount(value: -0.000004)),
+        SubTransaction(account: 'expenses', amount: Amount(value: 0.000004)),
       ],
     );
     var result = parseTransaction(transaction);
@@ -244,14 +226,8 @@ void main() {
     var transaction = Transaction(
       date: DateTime(2026, 02, 03),
       subTransactions: [
-        SubTransaction(
-          account: 'expenses',
-          amount: SuffixedAmount(value: 4),
-        ),
-        SubTransaction(
-          account: 'assets',
-          amount: SuffixedAmount(value: -4),
-        ),
+        SubTransaction(account: 'expenses', amount: SuffixedAmount(value: 4)),
+        SubTransaction(account: 'assets', amount: SuffixedAmount(value: -4)),
       ],
     );
     var realResult = parseTransaction(transaction);
@@ -265,29 +241,15 @@ void main() {
       expect(realResult.value, expectedResult);
     }
   });
-  test('transaction with sub account', () {
+  test('throwing error if an account string is empty', () {
     var transaction = Transaction(
       date: DateTime(2026, 02, 03),
       subTransactions: [
-        SubTransaction(
-          account: 'expenses',
-          amount: Amount(value: 4),
-        ),
-        SubTransaction(
-          account: 'assets:cash',
-          amount: Amount(value: -4),
-        ),
+        SubTransaction(account: '', amount: Amount(value: 4333)),
+        SubTransaction(account: 'assets:cash', amount: Amount(value: -4333)),
       ],
     );
     var realResult = parseTransaction(transaction);
-    var expectedResult =
-        '\n\n'
-        '2026-02-03\n'
-        '    expenses      4.0\n'
-        '    assets:cash  -4.0';
-    expect(realResult.runtimeType, Success);
-    if (realResult is Success) {
-      expect(realResult.value, expectedResult);
-    }
+    expect(realResult.runtimeType, Error);
   });
 }

@@ -20,7 +20,7 @@ class Transaction {
 /// A [Transaction] is composed of two or more of this.
 class SubTransaction {
   /// The [account] the units are transferred from or to.
- String account;
+  String account;
 
   /// The amount which is transferred.
   Amount amount;
