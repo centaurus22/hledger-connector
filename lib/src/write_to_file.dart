@@ -14,6 +14,10 @@ Future<Result> writeToFile(Result contentResult, String fileName) async {
 }
 
 Future<Result> _writeToFile(String content, String fileName) async {
+  if (fileName == '') {
+    return Error(message: 'The file name cannot be empty.');
+  }
+
   try {
     final file = File(fileName);
 
