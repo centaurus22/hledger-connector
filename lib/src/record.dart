@@ -69,7 +69,7 @@ sealed class Result {
 /// The sealed base class is the [Result]. The other [Result] ist a [Error].
 class Success extends Result {
   /// The embedded value.
-  final dynamic value;
+  final String value;
 
   /// This requires the embedded [value].
   Success({required this.value});

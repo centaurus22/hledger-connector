@@ -61,7 +61,7 @@ Result _checkSubTransactions(List<SubTransaction> subTransactions) {
   //hledger allows conversion transactions with exactly two participating units
   if ((numberNegativeBalances == 1 && numberPositiveBalances == 1) ||
       (numberPositiveBalances == 0 && numberNegativeBalances == 0)) {
-    return Success(value: true);
+    return Success(value: "Check complete");
   }
 
   var mCError =
