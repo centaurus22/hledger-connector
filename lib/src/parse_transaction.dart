@@ -24,7 +24,7 @@ Result _checkSubTransactions(List<SubTransaction> subTransactions) {
   }
 
   for (var subTransaction in subTransactions) {
-    /// hledger do not accept empty account names.
+    /// hledger does not accept empty account names.
     if (subTransaction.account.isEmpty) {
       return Error(
         message:
