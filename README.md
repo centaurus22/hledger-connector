@@ -8,7 +8,7 @@ the LICENSE file for the full text.
 
 ## Features
 
-These are the problems my library solves.
+These are the problems my library solves:
 
 ### Current features
 
@@ -24,9 +24,7 @@ These are the problems my library solves.
 
 ### Planned features
 
-* Create `Account` record from a default account string (eg.: "assets:cash").
-* Create a `JournalFile` record from a file path.
-* Read and filter journal information from a journal via hledger binary.
+* Read and filter journal information.
 * Add comments to journal entries.
 
 If you need any feature please [contact](#contact) me.
@@ -38,25 +36,24 @@ The following Dart record structure
 ```dart
 import 'package:hledger_connector/hledger_connector.dart';
 
-var file = JournalFile(name: 'test.journal');
-
 var transaction = Transaction(
+  description: 'Example transaction',
   date: DateTime(2026,1,1),
   subTransactions: [
     SubTransaction(
-      account: Account(main: 'assets', sub: ['cash']),
+      account: 'assets:cash',
       amount: Amount(value: -5, unit: '\$')
     ),
     SubTransaction(
-      account: Account(main: 'expenses', sub: ['food']),
-      amount: Amount(value: 5, unit '\$')
+      account: 'expenses:food',
+      amount: Amount(value: 5, unit: '\$')
     )
-  ]);
+]);
 
-final result = await addTransaction(transaction, file);
+final result = await addTransaction(transaction, 'test.journal');
 ```
 
-This adds the following transaction to the journal:
+adds the following transaction to the journal:
 
 ```hledger
 2026-01-01 Example transaction

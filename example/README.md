@@ -9,22 +9,21 @@ The following Dart record structure
 ```dart
 import 'package:hledger_connector/hledger_connector.dart';
 
-var file = JournalFile(name: 'test.journal');
-
 var transaction = Transaction(
+  description: 'Example transaction',
   date: DateTime(2026,1,1),
   subTransactions: [
     SubTransaction(
-      account: Account(main: 'assets', sub: ['cash']),
+      account: 'assets:cash',
       amount: Amount(value: -5, unit: '\$')
     ),
     SubTransaction(
-      account: Account(main: 'expenses', sub: ['food']),
-      amount: Amount(value: 5, unit '\$')
+      account: 'expenses:food',
+      amount: Amount(value: 5, unit: '\$')
     )
   ]);
 
-final result = await addTransaction(transaction, file);
+final result = await addTransaction(transaction, 'test.journal');
 ```
 adds the following transaction to the journal:
 
@@ -41,23 +40,21 @@ This is a minimal example with all absolutely required data for one transaction:
 ```dart
 import 'package:hledger_connector/hledger_connector.dart';
 
-var file = JournalFile(name: 'test.journal');
-
 var transaction = Transaction(
   date: DateTime(2026, 1, 1),
   subTransactions: [
     SubTransaction(
-      account: Account(main: 'assets'),
+      account: 'assets',
       amount: Amount(value: 5),
     ),
     SubTransaction(
-      account: Account(main: 'expenses'),
+      account: 'expenses',
       amount: Amount(value: -5),
     ),
   ],
 );
 
-final result = await addTransaction(transaction, file);
+final result = await addTransaction(transaction, 'test.journal');
 ```
 And this is the resulting journal entry:
 
@@ -74,23 +71,21 @@ This is an example with unit conversion:
 ```dart
 import 'package:hledger_connector/hledger_connector.dart';
 
-var file = JournalFile(name: 'test.journal');
-
 var transaction = Transaction(
   date: DateTime(2026,1,1),
   description: 'Conversion example',
   subTransactions: [
     SubTransaction(
-      account: Account(main: 'assets', sub: ['account1']),
+      account: 'assets:account1',
       amount: Amount(value: -5, unit: '\$')
     ),
     SubTransaction(
-      account: Account(main: 'expenses', sub: ['account2']),
+      account: 'expenses:account2',
       amount: SuffixedAmount(value: 4.28, unit: '€')
     )
   ]);
 
-  var result = await addTransaction(transaction, file);
+  var result = await addTransaction(transaction, 'test.journal');
 ```
 
 The result is the following:
@@ -108,22 +103,20 @@ This is an example with unit conversion:
 ```dart
 import 'package:hledger_connector/hledger_connector.dart';
 
-var file = JournalFile(name: 'test.journal');
-
 var transaction = Transaction(
   date: DateTime(2026,1,1),
-  description: 'Conversion example',
+  description: 'Unbalanced example',
   subTransactions: [
     SubTransaction(
-      account: Account(main: 'assets', sub: ['account1']),
+      account: 'assets:account1',
       amount: Amount(value: -5, unit: '\$')
     ),
   ]);
 
-  var result = await addTransaction(transaction, file);
+  var result = await addTransaction(transaction, 'test.journal');
 
   if  (result is Error) {
-    print(result.message)
+    print(result.message);
   }
 ```
 
