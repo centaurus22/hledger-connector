@@ -4,18 +4,16 @@ import 'record.dart';
 import 'dart:io';
 
 /// Use Case: Write the transaction to file
-Future<Result> writeToFile(Result contentResult, JournalFile file) async {
+Future<Result> writeToFile(Result contentResult, String fileName) async {
   switch (contentResult) {
     case Error _:
       return contentResult;
     case Success _:
-      return _writeToFile(contentResult.value, file);
+      return _writeToFile(contentResult.value, fileName);
   }
 }
 
-Future<Result> _writeToFile(String content, JournalFile file) async {
-  final fileName = _fromFile(file);
-
+Future<Result> _writeToFile(String content, String fileName) async {
   try {
     final file = File(fileName);
 
@@ -29,17 +27,6 @@ Future<Result> _writeToFile(String content, JournalFile file) async {
   }
 
   return Success(value: content);
-}
-
-String _fromFile(JournalFile file) {
-  var path = file.path;
-
-  if (path == null) {
-    return file.name;
-  }
-
-  final pathString = path.fold('', (path, pathElement) => '$pathElement/$path');
-  return '$pathString/${file.name}';
 }
 
 String fileHeader() {

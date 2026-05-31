@@ -87,15 +87,3 @@ class Error extends Result {
   /// This requires the error [message].
   Error({required this.message});
 }
-
-/// A file.
-class JournalFile {
-  /// The name of this file.
-  final String name;
-
-  /// The path to this file without this file's name.
-  final List<String>? path;
-
-  /// Requires the [name] of this and an optional [path].
-  JournalFile({required this.name, this.path});
-}
