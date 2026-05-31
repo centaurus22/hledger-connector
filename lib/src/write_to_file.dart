@@ -4,7 +4,7 @@ import 'record.dart';
 import 'dart:io';
 
 /// Use Case: Write the transaction to file
-Future<Result> writeToFile(Result contentResult, String fileName) async {
+Result writeToFile(Result contentResult, String fileName) {
   switch (contentResult) {
     case Error _:
       return contentResult;
@@ -13,7 +13,7 @@ Future<Result> writeToFile(Result contentResult, String fileName) async {
   }
 }
 
-Future<Result> _writeToFile(String content, String fileName) async {
+Result _writeToFile(String content, String fileName) {
   if (fileName == '') {
     return Error(message: 'The file name cannot be empty.');
   }
@@ -21,11 +21,11 @@ Future<Result> _writeToFile(String content, String fileName) async {
   try {
     final file = File(fileName);
 
-    if (await file.exists() == false || await file.length() == 0) {
-      await file.writeAsString(fileHeader());
+    if (file.existsSync() == false || file.lengthSync() == 0) {
+      file.writeAsStringSync(fileHeader());
     }
 
-    await file.writeAsString(content, mode: FileMode.append);
+    file.writeAsStringSync(content, mode: FileMode.append);
   } catch (e) {
     return Error(message: '$e');
   }

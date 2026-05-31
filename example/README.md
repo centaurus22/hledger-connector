@@ -23,7 +23,7 @@ var transaction = Transaction(
     )
   ]);
 
-final result = await addTransaction(transaction, 'test.journal');
+final result = addTransaction(transaction, 'test.journal');
 ```
 adds the following transaction to the journal:
 
@@ -54,7 +54,7 @@ var transaction = Transaction(
   ],
 );
 
-final result = await addTransaction(transaction, 'test.journal');
+final result = addTransaction(transaction, 'test.journal');
 ```
 And this is the resulting journal entry:
 
@@ -85,7 +85,7 @@ var transaction = Transaction(
     )
   ]);
 
-  var result = await addTransaction(transaction, 'test.journal');
+  var result = addTransaction(transaction, 'test.journal');
 ```
 
 The result is the following:
@@ -113,7 +113,7 @@ var transaction = Transaction(
     ),
   ]);
 
-  var result = await addTransaction(transaction, 'test.journal');
+  var result = addTransaction(transaction, 'test.journal');
 
   if  (result is Error) {
     print(result.message);
