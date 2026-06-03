@@ -2,6 +2,6 @@ import 'parse_transaction.dart';
 import 'write_to_file.dart';
 import 'record.dart';
 
-Result addTransaction(Transaction transaction, String file) {
+Result<String> addTransaction(Transaction transaction, String file) {
   return writeToFile(parseTransaction(transaction), file);
 }

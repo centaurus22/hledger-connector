@@ -4,7 +4,7 @@ import 'functions.dart';
 import 'record.dart';
 
 /// Use Case: Convert a transaction object to a hledger journal entry
-Result parseTransaction(Transaction transaction) {
+Result<String> parseTransaction(Transaction transaction) {
   var checkResult = _checkSubTransactions(transaction.subTransactions);
 
   if (checkResult is Error) {
@@ -18,7 +18,7 @@ Result parseTransaction(Transaction transaction) {
   return Success(value: '\n\n$dateString$description$subTransactions');
 }
 
-Result _checkSubTransactions(List<SubTransaction> subTransactions) {
+Result<String> _checkSubTransactions(List<SubTransaction> subTransactions) {
   if (subTransactions.isEmpty) {
     return Error(message: 'The transactions contains no sub-transactions');
   }

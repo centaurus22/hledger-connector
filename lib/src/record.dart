@@ -58,7 +58,7 @@ class SuffixedAmount extends Amount {
 /// This is the sealed base class. Its children are used in functions that can
 /// return an [Error] instead of a of an expected value ([Success])
 /// or additional [warnings].
-sealed class Result {
+sealed class Result<T> {
   /// A list of warnings.
   final List<String> warnings = [];
 }
@@ -67,9 +67,9 @@ sealed class Result {
 ///
 /// It can contain additional [warnings].
 /// The sealed base class is the [Result]. The other [Result] ist a [Error].
-class Success extends Result {
+class Success<T> extends Result<T> {
   /// The embedded value.
-  final String value;
+  final T value;
 
   /// This requires the embedded [value].
   Success({required this.value});
@@ -80,7 +80,7 @@ class Success extends Result {
 /// It can contain additional [warnings].
 /// The sealed base class ist the [Result]. The other [Result] ist a [Success].
 /// when the function executed correctly.
-class Error extends Result {
+class Error<T> extends Result<T> {
   /// The error message.
   final String message;
 

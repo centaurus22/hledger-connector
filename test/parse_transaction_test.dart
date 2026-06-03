@@ -14,8 +14,8 @@ void main() {
       subTransactions: basisSubTransactions,
     );
     var result = parseTransaction(transaction);
-    expect(result.runtimeType, Success);
-    if (result is Success) {
+    expect(result.runtimeType, Success<String>);
+    if (result is Success<String>) {
       expect(result.value.substring(0, 13), '\n\n2026-01-01\n');
     }
   });
@@ -26,8 +26,8 @@ void main() {
       subTransactions: basisSubTransactions,
     );
     var result = parseTransaction(transaction);
-    expect(result.runtimeType, Success);
-    if (result is Success) {
+    expect(result.runtimeType, Success<String>);
+    if (result is Success<String>) {
       expect(
         result.value.substring(0, 31),
         '\n\n2026-01-02 First Transaction\n',
@@ -40,15 +40,15 @@ void main() {
       subTransactions: basisSubTransactions,
     );
     var result = parseTransaction(transaction);
-    expect(result.runtimeType, Success);
-    if (result is Success) {
+    expect(result.runtimeType, Success<String>);
+    if (result is Success<String>) {
       expect(result.value.substring(0, 13), '\n\n2026-01-01\n');
     }
   });
   test('transaction with no sub-transactions', () {
     var transaction = Transaction(date: DateTime(2026), subTransactions: []);
     var result = parseTransaction(transaction);
-    expect(result.runtimeType, Error);
+    expect(result.runtimeType, Error<String>);
   });
   test('unbalanced transaction', () {
     var transaction = Transaction(
@@ -59,7 +59,7 @@ void main() {
       ],
     );
     var result = parseTransaction(transaction);
-    expect(result.runtimeType, Error);
+    expect(result.runtimeType, Error<String>);
   });
   test('balanced transaction with floating point numbers', () {
     var transaction = Transaction(
@@ -70,7 +70,7 @@ void main() {
       ],
     );
     var result = parseTransaction(transaction);
-    expect(result.runtimeType, Success);
+    expect(result.runtimeType, Success<String>);
   });
   test('balanced transaction with more than one unit', () {
     var transaction = Transaction(
@@ -95,7 +95,7 @@ void main() {
       ],
     );
     var result = parseTransaction(transaction);
-    expect(result.runtimeType, Success);
+    expect(result.runtimeType, Success<String>);
   });
   test('valid conversion transaction', () {
     var transaction = Transaction(
@@ -112,7 +112,7 @@ void main() {
       ],
     );
     var result = parseTransaction(transaction);
-    expect(result.runtimeType, Success);
+    expect(result.runtimeType, Success<String>);
   });
   test('invalid multi-conversion transaction', () {
     var transaction = Transaction(
@@ -133,7 +133,7 @@ void main() {
       ],
     );
     var result = parseTransaction(transaction);
-    expect(result.runtimeType, Error);
+    expect(result.runtimeType, Error<String>);
   });
   test('valid conversion transaction with one reduced value', () {
     var transaction = Transaction(
@@ -154,7 +154,7 @@ void main() {
       ],
     );
     var result = parseTransaction(transaction);
-    expect(result.runtimeType, Success);
+    expect(result.runtimeType, Success<String>);
   });
   test('sub-transactions in output', () {
     var transaction = Transaction(
@@ -167,8 +167,8 @@ void main() {
         '2026-01-01\n'
         '    assets     10.0\n'
         '    expenses  -10.0';
-    expect(realResult.runtimeType, Success);
-    if (realResult is Success) {
+    expect(realResult.runtimeType, Success<String>);
+    if (realResult is Success<String>) {
       expect(realResult.value, expectedResult);
     }
   });
@@ -192,8 +192,8 @@ void main() {
         '2026-04-03\n'
         '    expenses   \$4.0\n'
         '    assets    \$-4.0';
-    expect(realResult.runtimeType, Success);
-    if (realResult is Success) {
+    expect(realResult.runtimeType, Success<String>);
+    if (realResult is Success<String>) {
       expect(realResult.value, expectedResult);
     }
   });
@@ -217,8 +217,8 @@ void main() {
         '2026-02-03\n'
         '    expenses  -4.0 €\n'
         '    assets      \$4.0';
-    expect(realResult.runtimeType, Success);
-    if (realResult is Success) {
+    expect(realResult.runtimeType, Success<String>);
+    if (realResult is Success<String>) {
       expect(realResult.value, expectedResult);
     }
   });
@@ -236,8 +236,8 @@ void main() {
         '2026-02-03\n'
         '    expenses   4.0\n'
         '    assets    -4.0';
-    expect(realResult.runtimeType, Success);
-    if (realResult is Success) {
+    expect(realResult.runtimeType, Success<String>);
+    if (realResult is Success<String>) {
       expect(realResult.value, expectedResult);
     }
   });
@@ -250,6 +250,6 @@ void main() {
       ],
     );
     var realResult = parseTransaction(transaction);
-    expect(realResult.runtimeType, Error);
+    expect(realResult.runtimeType, Error<String>);
   });
 }

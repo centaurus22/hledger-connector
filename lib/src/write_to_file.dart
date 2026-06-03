@@ -4,16 +4,16 @@ import 'record.dart';
 import 'dart:io';
 
 /// Use Case: Write the transaction to file
-Result writeToFile(Result contentResult, String fileName) {
+Result<String> writeToFile(Result<String> contentResult, String fileName) {
   switch (contentResult) {
     case Error _:
       return contentResult;
-    case Success _:
+    case Success<String> _:
       return _writeToFile(contentResult.value, fileName);
   }
 }
 
-Result _writeToFile(String content, String fileName) {
+Result<String> _writeToFile(String content, String fileName) {
   if (fileName == '') {
     return Error(message: 'The file name cannot be empty.');
   }
