@@ -16,9 +16,20 @@ Result<List<Transaction>> _parseTransactionString(List<String> transactions) {
   List<Transaction> parsedTransactions = List.empty(growable: true);
 
   transactions.removeAt(0);
-  var subTransactions = transactions
+  var packedSubTransactions = transactions
       .map((t) => parseSubTransaction(t))
       .toList();
+
+  List<SubTransaction> subTransactions = List.empty(growable: true);
+
+  for (var subTransaction in packedSubTransactions) {
+    switch (subTransaction) {
+      case Success<SubTransaction> _:
+        subTransactions.add(subTransaction.value);
+      case Error<SubTransaction> _:
+        return Error(message: subTransaction.message);
+    }
+  }
 
   parsedTransactions.add(
     Transaction(date: DateTime(2025, 12, 3), subTransactions: subTransactions),
@@ -27,14 +38,19 @@ Result<List<Transaction>> _parseTransactionString(List<String> transactions) {
   return Success(value: parsedTransactions);
 }
 
-SubTransaction parseSubTransaction(String line) {
+Result<SubTransaction> parseSubTransaction(String line) {
   RegExp exp = RegExp(r'(.*)[ ]{2,}([-+]?[0-9][0-9]*.?[0-9]*)');
   RegExpMatch? match = exp.firstMatch(line);
 
-  var account = match![1]!.trim();
+  if (match == null) {
+    return Error(message: 'Sub-transaction in line "$line" is not parsable');
+  }
+  var account = match[1]!.trim();
   var amount = double.parse(match[2]!);
-  return SubTransaction(
-    account: account,
-    amount: Amount(value: amount),
+  return Success(
+    value: SubTransaction(
+      account: account,
+      amount: Amount(value: amount),
+    ),
   );
 }

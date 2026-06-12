@@ -66,4 +66,12 @@ void main() {
       expect(parsedTransaction.subTransactions.elementAt(1).amount.value, -0.4);
     }
   });
+  test('returning error if SubTransaction is not parsable', () {
+    List<String> transaction = List.empty(growable: true);
+    transaction.add("2025-12-03");
+    transaction.add("    food        0.4");
+    transaction.add("    assets");
+    var result = parseTransactionString(Success(value: transaction));
+    expect(result.runtimeType, Error<List<Transaction>>);
+  });
 }
