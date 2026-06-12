@@ -252,4 +252,15 @@ void main() {
     var realResult = parseTransactionRecord(transaction);
     expect(realResult.runtimeType, Error<String>);
   });
+  test('returning error if account string contains two following spaces', () {
+    var transaction = Transaction(
+      date: DateTime(2026, 02, 03),
+      subTransactions: [
+        SubTransaction(account: 'fo  od', amount: Amount(value: 4333)),
+        SubTransaction(account: 'assets:cash', amount: Amount(value: -4333)),
+      ],
+    );
+    var realResult = parseTransactionRecord(transaction);
+    expect(realResult.runtimeType, Error<String>);
+  });
 }

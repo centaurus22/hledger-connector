@@ -25,7 +25,8 @@ Result<String> _checkSubTransactions(List<SubTransaction> subTransactions) {
 
   for (var subTransaction in subTransactions) {
     /// hledger does not accept empty account names.
-    if (subTransaction.account.isEmpty) {
+    if (subTransaction.account.isEmpty ||
+        subTransaction.account.contains('  ')) {
       return Error(
         message:
             'A valid hledger account name is required. Eg: assets:cash, expenses:food:eating out.',
