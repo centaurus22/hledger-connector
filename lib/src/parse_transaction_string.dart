@@ -28,7 +28,7 @@ Result<List<Transaction>> _parseTransactionString(List<String> transactions) {
 }
 
 SubTransaction parseSubTransaction(String line) {
-  RegExp exp = RegExp(r'(.*)[ ]{2,}([-+]?[1-9][0-9]*.?[0-9]*)');
+  RegExp exp = RegExp(r'(.*)[ ]{2,}([-+]?[0-9][0-9]*.?[0-9]*)');
   RegExpMatch? match = exp.firstMatch(line);
 
   var account = match![1]!.trim();
