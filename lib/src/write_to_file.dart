@@ -6,10 +6,10 @@ import 'dart:io';
 /// Use Case: Write the transaction to file
 Result<String> writeToFile(Result<String> contentResult, String fileName) {
   switch (contentResult) {
-    case Error _:
-      return contentResult;
     case Success<String> _:
       return _writeToFile(contentResult.value, fileName);
+    case Error _:
+      return contentResult;
   }
 }
 
