@@ -18,11 +18,36 @@ void main() {
     expect(result.runtimeType, Success<List<Transaction>>);
     if (result is Success<List<Transaction>>) {
       var parsedTransaction = result.value.first;
-      expect(parsedTransaction.date, DateTime(2025,12,03));
+      expect(parsedTransaction.date, DateTime(2025, 12, 03));
       expect(parsedTransaction.subTransactions.first.account, 'food');
       expect(parsedTransaction.subTransactions.first.amount.value, 3);
       expect(parsedTransaction.subTransactions.elementAt(1).account, 'assets');
       expect(parsedTransaction.subTransactions.elementAt(1).amount.value, -3);
+    }
+  });
+  test('parsing transaction with three accounts', () {
+    List<String> transaction = List.empty(growable: true);
+    transaction.add("2025-12-03");
+    transaction.add("    food            3");
+    transaction.add("    assets:bank  -2.0");
+    transaction.add("    assets:cash  -1.0");
+    var result = parseTransactionString(Success(value: transaction));
+    expect(result.runtimeType, Success<List<Transaction>>);
+    if (result is Success<List<Transaction>>) {
+      var parsedTransaction = result.value.first;
+      expect(parsedTransaction.date, DateTime(2025, 12, 03));
+      expect(parsedTransaction.subTransactions.first.account, 'food');
+      expect(parsedTransaction.subTransactions.first.amount.value, 3);
+      expect(
+        parsedTransaction.subTransactions.elementAt(1).account,
+        'assets:bank',
+      );
+      expect(parsedTransaction.subTransactions.elementAt(1).amount.value, -2);
+      expect(
+        parsedTransaction.subTransactions.elementAt(2).account,
+        'assets:cash',
+      );
+      expect(parsedTransaction.subTransactions.elementAt(2).amount.value, -1);
     }
   });
 }

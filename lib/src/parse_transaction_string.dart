@@ -4,7 +4,7 @@ import 'record.dart';
 Result<List<Transaction>> parseTransactionString(
   Result<List<String>> transactions,
 ) {
-  switch(transactions) {
+  switch (transactions) {
     case Success<List<String>> _:
       return _parseTransactionString(transactions.value);
     case Error<List<String>> _:
@@ -12,18 +12,29 @@ Result<List<Transaction>> parseTransactionString(
   }
 }
 
-Result<List<Transaction>> _parseTransactionString(
-  List<String> transactions
-) {
+Result<List<Transaction>> _parseTransactionString(List<String> transactions) {
   List<Transaction> parsedTransactions = List.empty(growable: true);
 
-  parsedTransactions.add(Transaction(
-    date: DateTime(2025, 12, 3),
-    subTransactions: [
-      SubTransaction(account: 'food', amount: Amount(value: 3)),
-      SubTransaction(account: 'assets', amount: Amount(value: -3))
-    ])
+  transactions.removeAt(0);
+  var subTransactions = transactions
+      .map((t) => parseSubTransaction(t))
+      .toList();
+
+  parsedTransactions.add(
+    Transaction(date: DateTime(2025, 12, 3), subTransactions: subTransactions),
   );
-  
+
   return Success(value: parsedTransactions);
+}
+
+SubTransaction parseSubTransaction(String line) {
+  RegExp exp = RegExp(r'(.*)[ ]{2,}([-+]?[1-9][0-9]*.?[0-9]*)');
+  RegExpMatch? match = exp.firstMatch(line);
+
+  var account = match![1]!.trim();
+  var amount = double.parse(match[2]!);
+  return SubTransaction(
+    account: account,
+    amount: Amount(value: amount),
+  );
 }
