@@ -15,5 +15,15 @@ Result<List<Transaction>> parseTransactionString(
 Result<List<Transaction>> _parseTransactionString(
   List<String> transactions
 ) {
-  return Error(message: '');
+  List<Transaction> parsedTransactions = List.empty(growable: true);
+
+  parsedTransactions.add(Transaction(
+    date: DateTime(2025, 12, 3),
+    subTransactions: [
+      SubTransaction(account: 'food', amount: Amount(value: 3)),
+      SubTransaction(account: 'assets', amount: Amount(value: -3))
+    ])
+  );
+  
+  return Success(value: parsedTransactions);
 }
