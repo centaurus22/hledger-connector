@@ -1,7 +1,7 @@
 import 'package:hledger_connector/src/record.dart';
 import 'package:test/test.dart';
 
-import 'package:hledger_connector/src/parse_transaction.dart';
+import 'package:hledger_connector/src/parse_transaction_record.dart';
 
 void main() {
   var basisSubTransactions = [
@@ -13,7 +13,7 @@ void main() {
       date: DateTime(2026, 01, 01),
       subTransactions: basisSubTransactions,
     );
-    var result = parseTransaction(transaction);
+    var result = parseTransactionRecord(transaction);
     expect(result.runtimeType, Success<String>);
     if (result is Success<String>) {
       expect(result.value.substring(0, 13), '\n\n2026-01-01\n');
@@ -25,7 +25,7 @@ void main() {
       description: 'First Transaction',
       subTransactions: basisSubTransactions,
     );
-    var result = parseTransaction(transaction);
+    var result = parseTransactionRecord(transaction);
     expect(result.runtimeType, Success<String>);
     if (result is Success<String>) {
       expect(
@@ -39,7 +39,7 @@ void main() {
       date: DateTime(2026),
       subTransactions: basisSubTransactions,
     );
-    var result = parseTransaction(transaction);
+    var result = parseTransactionRecord(transaction);
     expect(result.runtimeType, Success<String>);
     if (result is Success<String>) {
       expect(result.value.substring(0, 13), '\n\n2026-01-01\n');
@@ -47,7 +47,7 @@ void main() {
   });
   test('transaction with no sub-transactions', () {
     var transaction = Transaction(date: DateTime(2026), subTransactions: []);
-    var result = parseTransaction(transaction);
+    var result = parseTransactionRecord(transaction);
     expect(result.runtimeType, Error<String>);
   });
   test('unbalanced transaction', () {
@@ -58,7 +58,7 @@ void main() {
         SubTransaction(account: 'expenses', amount: Amount(value: -5)),
       ],
     );
-    var result = parseTransaction(transaction);
+    var result = parseTransactionRecord(transaction);
     expect(result.runtimeType, Error<String>);
   });
   test('balanced transaction with floating point numbers', () {
@@ -69,7 +69,7 @@ void main() {
         SubTransaction(account: 'expenses', amount: Amount(value: 0.000004)),
       ],
     );
-    var result = parseTransaction(transaction);
+    var result = parseTransactionRecord(transaction);
     expect(result.runtimeType, Success<String>);
   });
   test('balanced transaction with more than one unit', () {
@@ -94,7 +94,7 @@ void main() {
         ),
       ],
     );
-    var result = parseTransaction(transaction);
+    var result = parseTransactionRecord(transaction);
     expect(result.runtimeType, Success<String>);
   });
   test('valid conversion transaction', () {
@@ -111,7 +111,7 @@ void main() {
         ),
       ],
     );
-    var result = parseTransaction(transaction);
+    var result = parseTransactionRecord(transaction);
     expect(result.runtimeType, Success<String>);
   });
   test('invalid multi-conversion transaction', () {
@@ -132,7 +132,7 @@ void main() {
         ),
       ],
     );
-    var result = parseTransaction(transaction);
+    var result = parseTransactionRecord(transaction);
     expect(result.runtimeType, Error<String>);
   });
   test('valid conversion transaction with one reduced value', () {
@@ -153,7 +153,7 @@ void main() {
         ),
       ],
     );
-    var result = parseTransaction(transaction);
+    var result = parseTransactionRecord(transaction);
     expect(result.runtimeType, Success<String>);
   });
   test('sub-transactions in output', () {
@@ -161,7 +161,7 @@ void main() {
       date: DateTime(2026),
       subTransactions: basisSubTransactions,
     );
-    var realResult = parseTransaction(transaction);
+    var realResult = parseTransactionRecord(transaction);
     var expectedResult =
         '\n\n'
         '2026-01-01\n'
@@ -186,7 +186,7 @@ void main() {
         ),
       ],
     );
-    var realResult = parseTransaction(transaction);
+    var realResult = parseTransactionRecord(transaction);
     var expectedResult =
         '\n\n'
         '2026-04-03\n'
@@ -211,7 +211,7 @@ void main() {
         ),
       ],
     );
-    var realResult = parseTransaction(transaction);
+    var realResult = parseTransactionRecord(transaction);
     var expectedResult =
         '\n\n'
         '2026-02-03\n'
@@ -230,7 +230,7 @@ void main() {
         SubTransaction(account: 'assets', amount: SuffixedAmount(value: -4)),
       ],
     );
-    var realResult = parseTransaction(transaction);
+    var realResult = parseTransactionRecord(transaction);
     var expectedResult =
         '\n\n'
         '2026-02-03\n'
@@ -249,7 +249,7 @@ void main() {
         SubTransaction(account: 'assets:cash', amount: Amount(value: -4333)),
       ],
     );
-    var realResult = parseTransaction(transaction);
+    var realResult = parseTransactionRecord(transaction);
     expect(realResult.runtimeType, Error<String>);
   });
 }
