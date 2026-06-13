@@ -74,4 +74,21 @@ void main() {
     var result = parseTransactionString(Success(value: transaction));
     expect(result.runtimeType, Error<List<Transaction>>);
   });
+  test('parsing amounts with a prefixed unit', () {
+    List<String> transaction = List.empty(growable: true);
+    transaction.add("2025-12-03");
+    transaction.add(r"    food        $0.4");
+    transaction.add(r"    assets     $-0.4");
+    var result = parseTransactionString(Success(value: transaction));
+    expect(result.runtimeType, Success<List<Transaction>>);
+    if (result is Success<List<Transaction>>) {
+      var parsedTransaction = result.value.first;
+      expect(parsedTransaction.subTransactions.first.account, 'food');
+      expect(parsedTransaction.subTransactions.first.amount.value, 0.4);
+      expect(parsedTransaction.subTransactions.first.amount.unit, r'$');
+      expect(parsedTransaction.subTransactions.elementAt(1).account, 'assets');
+      expect(parsedTransaction.subTransactions.elementAt(1).amount.value, -0.4);
+      expect(parsedTransaction.subTransactions.elementAt(1).amount.unit, r'$');
+    }
+  });
 }

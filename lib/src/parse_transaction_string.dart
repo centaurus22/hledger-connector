@@ -39,18 +39,49 @@ Result<List<Transaction>> _parseTransactionString(List<String> transactions) {
 }
 
 Result<SubTransaction> parseSubTransaction(String line) {
-  RegExp exp = RegExp(r'(.*)[ ]{2,}([-+]?[0-9][0-9]*.?[0-9]*)');
-  RegExpMatch? match = exp.firstMatch(line);
+  final lineParts = line
+      .split('  ')
+      .map((l) => l.trim())
+      .where((l) => l != '')
+      .toList();
+
+  final errorMessage = 'Sub-transaction in line "$line" is not parsable.';
+
+  if (lineParts.length == 1 || lineParts.length > 3) {
+    return Error(message: errorMessage);
+  }
+
+  final account = lineParts[0];
+
+  String amount;
+  if (lineParts.length == 3) {
+    amount = lineParts[1] + lineParts[2];
+  } else {
+    amount = lineParts[1];
+  }
+
+  final exp = RegExp(r'(?<unit>[^0-9-]*)(?<value>[-+]?[0-9][0-9]*.?[0-9]*)');
+  final match = exp.firstMatch(amount);
 
   if (match == null) {
-    return Error(message: 'Sub-transaction in line "$line" is not parsable');
+    return Error(message: errorMessage);
   }
-  var account = match[1]!.trim();
-  var amount = double.parse(match[2]!);
+
+  final value = match.namedGroup('value');
+  if (value == null) {
+    return Error(message: '$errorMessage The value is not parsable');
+  }
+
+  final unit = match.namedGroup('unit')?.trim();
+
+  if (unit != null && unit.contains(' ')) {
+    return Error(message: '$errorMessage The unit must not contain spaces.');
+  }
+
   return Success(
     value: SubTransaction(
       account: account,
-      amount: Amount(value: amount),
+      amount: Amount(value: double.parse(value), unit: unit),
     ),
   );
 }
