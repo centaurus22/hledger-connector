@@ -142,4 +142,21 @@ void main() {
     var result = parseTransactionString(Success(value: transaction));
     expect(result.runtimeType, Error<List<Transaction>>);
   });
+  test('parsing transaction with description', () {
+    List<String> transaction = List.empty(growable: true);
+    transaction.add("2025-12-03 Bought vegan milk  ");
+    transaction.add("    food        3");
+    transaction.add("    assets     -3");
+    var result = parseTransactionString(Success(value: transaction));
+    expect(result.runtimeType, Success<List<Transaction>>);
+    if (result is Success<List<Transaction>>) {
+      var parsedTransaction = result.value.first;
+      expect(parsedTransaction.date, DateTime(2025, 12, 03));
+      expect(parsedTransaction.description, 'Bought vegan milk');
+      expect(parsedTransaction.subTransactions.first.account, 'food');
+      expect(parsedTransaction.subTransactions.first.amount.value, 3);
+      expect(parsedTransaction.subTransactions.elementAt(1).account, 'assets');
+      expect(parsedTransaction.subTransactions.elementAt(1).amount.value, -3);
+    }
+  });
 }

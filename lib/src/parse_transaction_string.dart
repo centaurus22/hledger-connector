@@ -15,6 +15,16 @@ Result<List<Transaction>> parseTransactionString(
 Result<List<Transaction>> _parseTransactionString(List<String> transactions) {
   List<Transaction> parsedTransactions = List.empty(growable: true);
 
+  final dateDescription = _splitAndClean(transactions[0], ' ');
+  final date = DateTime.parse(dateDescription[0]);
+
+  String? description;
+  if (dateDescription.length > 1) {
+    description = dateDescription.sublist(1).join(' ');
+  } else {
+    description = null;
+  }
+
   transactions.removeAt(0);
   var packedSubTransactions = transactions
       .map((t) => parseSubTransaction(t))
@@ -32,19 +42,14 @@ Result<List<Transaction>> _parseTransactionString(List<String> transactions) {
   }
 
   parsedTransactions.add(
-    Transaction(date: DateTime(2025, 12, 3), subTransactions: subTransactions),
+    Transaction(date: date, description: description, subTransactions: subTransactions),
   );
 
   return Success(value: parsedTransactions);
 }
 
 Result<SubTransaction> parseSubTransaction(String line) {
-  final lineParts = line
-      .split('  ')
-      .map((l) => l.trim())
-      .where((l) => l != '')
-      .toList();
-
+  final lineParts = _splitAndClean(line, '  ');
   final baseErrorMessage = 'Sub-transaction in line "$line" is not parsable.';
 
   if (lineParts.length == 1 || lineParts.length > 3) {
@@ -99,4 +104,12 @@ Result<SubTransaction> parseSubTransaction(String line) {
   return Success(
     value: SubTransaction(account: account, amount: parsedAmount),
   );
+}
+
+List<String> _splitAndClean(String line, String delimiter) {
+  return line
+      .split(delimiter)
+      .map((l) => l.trim())
+      .where((l) => l != '')
+      .toList();
 }
