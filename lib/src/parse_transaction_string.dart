@@ -32,18 +32,8 @@ Result<List<Transaction>> _parseTransactionString(List<String> lines) {
   final parsedTransactions = transactions
       .sublist(1)
       .map((t) => _parseTransaction(t));
-  List<Transaction> checkedTransactions = List.empty(growable: true);
 
-  for (var transaction in parsedTransactions) {
-    switch (transaction) {
-      case Success<Transaction> _:
-        checkedTransactions.add(transaction.value);
-      case Error<Transaction> _:
-        return Error(message: transaction.message);
-    }
-  }
-
-  return Success(value: checkedTransactions);
+  return _checkResultList(parsedTransactions);
 }
 
 Result<Transaction> _parseTransaction(List<String> transaction) {
@@ -67,30 +57,26 @@ Result<Transaction> _parseTransaction(List<String> transaction) {
 
   var parsedSubTransactions = transaction
       .sublist(1)
-      .map((t) => parseSubTransaction(t))
+      .map((t) => _parseSubTransaction(t))
       .toList();
 
-  List<SubTransaction> checkedSubTransactions = List.empty(growable: true);
+  final checkedSubTransactions = _checkResultList(parsedSubTransactions);
 
-  for (var subTransaction in parsedSubTransactions) {
-    switch (subTransaction) {
-      case Success<SubTransaction> _:
-        checkedSubTransactions.add(subTransaction.value);
-      case Error<SubTransaction> _:
-        return Error(message: subTransaction.message);
-    }
+  switch (checkedSubTransactions) {
+    case Success<List<SubTransaction>> _:
+      return Success(
+        value: Transaction(
+          date: date,
+          description: description,
+          subTransactions: checkedSubTransactions.value,
+        ),
+      );
+    case Error<List<SubTransaction>> _:
+      return Error(message: checkedSubTransactions.message);
   }
-
-  return Success(
-    value: Transaction(
-      date: date,
-      description: description,
-      subTransactions: checkedSubTransactions,
-    ),
-  );
 }
 
-Result<SubTransaction> parseSubTransaction(String line) {
+Result<SubTransaction> _parseSubTransaction(String line) {
   final lineParts = _splitAndClean(line, '  ');
   final baseErrorMessage = 'Sub-transaction in line "$line" is not parsable.';
 
@@ -154,4 +140,17 @@ List<String> _splitAndClean(String line, String delimiter) {
       .map((l) => l.trim())
       .where((l) => l != '')
       .toList();
+}
+
+Result<List<T>> _checkResultList<T>(Iterable<Result<T>> elements) {
+  List<T> checkedElements = List.empty(growable: true);
+  for (var element in elements) {
+    switch (element) {
+      case Success<T> _:
+        checkedElements.add(element.value);
+      case Error<T> _:
+        return Error(message: element.message);
+    }
+  }
+  return Success(value: checkedElements);
 }
