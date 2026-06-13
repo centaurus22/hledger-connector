@@ -25,14 +25,14 @@ Result<List<Transaction>> _parseTransactionString(List<String> transactions) {
     description = null;
   }
 
-  transactions.removeAt(0);
-  var packedSubTransactions = transactions
+  var parsedSubTransactions = transactions
+      .sublist(1)
       .map((t) => parseSubTransaction(t))
       .toList();
 
   List<SubTransaction> subTransactions = List.empty(growable: true);
 
-  for (var subTransaction in packedSubTransactions) {
+  for (var subTransaction in parsedSubTransactions) {
     switch (subTransaction) {
       case Success<SubTransaction> _:
         subTransactions.add(subTransaction.value);
@@ -42,7 +42,11 @@ Result<List<Transaction>> _parseTransactionString(List<String> transactions) {
   }
 
   parsedTransactions.add(
-    Transaction(date: date, description: description, subTransactions: subTransactions),
+    Transaction(
+      date: date,
+      description: description,
+      subTransactions: subTransactions,
+    ),
   );
 
   return Success(value: parsedTransactions);
