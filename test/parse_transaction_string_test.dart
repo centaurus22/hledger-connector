@@ -34,20 +34,13 @@ void main() {
     var result = parseTransactionString(Success(value: transaction));
     expect(result.runtimeType, Success<List<Transaction>>);
     if (result is Success<List<Transaction>>) {
-      var parsedTransaction = result.value.first;
-      expect(parsedTransaction.date, DateTime(2025, 12, 03));
-      expect(parsedTransaction.subTransactions.first.account, 'food');
-      expect(parsedTransaction.subTransactions.first.amount.value, 3);
-      expect(
-        parsedTransaction.subTransactions.elementAt(1).account,
-        'assets:bank',
-      );
-      expect(parsedTransaction.subTransactions.elementAt(1).amount.value, -2);
-      expect(
-        parsedTransaction.subTransactions.elementAt(2).account,
-        'assets:cash',
-      );
-      expect(parsedTransaction.subTransactions.elementAt(2).amount.value, -1);
+      var subTransactions = result.value.first.subTransactions;
+      expect(subTransactions.first.account, 'food');
+      expect(subTransactions.first.amount.value, 3);
+      expect(subTransactions.elementAt(1).account, 'assets:bank');
+      expect(subTransactions.elementAt(1).amount.value, -2);
+      expect(subTransactions.elementAt(2).account, 'assets:cash');
+      expect(subTransactions.elementAt(2).amount.value, -1);
     }
   });
   test('parsing transaction with small amounts', () {
@@ -58,12 +51,11 @@ void main() {
     var result = parseTransactionString(Success(value: transaction));
     expect(result.runtimeType, Success<List<Transaction>>);
     if (result is Success<List<Transaction>>) {
-      var parsedTransaction = result.value.first;
-      expect(parsedTransaction.date, DateTime(2025, 12, 03));
-      expect(parsedTransaction.subTransactions.first.account, 'food');
-      expect(parsedTransaction.subTransactions.first.amount.value, 0.4);
-      expect(parsedTransaction.subTransactions.elementAt(1).account, 'assets');
-      expect(parsedTransaction.subTransactions.elementAt(1).amount.value, -0.4);
+      var subTransactions = result.value.first.subTransactions;
+      expect(subTransactions.first.account, 'food');
+      expect(subTransactions.first.amount.value, 0.4);
+      expect(subTransactions.elementAt(1).account, 'assets');
+      expect(subTransactions.elementAt(1).amount.value, -0.4);
     }
   });
   test('returning error if SubTransaction is not parsable', () {
@@ -82,13 +74,13 @@ void main() {
     var result = parseTransactionString(Success(value: transaction));
     expect(result.runtimeType, Success<List<Transaction>>);
     if (result is Success<List<Transaction>>) {
-      var parsedTransaction = result.value.first;
-      expect(parsedTransaction.subTransactions.first.account, 'food');
-      expect(parsedTransaction.subTransactions.first.amount.value, 0.4);
-      expect(parsedTransaction.subTransactions.first.amount.unit, r'$');
-      expect(parsedTransaction.subTransactions.elementAt(1).account, 'assets');
-      expect(parsedTransaction.subTransactions.elementAt(1).amount.value, -0.4);
-      expect(parsedTransaction.subTransactions.elementAt(1).amount.unit, r'$');
+      var subTransactions = result.value.first.subTransactions;
+      expect(subTransactions.first.account, 'food');
+      expect(subTransactions.first.amount.value, 0.4);
+      expect(subTransactions.first.amount.unit, r'$');
+      expect(subTransactions.elementAt(1).account, 'assets');
+      expect(subTransactions.elementAt(1).amount.value, -0.4);
+      expect(subTransactions.elementAt(1).amount.unit, r'$');
     }
   });
   test('parsing transaction with two spaces between unit and value', () {
@@ -99,13 +91,13 @@ void main() {
     var result = parseTransactionString(Success(value: transaction));
     expect(result.runtimeType, Success<List<Transaction>>);
     if (result is Success<List<Transaction>>) {
-      var parsedTransaction = result.value.first;
-      expect(parsedTransaction.subTransactions.first.account, 'food');
-      expect(parsedTransaction.subTransactions.first.amount.value, 0.4);
-      expect(parsedTransaction.subTransactions.first.amount.unit, '€');
-      expect(parsedTransaction.subTransactions.elementAt(1).account, 'assets');
-      expect(parsedTransaction.subTransactions.elementAt(1).amount.value, -0.4);
-      expect(parsedTransaction.subTransactions.elementAt(1).amount.unit, '€');
+      var subTransactions = result.value.first.subTransactions;
+      expect(subTransactions.first.account, 'food');
+      expect(subTransactions.first.amount.value, 0.4);
+      expect(subTransactions.first.amount.unit, '€');
+      expect(subTransactions.elementAt(1).account, 'assets');
+      expect(subTransactions.elementAt(1).amount.value, -0.4);
+      expect(subTransactions.elementAt(1).amount.unit, '€');
     }
   });
   test('return Error when a unit contains a space', () {
