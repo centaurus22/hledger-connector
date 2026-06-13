@@ -159,4 +159,12 @@ void main() {
       expect(parsedTransaction.subTransactions.elementAt(1).amount.value, -3);
     }
   });
+  test('Returning an Error if the date is malformed', () {
+    List<String> transaction = List.empty(growable: true);
+    transaction.add("2025-04  Bought banana");
+    transaction.add("    food        3");
+    transaction.add("    assets     -3");
+    var result = parseTransactionString(Success(value: transaction));
+    expect(result.runtimeType, Error<List<Transaction>>);
+  });
 }

@@ -16,7 +16,11 @@ Result<List<Transaction>> _parseTransactionString(List<String> transactions) {
   List<Transaction> parsedTransactions = List.empty(growable: true);
 
   final dateDescription = _splitAndClean(transactions[0], ' ');
-  final date = DateTime.parse(dateDescription[0]);
+
+  final date = DateTime.tryParse(dateDescription[0]);
+  if (date == null) {
+    return Error(message: 'The date in line "$dateDescription" is not parsable.');
+  }
 
   String? description;
   if (dateDescription.length > 1) {
