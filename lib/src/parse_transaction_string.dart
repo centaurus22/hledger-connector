@@ -83,10 +83,7 @@ Result<SubTransaction> parseSubTransaction(String line) {
 
   Amount parsedAmount;
   if (suffixUnit != null && suffixUnit != '') {
-    parsedAmount = SuffixedAmount(
-      value: double.parse(value),
-      unit: suffixUnit,
-    );
+    parsedAmount = SuffixedAmount(value: double.parse(value), unit: suffixUnit);
   } else {
     parsedAmount = SuffixedAmount(value: double.parse(value), unit: unit);
   }
