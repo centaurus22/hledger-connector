@@ -167,4 +167,12 @@ void main() {
     var result = parseTransactionString(Success(value: transaction));
     expect(result.runtimeType, Error<List<Transaction>>);
   });
+  test('Returning an Error if the date is invalid', () {
+    List<String> transaction = List.empty(growable: true);
+    transaction.add("2025-04-31  Bought banana");
+    transaction.add("    assets:cash:bank      3 €");
+    transaction.add("    assets:cash:cash     -3 €");
+    var result = parseTransactionString(Success(value: transaction));
+    expect(result.runtimeType, Error<List<Transaction>>);
+  });
 }

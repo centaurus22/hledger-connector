@@ -1,3 +1,4 @@
+import 'functions.dart';
 import 'record.dart';
 
 /// Use Case: Parse a String of Transactions to a List of Transaction Records
@@ -19,7 +20,11 @@ Result<List<Transaction>> _parseTransactionString(List<String> transactions) {
 
   final date = DateTime.tryParse(dateDescription[0]);
   if (date == null) {
-    return Error(message: 'The date in line "$dateDescription" is not parsable.');
+    return Error(
+      message: 'The date in line "$dateDescription" is not parsable.',
+    );
+  } else if (dateDescription[0] != formatToIsoDate(date)) {
+    return Error(message: 'The date in line "$dateDescription" is invalid.');
   }
 
   String? description;
