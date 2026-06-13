@@ -13,10 +13,41 @@ Result<List<Transaction>> parseTransactionString(
   }
 }
 
-Result<List<Transaction>> _parseTransactionString(List<String> transactions) {
-  List<Transaction> parsedTransactions = List.empty(growable: true);
+Result<List<Transaction>> _parseTransactionString(List<String> lines) {
+  List<List<String>> transactions = List.empty(growable: true);
+  List<String> transaction = List.empty(growable: true);
+  int? firstChar;
 
-  final dateDescription = _splitAndClean(transactions[0], ' ');
+  for (var line in lines) {
+    //Every transaction starts with a date
+    firstChar = int.tryParse(line[0]);
+    if (firstChar != null) {
+      transactions.add(transaction);
+      transaction = List.empty(growable: true);
+    }
+    transaction.add(line);
+  }
+  transactions.add(transaction);
+
+  final parsedTransactions = transactions
+      .sublist(1)
+      .map((t) => _parseTransaction(t));
+  List<Transaction> checkedTransactions = List.empty(growable: true);
+
+  for (var transaction in parsedTransactions) {
+    switch (transaction) {
+      case Success<Transaction> _:
+        checkedTransactions.add(transaction.value);
+      case Error<Transaction> _:
+        return Error(message: transaction.message);
+    }
+  }
+
+  return Success(value: checkedTransactions);
+}
+
+Result<Transaction> _parseTransaction(List<String> transaction) {
+  final dateDescription = _splitAndClean(transaction[0], ' ');
 
   final date = DateTime.tryParse(dateDescription[0]);
   if (date == null) {
@@ -34,31 +65,29 @@ Result<List<Transaction>> _parseTransactionString(List<String> transactions) {
     description = null;
   }
 
-  var parsedSubTransactions = transactions
+  var parsedSubTransactions = transaction
       .sublist(1)
       .map((t) => parseSubTransaction(t))
       .toList();
 
-  List<SubTransaction> subTransactions = List.empty(growable: true);
+  List<SubTransaction> checkedSubTransactions = List.empty(growable: true);
 
   for (var subTransaction in parsedSubTransactions) {
     switch (subTransaction) {
       case Success<SubTransaction> _:
-        subTransactions.add(subTransaction.value);
+        checkedSubTransactions.add(subTransaction.value);
       case Error<SubTransaction> _:
         return Error(message: subTransaction.message);
     }
   }
 
-  parsedTransactions.add(
-    Transaction(
+  return Success(
+    value: Transaction(
       date: date,
       description: description,
-      subTransactions: subTransactions,
+      subTransactions: checkedSubTransactions,
     ),
   );
-
-  return Success(value: parsedTransactions);
 }
 
 Result<SubTransaction> parseSubTransaction(String line) {

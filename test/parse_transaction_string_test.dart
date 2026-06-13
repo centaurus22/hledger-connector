@@ -175,4 +175,33 @@ void main() {
     var result = parseTransactionString(Success(value: transaction));
     expect(result.runtimeType, Error<List<Transaction>>);
   });
+  test('parsing two transactions', () {
+    List<String> transaction = List.empty(growable: true);
+    transaction.add("2026-12-03 Debit bank account");
+    transaction.add("    assets:cash:cash      150 €");
+    transaction.add("    assets:cash:bank     -150 €");
+    transaction.add("2026-12-05 Debit bank account");
+    transaction.add("    assets:cash:cash     200 €");
+    transaction.add("    assets:cash:bank     -200 €");
+    var result = parseTransactionString(Success(value: transaction));
+    expect(result.runtimeType, Success<List<Transaction>>);
+    if (result is Success<List<Transaction>>) {
+      var parsedTransaction = result.value.first;
+      var subTransactions = parsedTransaction.subTransactions;
+      expect(parsedTransaction.date, DateTime(2026, 12, 03));
+      expect(parsedTransaction.description, 'Debit bank account');
+      expect(subTransactions.first.account, 'assets:cash:cash');
+      expect(subTransactions.first.amount.value, 150);
+      expect(subTransactions.elementAt(1).account, 'assets:cash:bank');
+      expect(subTransactions.elementAt(1).amount.value, -150);
+      parsedTransaction = result.value[1];
+      subTransactions = parsedTransaction.subTransactions;
+      expect(parsedTransaction.date, DateTime(2026, 12, 05));
+      expect(parsedTransaction.description, 'Debit bank account');
+      expect(subTransactions.first.account, 'assets:cash:cash');
+      expect(subTransactions.first.amount.value, 200);
+      expect(subTransactions.elementAt(1).account, 'assets:cash:bank');
+      expect(subTransactions.elementAt(1).amount.value, -200);
+    }
+  });
 }
