@@ -71,7 +71,7 @@ Result<SubTransaction> parseSubTransaction(String line) {
 
   final value = match.namedGroup('value');
   if (value == null) {
-    return Error(message: '$baseErrorMessage The value is not parsable');
+    return Error(message: '$baseErrorMessage The value is not parsable.');
   }
 
   final unit = match.namedGroup('unit')?.trim();
@@ -82,7 +82,7 @@ Result<SubTransaction> parseSubTransaction(String line) {
 
   if (suffixUnit != null && unit != null && suffixUnit != '' && unit != '') {
     return Error(
-      message: '$baseErrorMessage The amount must have only on unit',
+      message: '$baseErrorMessage The amount must have only on unit.',
     );
   } else if (suffixUnit != null && suffixUnit != '') {
     if (suffixUnit.contains(' ')) {
