@@ -108,7 +108,7 @@ void main() {
       expect(parsedTransaction.subTransactions.elementAt(1).amount.unit, '€');
     }
   });
-    test('return Error when a unit contains a space', () {
+  test('return Error when a unit contains a space', () {
     List<String> transaction = List.empty(growable: true);
     transaction.add("2025-12-03");
     transaction.add(r"    food      a b  0.4");
