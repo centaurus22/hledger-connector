@@ -76,15 +76,18 @@ Result<SubTransaction> parseSubTransaction(String line) {
 
   final unit = match.namedGroup('unit')?.trim();
   final suffixUnit = match.namedGroup('suffix_unit')?.trim();
-
-  if (unit != null && unit.contains(' ')) {
-    return Error(message: '$errorMessage The unit must not contain spaces.');
-  }
-
+  final spacesErrorMessage = '$errorMessage The unit must not contain spaces.';
   Amount parsedAmount;
+
   if (suffixUnit != null && suffixUnit != '') {
+    if (suffixUnit.contains(' ')) {
+      return Error(message: spacesErrorMessage);
+    }
     parsedAmount = SuffixedAmount(value: double.parse(value), unit: suffixUnit);
   } else {
+    if (unit != null && unit.contains(' ')) {
+      return Error(message: spacesErrorMessage);
+    }
     parsedAmount = SuffixedAmount(value: double.parse(value), unit: unit);
   }
 

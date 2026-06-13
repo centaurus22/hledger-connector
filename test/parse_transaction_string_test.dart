@@ -126,4 +126,12 @@ void main() {
       expect(subTransactions.first.amount.runtimeType, SuffixedAmount);
     }
   });
+  test('returning Error when a suffix unit contains a space', () {
+    List<String> transaction = List.empty(growable: true);
+    transaction.add("2025-12-03");
+    transaction.add(r"    food      0.4 b a");
+    transaction.add(r"    assets   -0.4 d e");
+    var result = parseTransactionString(Success(value: transaction));
+    expect(result.runtimeType, Error<List<Transaction>>);
+  });
 }
