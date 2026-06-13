@@ -61,7 +61,7 @@ Result<SubTransaction> parseSubTransaction(String line) {
   }
 
   final exp = RegExp(
-    r'(?<unit>[^0-9-]*)(?<value>[-+]?[0-9][0-9]*.?[0-9]*)(?<suffixed_unit>[^0-9-]*)',
+    r'(?<unit>[^0-9-]*)(?<value>[-+]?[0-9][0-9]*.?[0-9]*)(?<suffix_unit>[^0-9-]*)',
   );
   final match = exp.firstMatch(amount);
 
@@ -75,17 +75,17 @@ Result<SubTransaction> parseSubTransaction(String line) {
   }
 
   final unit = match.namedGroup('unit')?.trim();
-  final suffixedUnit = match.namedGroup('suffixed_unit')?.trim();
+  final suffixUnit = match.namedGroup('suffix_unit')?.trim();
 
   if (unit != null && unit.contains(' ')) {
     return Error(message: '$errorMessage The unit must not contain spaces.');
   }
 
   Amount parsedAmount;
-  if (suffixedUnit != null && suffixedUnit != '') {
+  if (suffixUnit != null && suffixUnit != '') {
     parsedAmount = SuffixedAmount(
       value: double.parse(value),
-      unit: suffixedUnit,
+      unit: suffixUnit,
     );
   } else {
     parsedAmount = SuffixedAmount(value: double.parse(value), unit: unit);
