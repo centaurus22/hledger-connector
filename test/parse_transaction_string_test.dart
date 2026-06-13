@@ -116,4 +116,22 @@ void main() {
     var result = parseTransactionString(Success(value: transaction));
     expect(result.runtimeType, Error<List<Transaction>>);
   });
+  test('parsing transaction with suffixed unit', () {
+    List<String> transaction = List.empty(growable: true);
+    transaction.add("2025-12-03");
+    transaction.add(r"    food      0.4 €");
+    transaction.add(r"    assets   -0.4 €");
+    var result = parseTransactionString(Success(value: transaction));
+    expect(result.runtimeType, Success<List<Transaction>>);
+    if (result is Success<List<Transaction>>) {
+      var subTransactions = result.value.first.subTransactions;
+      expect(subTransactions.first.account, 'food');
+      expect(subTransactions.first.amount.value, 0.4);
+      expect(subTransactions.first.amount.unit, '€');
+      expect(subTransactions.elementAt(1).account, 'assets');
+      expect(subTransactions.elementAt(1).amount.value, -0.4);
+      expect(subTransactions.elementAt(1).amount.unit, '€');
+      expect(subTransactions.first.amount.runtimeType, SuffixedAmount);
+    }
+  });
 }
