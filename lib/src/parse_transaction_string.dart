@@ -45,10 +45,10 @@ Result<SubTransaction> parseSubTransaction(String line) {
       .where((l) => l != '')
       .toList();
 
-  final errorMessage = 'Sub-transaction in line "$line" is not parsable.';
+  final baseErrorMessage = 'Sub-transaction in line "$line" is not parsable.';
 
   if (lineParts.length == 1 || lineParts.length > 3) {
-    return Error(message: errorMessage);
+    return Error(message: baseErrorMessage);
   }
 
   final account = lineParts[0];
@@ -66,21 +66,24 @@ Result<SubTransaction> parseSubTransaction(String line) {
   final match = exp.firstMatch(amount);
 
   if (match == null) {
-    return Error(message: errorMessage);
+    return Error(message: baseErrorMessage);
   }
 
   final value = match.namedGroup('value');
   if (value == null) {
-    return Error(message: '$errorMessage The value is not parsable');
+    return Error(message: '$baseErrorMessage The value is not parsable');
   }
 
   final unit = match.namedGroup('unit')?.trim();
   final suffixUnit = match.namedGroup('suffix_unit')?.trim();
-  final spacesErrorMessage = '$errorMessage The unit must not contain spaces.';
+  final spacesErrorMessage =
+      '$baseErrorMessage The unit must not contain spaces.';
   Amount parsedAmount;
 
   if (suffixUnit != null && unit != null && suffixUnit != '' && unit != '') {
-    return Error(message: '$errorMessage The amount must have only on unit');
+    return Error(
+      message: '$baseErrorMessage The amount must have only on unit',
+    );
   } else if (suffixUnit != null && suffixUnit != '') {
     if (suffixUnit.contains(' ')) {
       return Error(message: spacesErrorMessage);
