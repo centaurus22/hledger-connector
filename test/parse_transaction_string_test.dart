@@ -134,4 +134,12 @@ void main() {
     var result = parseTransactionString(Success(value: transaction));
     expect(result.runtimeType, Error<List<Transaction>>);
   });
+  test('returning Error if an amount has a prefix and suffix unit', () {
+    List<String> transaction = List.empty(growable: true);
+    transaction.add("2025-12-03");
+    transaction.add(r"    food     e0.4 b");
+    transaction.add(r"    assets   e-0.4 d");
+    var result = parseTransactionString(Success(value: transaction));
+    expect(result.runtimeType, Error<List<Transaction>>);
+  });
 }

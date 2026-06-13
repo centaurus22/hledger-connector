@@ -79,7 +79,9 @@ Result<SubTransaction> parseSubTransaction(String line) {
   final spacesErrorMessage = '$errorMessage The unit must not contain spaces.';
   Amount parsedAmount;
 
-  if (suffixUnit != null && suffixUnit != '') {
+  if (suffixUnit != null && unit != null && suffixUnit != '' && unit != '') {
+    return Error(message: '$errorMessage The amount must have only on unit');
+  } else if (suffixUnit != null && suffixUnit != '') {
     if (suffixUnit.contains(' ')) {
       return Error(message: spacesErrorMessage);
     }
