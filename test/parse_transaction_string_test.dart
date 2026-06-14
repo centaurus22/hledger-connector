@@ -204,4 +204,16 @@ void main() {
       expect(subTransactions.elementAt(1).amount.value, -200);
     }
   });
+  test('parsing transaction with prefixed unit', () {
+    List<String> transaction = List.empty(growable: true);
+    transaction.add("2025-12-03");
+    transaction.add(r"    food      € 0.4");
+    transaction.add(r"    assets   € -0.4");
+    var result = parseTransactionString(Success(value: transaction));
+    expect(result.runtimeType, Success<List<Transaction>>);
+    if (result is Success<List<Transaction>>) {
+      var subTransactions = result.value.first.subTransactions;
+      expect(subTransactions.first.amount.runtimeType, Amount);
+    }
+  });
 }
