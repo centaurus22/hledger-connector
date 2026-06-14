@@ -95,7 +95,7 @@ Result<SubTransaction> _parseSubTransaction(String line) {
 
   final exp = RegExp(
     r'(?<unit>[^0-9-]*)'
-    r'(?<value>[-+]?[0-9][0-9]*.?[0-9]*)'
+    r'(?<value>[-+]?[0-9][0-9]*\.?[0-9]*)'
     r'(?<suffix_unit>[^0-9-;]*)',
   );
   final match = exp.firstMatch(amount);
@@ -140,7 +140,7 @@ List<String> _splitAndClean(String line, String delimiter) {
   return line
       .split(delimiter)
       .map((l) => l.trim())
-      .where((l) => l != '')
+      .where((l) => l != '' && l[0] != ';') // `;` introduces a tag
       .toList();
 }
 
