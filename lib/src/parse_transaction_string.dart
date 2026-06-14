@@ -94,7 +94,9 @@ Result<SubTransaction> _parseSubTransaction(String line) {
   }
 
   final exp = RegExp(
-    r'(?<unit>[^0-9-]*)(?<value>[-+]?[0-9][0-9]*.?[0-9]*)(?<suffix_unit>[^0-9-]*)',
+    r'(?<unit>[^0-9-]*)'
+    r'(?<value>[-+]?[0-9][0-9]*.?[0-9]*)'
+    r'(?<suffix_unit>[^0-9-;]*)',
   );
   final match = exp.firstMatch(amount);
 
