@@ -243,7 +243,8 @@ void main() {
       expect(parsedTransaction.subTransactions.first.account, '23');
       expect(parsedTransaction.subTransactions.elementAt(1).account, '12');
     }
-  });  test('Parse spaces in account names', () {
+  });
+  test('Parse spaces in account names', () {
     List<String> transaction = List.empty(growable: true);
     transaction.add("2025-04-30");
     transaction.add("    f 3      3 €");
