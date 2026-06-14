@@ -262,7 +262,7 @@ void main() {
     List<String> transaction = List.empty(growable: true);
     transaction.add("2025-04-30");
     transaction.add("    food      3 €; tag1 ");
-    transaction.add("    assets   -3 ");
+    transaction.add("    assets   -3 €");
     var result = parseTransactionString(Success(value: transaction));
     expect(result.runtimeType, Success<List<Transaction>>);
     if (result is Success<List<Transaction>>) {
@@ -277,7 +277,7 @@ void main() {
     List<String> transaction = List.empty(growable: true);
     transaction.add("2025-04-30");
     transaction.add("    food      3 €  ; tag1 ");
-    transaction.add("    assets   -3 ");
+    transaction.add("    assets   -3€ ");
     var result = parseTransactionString(Success(value: transaction));
     expect(result.runtimeType, Success<List<Transaction>>);
     if (result is Success<List<Transaction>>) {
@@ -292,7 +292,7 @@ void main() {
     List<String> transaction = List.empty(growable: true);
     transaction.add("2025-04-30");
     transaction.add("    food      3  €  ; tag1 ");
-    transaction.add("    assets   -3 ");
+    transaction.add("    assets   -3€ ");
     var result = parseTransactionString(Success(value: transaction));
     expect(result.runtimeType, Success<List<Transaction>>);
     if (result is Success<List<Transaction>>) {

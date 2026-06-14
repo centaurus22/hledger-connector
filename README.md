@@ -15,12 +15,18 @@ These are the problems my library solves:
 * Generate journal entries and write it to a journal file with
   * a date and an optional description,
   * sub transactions between two or more accounts,
-  * prefixed or suffixed units,
+  * prefixed or suffixed values //Todo: overhaul
   * simple conversion transactions.
 * Conversion transactions.
 * Creates a new journal files if necessary.
 * Returns a Success record when everything works correctly or an Error record
   which contains an error message.
+
+### Not supported
+
+This is a non-exhaustive list
+
+* Secondary date (deprecated by hledger)
 
 ### Planned features
 
