@@ -230,4 +230,31 @@ void main() {
       expect(parsedTransaction.subTransactions.elementAt(1).account, '12');
     }
   });
+  test('Parse numbers in account names', () {
+    List<String> transaction = List.empty(growable: true);
+    transaction.add("2025-04-30");
+    transaction.add("    23      3 €");
+    transaction.add("    12     -3 €");
+    var result = parseTransactionString(Success(value: transaction));
+    expect(result.runtimeType, Success<List<Transaction>>);
+    if (result is Success<List<Transaction>>) {
+      var parsedTransaction = result.value.first;
+      expect(parsedTransaction.date, DateTime(2025, 04, 30));
+      expect(parsedTransaction.subTransactions.first.account, '23');
+      expect(parsedTransaction.subTransactions.elementAt(1).account, '12');
+    }
+  });  test('Parse spaces in account names', () {
+    List<String> transaction = List.empty(growable: true);
+    transaction.add("2025-04-30");
+    transaction.add("    f 3      3 €");
+    transaction.add("    x 2     -3 €");
+    var result = parseTransactionString(Success(value: transaction));
+    expect(result.runtimeType, Success<List<Transaction>>);
+    if (result is Success<List<Transaction>>) {
+      var parsedTransaction = result.value.first;
+      expect(parsedTransaction.date, DateTime(2025, 04, 30));
+      expect(parsedTransaction.subTransactions.first.account, 'f 3');
+      expect(parsedTransaction.subTransactions.elementAt(1).account, 'x 2');
+    }
+  });
 }
