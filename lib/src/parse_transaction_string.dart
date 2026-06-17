@@ -38,6 +38,8 @@ Result<List<Transaction>> _parseTransactionString(List<String> lines) {
 
 Result<Transaction> _parseTransaction(List<String> transaction) {
   final dateDescription = _splitAndClean(transaction[0], ' ');
+  
+  final description = _parseDescription(dateDescription);
 
   final date = DateTime.tryParse(dateDescription[0]);
   if (date == null) {
@@ -46,13 +48,6 @@ Result<Transaction> _parseTransaction(List<String> transaction) {
     );
   } else if (dateDescription[0] != formatToIsoDate(date)) {
     return Error(message: 'The date in line "$dateDescription" is invalid.');
-  }
-
-  String? description;
-  if (dateDescription.length > 1) {
-    description = dateDescription.sublist(1).join(' ');
-  } else {
-    description = null;
   }
 
   var parsedSubTransactions = transaction
@@ -149,4 +144,12 @@ Result<List<T>> _checkResultList<T>(Iterable<Result<T>> elements) {
     }
   }
   return Success(value: checkedElements);
+}
+
+String? _parseDescription(List<String> input) {
+  if (input.length > 1) {
+    return input.sublist(1).join(' ');
+  } else {
+    return null;
+  }
 }
