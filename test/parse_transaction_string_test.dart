@@ -318,4 +318,20 @@ void main() {
       expect(parsedTransaction.subTransactions.first.amount.unit, '€');
     }
   });
+  test('ignoring comments that claim a complete line', () {
+    List<String> transaction = List.empty(growable: true);
+    transaction.add("2025-03-30");
+    transaction.add("    food            3  €  ;  tag1 ");
+    transaction.add(" ; I am a comment");
+    transaction.add("    assets:bank   -3€ ");
+    var result = parseTransactionString(Success(value: transaction));
+    expect(result.runtimeType, Success<List<Transaction>>);
+    if (result is Success<List<Transaction>>) {
+      var parsedTransaction = result.value.first;
+      expect(parsedTransaction.date, DateTime(2025, 3, 30));
+      expect(parsedTransaction.subTransactions.first.account, 'food');
+      expect(parsedTransaction.subTransactions.first.amount.value, 3);
+      expect(parsedTransaction.subTransactions.first.amount.unit, '€');
+    }
+  });
 }

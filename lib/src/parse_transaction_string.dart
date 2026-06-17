@@ -19,6 +19,11 @@ Result<List<Transaction>> _parseTransactionString(List<String> lines) {
   int? firstChar;
 
   for (var line in lines) {
+    //Line with a comment
+    if (line.trimLeft()[0] == ';') {
+      continue;
+    }
+
     //Every transaction starts with a date
     firstChar = int.tryParse(line[0]);
     if (firstChar != null) {
@@ -38,7 +43,6 @@ Result<List<Transaction>> _parseTransactionString(List<String> lines) {
 
 Result<Transaction> _parseTransaction(List<String> transaction) {
   final dateDescription = _splitAndClean(transaction[0], ' ');
-  
   final description = _parseDescription(dateDescription);
 
   final date = DateTime.tryParse(dateDescription[0]);
