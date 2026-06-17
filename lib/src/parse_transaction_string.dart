@@ -80,18 +80,12 @@ Result<SubTransaction> _parseSubTransaction(String line) {
   final lineParts = _splitAndClean(line, '  ');
   final baseErrorMessage = 'Sub-transaction in line "$line" is not parsable.';
 
-  if (lineParts.length == 1 || lineParts.length > 3) {
+  if (lineParts.length == 1) {
     return Error(message: baseErrorMessage);
   }
 
   final account = lineParts[0];
-
-  String amount;
-  if (lineParts.length == 3) {
-    amount = lineParts[1] + lineParts[2];
-  } else {
-    amount = lineParts[1];
-  }
+  final amount = lineParts.sublist(1).join(' ');
 
   final exp = RegExp(
     r'(?<unit>[^0-9-]*)'
@@ -140,7 +134,7 @@ List<String> _splitAndClean(String line, String delimiter) {
   return line
       .split(delimiter)
       .map((l) => l.trim())
-      .where((l) => l != '' && l[0] != ';') // `;` introduces a tag
+      .where((l) => l != '')
       .toList();
 }
 

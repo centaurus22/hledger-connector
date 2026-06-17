@@ -303,4 +303,18 @@ void main() {
       expect(parsedTransaction.subTransactions.first.amount.unit, '€');
     }
   });
+  test('ignoring tags when separated from ; by more than two spaces', () {
+    List<String> transaction = List.empty(growable: true);
+    transaction.add("2025-04-30");
+    transaction.add("    food      3  €  ;  tag1 ");
+    transaction.add("    assets   -3€ ");
+    var result = parseTransactionString(Success(value: transaction));
+    if (result is Success<List<Transaction>>) {
+      var parsedTransaction = result.value.first;
+      expect(parsedTransaction.date, DateTime(2025, 04, 30));
+      expect(parsedTransaction.subTransactions.first.account, 'food');
+      expect(parsedTransaction.subTransactions.first.amount.value, 3);
+      expect(parsedTransaction.subTransactions.first.amount.unit, '€');
+    }
+  });
 }
