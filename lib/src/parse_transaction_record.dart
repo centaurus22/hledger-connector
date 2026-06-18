@@ -4,84 +4,21 @@ import 'functions.dart';
 import 'record.dart';
 
 /// Use Case: Convert a transaction object to a hledger journal entry
-Result<String> parseTransactionRecord(Transaction transaction) {
-  var checkResult = _checkSubTransactions(transaction.subTransactions);
-
-  if (checkResult is Error) {
-    return checkResult;
+Result<String> parseTransactionRecord(Result<Transaction> transaction) {
+  switch (transaction) {
+    case Success<Transaction> _:
+      return _parseTransactionRecord(transaction.value);
+    case Error<Transaction> _:
+      return Error(message: transaction.message);
   }
+}
 
+Result<String> _parseTransactionRecord(Transaction transaction) {
   String dateString = _formatDate(transaction.date);
   String description = _formatDescription(transaction.description);
   String subTransactions = _formatSubTransactions(transaction.subTransactions);
 
   return Success(value: '\n\n$dateString$description$subTransactions');
-}
-
-Result<String> _checkSubTransactions(List<SubTransaction> subTransactions) {
-  if (subTransactions.isEmpty) {
-    return Error(message: 'The transactions contains no sub-transactions');
-  }
-
-  for (var subTransaction in subTransactions) {
-    /// hledger does not accept empty account names.
-    if (subTransaction.account.isEmpty ||
-        subTransaction.account.contains('  ')) {
-      return Error(
-        message:
-            'A valid hledger account name is required. Eg: assets:cash, expenses:food:eating out.',
-      );
-    }
-  }
-
-  Map<String, double> balances = {};
-
-  subTransactions.fold(
-    balances,
-    (balances, subTransaction) =>
-        _updateBalances(balances, subTransaction.amount),
-  );
-
-  if (balances.length == 1 && balances[balances.keys.first] != 0) {
-    return Error(
-      message: 'This transaction is unbalanced. The sum should be 0.',
-    );
-  }
-
-  var numberPositiveBalances = 0;
-  var numberNegativeBalances = 0;
-
-  for (var balance in balances.entries) {
-    if (balance.value > 0) {
-      numberPositiveBalances += 1;
-    } else if (balance.value < 0) {
-      numberNegativeBalances += 1;
-    }
-  }
-
-  //hledger allows conversion transactions with exactly two participating units
-  if ((numberNegativeBalances == 1 && numberPositiveBalances == 1) ||
-      (numberPositiveBalances == 0 && numberNegativeBalances == 0)) {
-    return Success(value: "Check complete");
-  }
-
-  var mCError =
-      'This multi-commodity transaction is unbalanced. The sum should be 0.';
-
-  return Error(message: mCError);
-}
-
-Map<String, double> _updateBalances(
-  Map<String, double> balances,
-  Amount amount,
-) {
-  var unit = amount.unit;
-  var value = amount.value;
-
-  unit ??= ' ';
-  balances[unit] = (balances[unit] ?? 0) + value;
-
-  return balances;
 }
 
 String _formatDescription(String? description) {
