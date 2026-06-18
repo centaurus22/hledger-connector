@@ -115,7 +115,7 @@ void main() {
     var result = checkTransaction(transaction);
     expect(result.runtimeType, Success<Transaction>);
   });
-  test('throwing error if an account string is empty', () {
+  test('empty account string', () {
     var transaction = Transaction(
       date: DateTime(2026, 02, 03),
       subTransactions: [
@@ -126,7 +126,7 @@ void main() {
     var realResult = checkTransaction(transaction);
     expect(realResult.runtimeType, Error<Transaction>);
   });
-  test('returning error if account string contains two following spaces', () {
+  test('account string with two following spaces', () {
     var transaction = Transaction(
       date: DateTime(2026, 02, 03),
       subTransactions: [

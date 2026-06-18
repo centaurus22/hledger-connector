@@ -8,7 +8,7 @@ void main() {
     SubTransaction(account: 'assets', amount: Amount(value: 10)),
     SubTransaction(account: 'expenses', amount: Amount(value: -10)),
   ];
-  test('if transaction starts with a date', () {
+  test('transaction starting with a date', () {
     final transaction = Success(
       value: Transaction(
         date: DateTime(2026, 01, 01),
@@ -21,7 +21,7 @@ void main() {
       expect(result.value.substring(0, 13), '\n\n2026-01-01\n');
     }
   });
-  test('if description is rendered', () {
+  test('description rendering', () {
     final transaction = Success(
       value: Transaction(
         date: DateTime(2026, 01, 02),
@@ -51,7 +51,7 @@ void main() {
       expect(result.value.substring(0, 13), '\n\n2026-01-01\n');
     }
   });
-  test('sub-transactions in output', () {
+  test('sub-transactions', () {
     final transaction = Success(
       value: Transaction(
         date: DateTime(2026),
