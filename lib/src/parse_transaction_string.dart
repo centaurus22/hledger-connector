@@ -38,7 +38,7 @@ Result<List<Transaction>> _parseTransactionString(List<String> lines) {
       .sublist(1)
       .map((t) => _parseTransaction(t));
 
-  return _sortResultList(checkResultList(parsedTransactions));
+  return _sort(check(parsedTransactions));
 }
 
 Result<Transaction> _parseTransaction(List<String> transaction) {
@@ -59,7 +59,7 @@ Result<Transaction> _parseTransaction(List<String> transaction) {
       .map((t) => _parseSubTransaction(t))
       .toList();
 
-  final checkedSubTransactions = checkResultList(parsedSubTransactions);
+  final checkedSubTransactions = check(parsedSubTransactions);
 
   switch (checkedSubTransactions) {
     case Success<List<SubTransaction>> _:
@@ -145,10 +145,10 @@ String? _parseDescription(List<String> input) {
   }
 }
 
-Result<List<Transaction>> _sortResultList(Result<List<Transaction>> transactions) {
+Result<List<Transaction>> _sort(Result<List<Transaction>> transactions) {
   switch (transactions) {
     case Success<List<Transaction>> _:
-      transactions.value.sort((a,b) => a.date.compareTo(b.date));
+      transactions.value.sort((a, b) => a.date.compareTo(b.date));
       return transactions;
     case Error<List<Transaction>> _:
       return transactions;

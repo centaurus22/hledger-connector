@@ -8,7 +8,7 @@ String _padLeft(int value) {
   return value.toString().padLeft(2, '0');
 }
 
-Result<List<T>> checkResultList<T>(Iterable<Result<T>> elements) {
+Result<List<T>> check<T>(Iterable<Result<T>> elements) {
   final errorElements = elements.whereType<Error<T>>();
   if (errorElements.isNotEmpty) {
     return Error(message: errorElements.first.message);
