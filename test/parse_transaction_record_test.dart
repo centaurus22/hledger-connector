@@ -144,4 +144,9 @@ void main() {
       expect(realResult.value, expectedResult);
     }
   });
+  test('Error passed to function', () {
+    final transaction = Error<Transaction>(message: "transaction invalid.");
+    var realResult = parseTransactionRecord(transaction);
+    expect(realResult.runtimeType, Error<String>);
+  });
 }
