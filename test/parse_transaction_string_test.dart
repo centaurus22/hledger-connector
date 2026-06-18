@@ -334,4 +334,21 @@ void main() {
       expect(parsedTransaction.subTransactions.first.amount.unit, '€');
     }
   });
+  test('sorting two transactions by date', () {
+    List<String> transaction = List.empty(growable: true);
+    transaction.add("2026-12-06 Debit bank account");
+    transaction.add("    assets:cash:cash      150 €");
+    transaction.add("    assets:cash:bank     -150 €");
+    transaction.add("2026-12-05 Debit bank account");
+    transaction.add("    assets:cash:cash     200 €");
+    transaction.add("    assets:cash:bank     -200 €");
+    var result = parseTransactionString(Success(value: transaction));
+    expect(result.runtimeType, Success<List<Transaction>>);
+    if (result is Success<List<Transaction>>) {
+      var parsedTransaction = result.value.first;
+      expect(parsedTransaction.date, DateTime(2026, 12, 05));
+      parsedTransaction = result.value[1];
+      expect(parsedTransaction.date, DateTime(2026, 12, 06));
+    }
+  });
 }
