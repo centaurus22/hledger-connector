@@ -11,4 +11,9 @@ void main() {
       expect(result.message, 'The file name cannot be empty.');
     }
   });
+  test('Error passed to function', () {
+    final transaction = Error<String>(message: "transaction invalid.");
+    var realResult = writeToFile(transaction, '');
+    expect(realResult.runtimeType, Error<String>);
+  });
 }
