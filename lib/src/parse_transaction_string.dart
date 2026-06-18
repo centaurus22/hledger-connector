@@ -138,16 +138,13 @@ List<String> _splitAndClean(String line, String delimiter) {
 }
 
 Result<List<T>> _checkResultList<T>(Iterable<Result<T>> elements) {
-  List<T> checkedElements = List.empty(growable: true);
-  for (var element in elements) {
-    switch (element) {
-      case Success<T> _:
-        checkedElements.add(element.value);
-      case Error<T> _:
-        return Error(message: element.message);
-    }
-  }
-  return Success(value: checkedElements);
+  final errorElements = elements.whereType<Error<T>>();
+  if (errorElements.isNotEmpty) {
+    return Error(message: errorElements.first.message);
+  } 
+  
+  final successElements = (elements.whereType<Success<T>>());
+  return Success(value: successElements.map((e) => e.value).toList());
 }
 
 String? _parseDescription(List<String> input) {
