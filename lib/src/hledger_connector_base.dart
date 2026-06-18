@@ -1,4 +1,5 @@
 import 'check_transaction.dart';
+import 'check_transactions.dart';
 import 'parse_transaction_record.dart';
 import 'parse_transaction_string.dart';
 import 'write_to_file.dart';
@@ -13,5 +14,5 @@ Result<String> addTransaction(Transaction transaction, String file) {
 }
 
 Result<List<Transaction>> readTransactions(String file) {
-  return parseTransactionString(readFromFile(file));
+  return checkTransactions(parseTransactionString(readFromFile(file)));
 }

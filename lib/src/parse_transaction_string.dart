@@ -38,7 +38,7 @@ Result<List<Transaction>> _parseTransactionString(List<String> lines) {
       .sublist(1)
       .map((t) => _parseTransaction(t));
 
-  return _checkResultList(parsedTransactions);
+  return checkResultList(parsedTransactions);
 }
 
 Result<Transaction> _parseTransaction(List<String> transaction) {
@@ -59,7 +59,7 @@ Result<Transaction> _parseTransaction(List<String> transaction) {
       .map((t) => _parseSubTransaction(t))
       .toList();
 
-  final checkedSubTransactions = _checkResultList(parsedSubTransactions);
+  final checkedSubTransactions = checkResultList(parsedSubTransactions);
 
   switch (checkedSubTransactions) {
     case Success<List<SubTransaction>> _:
@@ -135,16 +135,6 @@ List<String> _splitAndClean(String line, String delimiter) {
       .map((l) => l.trim())
       .where((l) => l != '')
       .toList();
-}
-
-Result<List<T>> _checkResultList<T>(Iterable<Result<T>> elements) {
-  final errorElements = elements.whereType<Error<T>>();
-  if (errorElements.isNotEmpty) {
-    return Error(message: errorElements.first.message);
-  } 
-  
-  final successElements = (elements.whereType<Success<T>>());
-  return Success(value: successElements.map((e) => e.value).toList());
 }
 
 String? _parseDescription(List<String> input) {
