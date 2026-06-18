@@ -29,7 +29,9 @@ void main() {
     expect(result.runtimeType, Success<List<Transaction>>);
   });
   test('Error as input', () {
-    Error<List<Transaction>> value = Error(message: 'The file cannot be found.');
+    Error<List<Transaction>> value = Error(
+      message: 'The file cannot be found.',
+    );
     var result = checkTransactions(value);
     expect(result.runtimeType, Error<List<Transaction>>);
   });
