@@ -19,8 +19,8 @@ Result<List<Transaction>> _parseTransactionString(List<String> lines) {
   int? firstChar;
 
   for (var line in lines) {
-    //Line with a comment
-    if (line.trimLeft()[0] == ';') {
+    //filter lines with a comment
+    if ([';', '#'].contains(line.trimLeft()[0])) {
       continue;
     }
 
