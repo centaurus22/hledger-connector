@@ -37,7 +37,7 @@ Supported features according to the [data formats page](https://hledger.org/1.52
 | Pending status | ❌ Not Supported | 🗒️ On request |
 | Cleared status | ❌ Not Supported | 🗒️ On request |
 | (code) | ❌ Not Supported | 🗒️ On request |
-| Description as PAYEE \| NOTE* | 👻 Ignored | 🗒️ On request |
+| Description as PAYEE \| NOTE ¹ | 👻 Ignored | 🗒️ On request |
 | Complex commodity symbol | ❌ Not Supported | 🗒️ On request |
 | Per unit cost | ❌ Not Supported | 🗒️ On request |
 | Total cost | ❌ Not Supported | 🗒️ On request |
@@ -45,7 +45,7 @@ Supported features according to the [data formats page](https://hledger.org/1.52
 | Balance assertion | ❌ Not Supported | 🗒️ On request |
 | Virtual postings | ❌ Not Supported | 🗒️ On request |
 | comment | 👻 Ignored | 🗒️ On request |
-| Secondary date** | ❌ Not Supported |  ❌ Won't implement |
+| Secondary date ² | ❌ Not Supported |  ❌ Won't implement |
 | Block comment | ❌ Not Supported | 🗒️ On request |
 | account directive | ❌ Not Supported | 🗒️ On request |
 | Gain postings | ❌ Not Supported | 🗒️ On request |
@@ -62,9 +62,10 @@ Supported features according to the [data formats page](https://hledger.org/1.52
 | Default year | ❌ Not Supported | 🗒️ On request |
 | Other ledger directives | ❌ Not Supported | 🗒️ On request |
 
-\* Is part of description / ** Is deprecated by hledger
+1. Is part of description 
+2. Is deprecated by hledger
 
-* '👻 Ignored' means: The content of this element will be silently dropped if present in a journal. 
+* '👻 Ignored' means: The content of this element will be silently dropped if present in a journal. It cannot be added to a Transaction record.
 * '❌ Not Supported' means: This element will cause an error.
 
 ## Usage
