@@ -20,7 +20,7 @@ Result<List<Transaction>> _parseTransactionString(List<String> lines) {
 
   for (var line in lines) {
     //filter lines with a comment
-    if ([';', '#'].contains(line.trimLeft()[0])) {
+    if ([';', '#', '*'].contains(line.trimLeft()[0])) {
       continue;
     }
 

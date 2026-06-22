@@ -38,16 +38,14 @@ Supported features according to the [data formats page](https://hledger.org/1.52
 | Cleared status | ❌ Not Supported | 🗒️ On request |
 | (code) | ❌ Not Supported | 🗒️ On request |
 | Description as PAYEE \| NOTE* | 👻 Ignored | 🗒️ On request |
-| Complex commodity symbols | ❌ Not Supported | 🗒️ On request |
-| Per unit costs | ❌ Not Supported | 🗒️ On request |
-| Total costs | ❌ Not Supported | 🗒️ On request |
+| Complex commodity symbol | ❌ Not Supported | 🗒️ On request |
+| Per unit cost | ❌ Not Supported | 🗒️ On request |
+| Total cost | ❌ Not Supported | 🗒️ On request |
 | Cost basis | ❌ Not Supported | 🗒️ On request |
-| Balance assertions | ❌ Not Supported | 🗒️ On request |
+| Balance assertion | ❌ Not Supported | 🗒️ On request |
 | Virtual postings | ❌ Not Supported | 🗒️ On request |
-| ; comment | 👻 Ignored | 🗒️ On request |
-| # comment | 👻 Ignored | 🗒️ On request |
-| * comment | ❌ Not Supported |  ⏳ Planned |
-| Secondary dates** | ❌ Not Supported |  ❌ Won't implement |
+| comment | 👻 Ignored | 🗒️ On request |
+| Secondary date** | ❌ Not Supported |  ❌ Won't implement |
 | Block comment | ❌ Not Supported | 🗒️ On request |
 | account directive | ❌ Not Supported | 🗒️ On request |
 | Gain postings | ❌ Not Supported | 🗒️ On request |
