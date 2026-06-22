@@ -15,23 +15,36 @@ var transaction = Transaction(
   subTransactions: [
     SubTransaction(
       account: 'assets:cash',
-      amount: Amount(value: -5, unit: '\$')
+      amount: Amount(value: -5, unit: r'$')
     ),
     SubTransaction(
       account: 'expenses:food',
-      amount: Amount(value: 5, unit: '\$')
+      amount: Amount(value: 5, unit: r'$')
     )
-  ]);
+]);
 
-final result = addTransaction(transaction, 'test.journal');
+final writeResult = addTransaction(transaction, 'test.journal');
 ```
+
 adds the following transaction to the journal:
 
-```hledger
+```ledger
 2026-01-01 Example transaction
     assets:cash    $-5.0
     expenses:food   $5.0
 ```
+
+You can read the information back with
+
+```dart
+final readResult = readTransactions('test.journal');
+
+if (readResult is Success) {
+  final transaction = readResult.value.first;
+}
+```
+The `transaction` variable contains the record structure that you just wrote
+to disk.
 
 ## Minimal example
 
@@ -98,7 +111,7 @@ The result is the following:
 
 ## Error example
 
-This is an example with unit conversion:
+This is an example with a unbalanced Transaction. The parser returns an Error:
 
 ```dart
 import 'package:hledger_connector/hledger_connector.dart';
