@@ -45,7 +45,7 @@ Supported features according to the [data formats page](https://hledger.org/1.52
 | Balance assertions | ❌ Not Supported | 🗒️ On request |
 | Virtual postings | ❌ Not Supported | 🗒️ On request |
 | ; comment | 👻 Ignored | 🗒️ On request |
-| # comment | ❌ Not Supported |  ⏳ Planned |
+| # comment | 👻 Ignored | 🗒️ On request |
 | * comment | ❌ Not Supported |  ⏳ Planned |
 | Secondary dates** | ❌ Not Supported |  ❌ Won't implement |
 | Block comment | ❌ Not Supported | 🗒️ On request |
