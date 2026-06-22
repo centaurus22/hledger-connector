@@ -8,32 +8,66 @@ the LICENSE file for the full text.
 
 ## Features
 
-These are the problems my library solves:
-
-### Current features
-
-* Generate journal entries and write it to a journal file with
+* Generate and read journal entries
   * a date and an optional description,
-  * sub transactions between two or more accounts,
-  * prefixed or suffixed values //Todo: overhaul
+  * transactions between two or more accounts,
+  * preceding or following units
   * simple conversion transactions.
-* Conversion transactions.
+* Write them to file or read them from a file.
 * Creates a new journal files if necessary.
-* Returns a Success record when everything works correctly or an Error record
-  which contains an error message.
-
-### Not supported
-
-This is a non-exhaustive list
-
-* Secondary date (deprecated by hledger)
+* Returns a Success when everything has worked correctly or an Error which
+  contains an error message.
 
 ### Planned features
 
-* Read and filter journal information.
-* Add comments to journal entries.
+* Filter a List of Transactions by account names, dates etc.
+* Write a list of Transactions with one file access instead one access for
+  every Transaction.
+* Transform a Transaction from and to a string without any file access for
+  example to send it over the net or save it in a database.
 
-If you need any feature please [contact](#contact) me.
+### List
+Supported features according to the [data formats page](https://hledger.org/1.52/hledger.html#part-2-data-formats) on [hledger.org](hledger.org)
+
+| Feature | Supported | Future dev?|
+|---------|-----------|--------|
+| Basic transaction | ✅ Supported |
+| Tag | 👻 Ignored | 🗒️ On request |
+| Group values by spaces | ❌ Not Supported | 🗒️ On request |
+| Pending status | ❌ Not Supported | 🗒️ On request |
+| Cleared status | ❌ Not Supported | 🗒️ On request |
+| (code) | ❌ Not Supported | 🗒️ On request |
+| Description as PAYEE \| NOTE* | 👻 Ignored | 🗒️ On request |
+| Complex commodity symbols | ❌ Not Supported | 🗒️ On request |
+| Per unit costs | ❌ Not Supported | 🗒️ On request |
+| Total costs | ❌ Not Supported | 🗒️ On request |
+| Cost basis | ❌ Not Supported | 🗒️ On request |
+| Balance assertions | ❌ Not Supported | 🗒️ On request |
+| Virtual postings | ❌ Not Supported | 🗒️ On request |
+| ; comment | 👻 Ignored | 🗒️ On request |
+| # comment | ❌ Not Supported |  ⏳ Planned |
+| * comment | ❌ Not Supported |  ⏳ Planned |
+| Secondary dates** | ❌ Not Supported |  ❌ Won't implement |
+| Block comment | ❌ Not Supported | 🗒️ On request |
+| account directive | ❌ Not Supported | 🗒️ On request |
+| Gain postings | ❌ Not Supported | 🗒️ On request |
+| alias directive | ❌ Not Supported | 🗒️ On request |
+| commodity directive | ❌ Not Supported | 🗒️ On request |
+| decimal-mark directive | ❌ Not Supported | 🗒️ On request |
+| payee directive | ❌ Not Supported | 🗒️ On request |
+| tag directive | ❌ Not Supported | 🗒️ On request |
+| Market price directive | ❌ Not Supported | 🗒️ On request |
+| include directive | ❌ Not Supported | 🗒️ On request |
+| Periodic transaction | ❌ Not Supported | 🗒️ On request |
+| apply account | ❌ Not Supported | 🗒️ On request |
+| Default commodity | ❌ Not Supported | 🗒️ On request |
+| Default year | ❌ Not Supported | 🗒️ On request |
+| Other ledger directives | ❌ Not Supported | 🗒️ On request |
+
+\* Is part of description / ** Is deprecated by hledger
+
+* '👻 Ignored' means: The content of this element will be silently dropped if present in a journal. 
+* '❌ Not Supported' means: This element will cause an error.
 
 ## Usage
 
@@ -48,24 +82,36 @@ var transaction = Transaction(
   subTransactions: [
     SubTransaction(
       account: 'assets:cash',
-      amount: Amount(value: -5, unit: '\$')
+      amount: Amount(value: -5, unit: r'$')
     ),
     SubTransaction(
       account: 'expenses:food',
-      amount: Amount(value: 5, unit: '\$')
+      amount: Amount(value: 5, unit: r'$')
     )
 ]);
 
-final result = addTransaction(transaction, 'test.journal');
+final writeResult = addTransaction(transaction, 'test.journal');
 ```
 
 adds the following transaction to the journal:
 
-```hledger
+```ledger
 2026-01-01 Example transaction
     assets:cash    $-5.0
     expenses:food   $5.0
 ```
+
+You can read the information back with
+
+```dart
+final readResult = readTransactions('test.journal');
+
+if (readResult is Success) {
+  final transaction = readResult.value.first;
+}
+```
+The variable `transaction` contains the record structure you just have written
+to disk.
 
 For more usage examples, see the `example/` directory.
 
