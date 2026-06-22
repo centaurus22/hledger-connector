@@ -108,7 +108,7 @@ if (readResult is Success) {
   final transaction = readResult.value.first;
 }
 ```
-The variable `transaction` contains the record structure you just have written
+The `transaction` variable contains the record structure that you just wrote
 to disk.
 
 For more usage examples, see the `example/` directory.
