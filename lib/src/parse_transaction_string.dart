@@ -148,7 +148,7 @@ String? _parseDescription(List<String> input) {
 
 Result<DateTime> _parseDate(String dateString)
 {
-  dateString = dateString.replaceAll('.', '-');
+  dateString = dateString.replaceAll('.', '-').replaceAll('/', '-');
   final date = DateTime.tryParse(dateString);
   if (date == null) {
     return Error(

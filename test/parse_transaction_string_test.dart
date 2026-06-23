@@ -394,4 +394,15 @@ void main() {
       expect(result.value.first.date, DateTime(2025,12,03));
     }
   });
+  test('simple date with slash separator', () {
+    List<String> transaction = List.empty(growable: true);
+    transaction.add("2027/08/02");
+    transaction.add("    food      € 0.4");
+    transaction.add("    assets   € -0.4");
+    var result = parseTransactionString(Success(value: transaction));
+    expect(result.runtimeType, Success<List<Transaction>>);
+    if (result is Success<List<Transaction>>) {
+      expect(result.value.first.date, DateTime(2027,8,2));
+    }
+  });
 }
