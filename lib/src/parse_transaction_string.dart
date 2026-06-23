@@ -44,7 +44,7 @@ Result<List<Transaction>> _parseTransactionString(List<String> lines) {
 Result<Transaction> _parseTransaction(List<String> transaction) {
   final dateDescription = _splitAndClean(transaction[0], ' ');
   final description = _parseDescription(dateDescription);
-  
+
   final dateResult = _parseDate(dateDescription[0]);
   DateTime date;
   switch (dateResult) {
@@ -53,7 +53,6 @@ Result<Transaction> _parseTransaction(List<String> transaction) {
     case Error<DateTime> _:
       return Error(message: dateResult.message);
   }
-
 
   var parsedSubTransactions = transaction
       .sublist(1)
@@ -146,14 +145,11 @@ String? _parseDescription(List<String> input) {
   }
 }
 
-Result<DateTime> _parseDate(String dateString)
-{
+Result<DateTime> _parseDate(String dateString) {
   dateString = dateString.replaceAll('.', '-').replaceAll('/', '-');
   final date = DateTime.tryParse(dateString);
   if (date == null) {
-    return Error(
-      message: 'The date in line "$dateString" is not parsable.',
-    );
+    return Error(message: 'The date in line "$dateString" is not parsable.');
   } else if (dateString != formatToIsoDate(date)) {
     return Error(message: 'The date in line "$dateString" is invalid.');
   } else {

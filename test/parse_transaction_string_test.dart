@@ -391,7 +391,7 @@ void main() {
     var result = parseTransactionString(Success(value: transaction));
     expect(result.runtimeType, Success<List<Transaction>>);
     if (result is Success<List<Transaction>>) {
-      expect(result.value.first.date, DateTime(2025,12,03));
+      expect(result.value.first.date, DateTime(2025, 12, 3));
     }
   });
   test('simple date with slash separator', () {
@@ -402,7 +402,7 @@ void main() {
     var result = parseTransactionString(Success(value: transaction));
     expect(result.runtimeType, Success<List<Transaction>>);
     if (result is Success<List<Transaction>>) {
-      expect(result.value.first.date, DateTime(2027,8,2));
+      expect(result.value.first.date, DateTime(2027, 8, 2));
     }
   });
 }
