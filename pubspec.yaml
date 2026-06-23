@@ -1,6 +1,6 @@
 name: hledger_connector
 description: A library to connect with the hledger plain text accounting system https://hledger.org/.
-version: 0.2.0
+version: 0.3.0
 
 topics: 
  - accounting
