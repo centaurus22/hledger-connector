@@ -25,6 +25,7 @@ the LICENSE file for the full text.
   every Transaction.
 * Transform a Transaction from and to a string without any file access for
   example to send it over the net or save it in a database.
+* Add a warning if a journal contains an ignored feature.
 
 ### List
 Supported features according to the [data formats page](https://hledger.org/1.52/hledger.html#part-2-data-formats) on [hledger.org](hledger.org)
