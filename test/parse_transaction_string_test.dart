@@ -383,4 +383,15 @@ void main() {
       expect(parsedTransaction.subTransactions.first.amount.unit, '€');
     }
   });
+  test('simple date with period separator', () {
+    List<String> transaction = List.empty(growable: true);
+    transaction.add("2025.12.03");
+    transaction.add("    food      € 0.4");
+    transaction.add("    assets   € -0.4");
+    var result = parseTransactionString(Success(value: transaction));
+    expect(result.runtimeType, Success<List<Transaction>>);
+    if (result is Success<List<Transaction>>) {
+      expect(result.value.first.date, DateTime(2025,12,03));
+    }
+  });
 }
