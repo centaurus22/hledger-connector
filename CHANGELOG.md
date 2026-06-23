@@ -10,7 +10,7 @@
 - Check if the file path is empty before opening the file for writing.
 - Other improvements.
 
-# 0.3.0
+## 0.3.0
 
 - I am happy to introduce the journal parser that reads a file and returns a Transaction object.
 - I added a large list to the Readme where you can see which ledger journal feature is already supported.
