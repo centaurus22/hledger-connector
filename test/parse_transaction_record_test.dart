@@ -1,7 +1,7 @@
 import 'package:hledger_connector/src/record.dart';
 import 'package:test/test.dart';
 
-import 'package:hledger_connector/src/parse_transaction_record.dart';
+import 'package:hledger_connector/src/to_journal_string.dart';
 
 void main() {
   final basisSubTransactions = [
@@ -15,7 +15,7 @@ void main() {
         subTransactions: basisSubTransactions,
       ),
     );
-    var result = parseTransactionRecord(transaction);
+    var result = toJournalString(transaction);
     expect(result.runtimeType, Success<String>);
     if (result is Success<String>) {
       expect(result.value.substring(0, 13), '\n\n2026-01-01\n');
@@ -29,7 +29,7 @@ void main() {
         subTransactions: basisSubTransactions,
       ),
     );
-    var result = parseTransactionRecord(transaction);
+    var result = toJournalString(transaction);
     expect(result.runtimeType, Success<String>);
     if (result is Success<String>) {
       expect(
@@ -45,7 +45,7 @@ void main() {
         subTransactions: basisSubTransactions,
       ),
     );
-    var result = parseTransactionRecord(transaction);
+    var result = toJournalString(transaction);
     expect(result.runtimeType, Success<String>);
     if (result is Success<String>) {
       expect(result.value.substring(0, 13), '\n\n2026-01-01\n');
@@ -58,7 +58,7 @@ void main() {
         subTransactions: basisSubTransactions,
       ),
     );
-    var realResult = parseTransactionRecord(transaction);
+    var realResult = toJournalString(transaction);
     var expectedResult =
         '\n\n'
         '2026-01-01\n'
@@ -85,7 +85,7 @@ void main() {
         ],
       ),
     );
-    var realResult = parseTransactionRecord(transaction);
+    var realResult = toJournalString(transaction);
     var expectedResult =
         '\n\n'
         '2026-04-03\n'
@@ -112,7 +112,7 @@ void main() {
         ],
       ),
     );
-    var realResult = parseTransactionRecord(transaction);
+    var realResult = toJournalString(transaction);
     var expectedResult =
         '\n\n'
         '2026-02-03\n'
@@ -133,7 +133,7 @@ void main() {
         ],
       ),
     );
-    var realResult = parseTransactionRecord(transaction);
+    var realResult = toJournalString(transaction);
     var expectedResult =
         '\n\n'
         '2026-02-03\n'
@@ -146,7 +146,7 @@ void main() {
   });
   test('Error passed to function', () {
     final transaction = Error<Transaction>(message: "transaction invalid.");
-    var realResult = parseTransactionRecord(transaction);
+    var realResult = toJournalString(transaction);
     expect(realResult.runtimeType, Error<String>);
   });
 }
