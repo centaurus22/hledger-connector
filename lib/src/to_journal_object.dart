@@ -2,18 +2,16 @@ import 'functions.dart';
 import 'record.dart';
 
 /// Use Case: Parse a String of Transactions to a List of Transaction Records
-Result<List<Transaction>> parseTransactionString(
-  Result<List<String>> transactions,
-) {
+Result<List<Transaction>> toJournalObject(Result<List<String>> transactions) {
   switch (transactions) {
     case Success<List<String>> _:
-      return _parseTransactionString(transactions.value);
+      return _toJournalObject(transactions.value);
     case Error<List<String>> _:
       return Error(message: transactions.message);
   }
 }
 
-Result<List<Transaction>> _parseTransactionString(List<String> lines) {
+Result<List<Transaction>> _toJournalObject(List<String> lines) {
   List<List<String>> transactions = List.empty(growable: true);
   List<String> transaction = List.empty(growable: true);
   int? firstChar;
