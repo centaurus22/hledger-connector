@@ -21,7 +21,7 @@ class Posting {
   /// The amount which is transferred.
   Amount amount;
 
-  /// This requires an [Account] and an [Amount].
+  /// This requires an [account] and an [Amount].
   Posting({required this.account, required this.amount});
 }
 
