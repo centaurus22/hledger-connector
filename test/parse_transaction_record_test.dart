@@ -4,16 +4,13 @@ import 'package:test/test.dart';
 import 'package:hledger_connector/src/to_journal_string.dart';
 
 void main() {
-  final basisSubTransactions = [
-    SubTransaction(account: 'assets', amount: Amount(value: 10)),
-    SubTransaction(account: 'expenses', amount: Amount(value: -10)),
+  final basePostings = [
+    Posting(account: 'assets', amount: Amount(value: 10)),
+    Posting(account: 'expenses', amount: Amount(value: -10)),
   ];
   test('transaction starting with a date', () {
     final transaction = Success(
-      value: Transaction(
-        date: DateTime(2026, 01, 01),
-        subTransactions: basisSubTransactions,
-      ),
+      value: Transaction(date: DateTime(2026, 01, 01), postings: basePostings),
     );
     var result = toJournalString(transaction);
     expect(result.runtimeType, Success<String>);
@@ -26,7 +23,7 @@ void main() {
       value: Transaction(
         date: DateTime(2026, 01, 02),
         description: 'First Transaction',
-        subTransactions: basisSubTransactions,
+        postings: basePostings,
       ),
     );
     var result = toJournalString(transaction);
@@ -40,10 +37,7 @@ void main() {
   });
   test('date with only a year', () {
     final transaction = Success(
-      value: Transaction(
-        date: DateTime(2026),
-        subTransactions: basisSubTransactions,
-      ),
+      value: Transaction(date: DateTime(2026), postings: basePostings),
     );
     var result = toJournalString(transaction);
     expect(result.runtimeType, Success<String>);
@@ -51,12 +45,9 @@ void main() {
       expect(result.value.substring(0, 13), '\n\n2026-01-01\n');
     }
   });
-  test('sub-transactions', () {
+  test('posting', () {
     final transaction = Success(
-      value: Transaction(
-        date: DateTime(2026),
-        subTransactions: basisSubTransactions,
-      ),
+      value: Transaction(date: DateTime(2026), postings: basePostings),
     );
     var realResult = toJournalString(transaction);
     var expectedResult =
@@ -69,16 +60,16 @@ void main() {
       expect(realResult.value, expectedResult);
     }
   });
-  test('sub-transactions with unit', () {
+  test('posting with unit', () {
     final transaction = Success(
       value: Transaction(
         date: DateTime(2026, 04, 03),
-        subTransactions: [
-          SubTransaction(
+        postings: [
+          Posting(
             account: 'expenses',
             amount: Amount(value: 4, unit: '\$'),
           ),
-          SubTransaction(
+          Posting(
             account: 'assets',
             amount: Amount(value: -4, unit: '\$'),
           ),
@@ -96,16 +87,16 @@ void main() {
       expect(realResult.value, expectedResult);
     }
   });
-  test('sub-transactions with suffixed unit', () {
+  test('postings with suffixed unit', () {
     final transaction = Success(
       value: Transaction(
         date: DateTime(2026, 02, 03),
-        subTransactions: [
-          SubTransaction(
+        postings: [
+          Posting(
             account: 'expenses',
             amount: SuffixedAmount(value: -4, unit: '€'),
           ),
-          SubTransaction(
+          Posting(
             account: 'assets',
             amount: Amount(value: 4, unit: '\$'),
           ),
@@ -127,9 +118,9 @@ void main() {
     final transaction = Success(
       value: Transaction(
         date: DateTime(2026, 02, 03),
-        subTransactions: [
-          SubTransaction(account: 'expenses', amount: SuffixedAmount(value: 4)),
-          SubTransaction(account: 'assets', amount: SuffixedAmount(value: -4)),
+        postings: [
+          Posting(account: 'expenses', amount: SuffixedAmount(value: 4)),
+          Posting(account: 'assets', amount: SuffixedAmount(value: -4)),
         ],
       ),
     );

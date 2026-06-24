@@ -5,20 +5,16 @@ class Transaction {
   /// The date of the [Transaction]
   DateTime date;
 
-  /// A list of [SubTransaction]s, this [Transaction] is composed of.
-  List<SubTransaction> subTransactions;
+  /// A list of [Posting]s, this [Transaction] is composed of.
+  List<Posting> postings;
 
-  /// Requires a [date], a list of [SubTransaction]s and an optional
+  /// Requires a [date], a list of [Posting]s and an optional
   /// description.
-  Transaction({
-    this.description,
-    required this.date,
-    required this.subTransactions,
-  });
+  Transaction({this.description, required this.date, required this.postings});
 }
 
 /// A [Transaction] is composed of two or more of this.
-class SubTransaction {
+class Posting {
   /// The [account] the units are transferred from or to.
   String account;
 
@@ -26,10 +22,10 @@ class SubTransaction {
   Amount amount;
 
   /// This requires an [Account] and an [Amount].
-  SubTransaction({required this.account, required this.amount});
+  Posting({required this.account, required this.amount});
 }
 
-/// The amount transferred in a [SubTransaction].
+/// The amount transferred in a [Posting].
 ///
 /// In this base class the optional unit is written in front of the amount. In
 /// the child class [SuffixedAmount], the unit is written behind the amount.

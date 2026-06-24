@@ -52,30 +52,30 @@ Result<Transaction> _parseTransaction(List<String> transaction) {
       return Error(message: dateResult.message);
   }
 
-  var parsedSubTransactions = transaction
+  var parsedPostings = transaction
       .sublist(1)
-      .map((t) => _parseSubTransaction(t))
+      .map((t) => _parsePosting(t))
       .toList();
 
-  final checkedSubTransactions = check(parsedSubTransactions);
+  final checkedPostings = check(parsedPostings);
 
-  switch (checkedSubTransactions) {
-    case Success<List<SubTransaction>> _:
+  switch (checkedPostings) {
+    case Success<List<Posting>> _:
       return Success(
         value: Transaction(
           date: date,
           description: description,
-          subTransactions: checkedSubTransactions.value,
+          postings: checkedPostings.value,
         ),
       );
-    case Error<List<SubTransaction>> _:
-      return Error(message: checkedSubTransactions.message);
+    case Error<List<Posting>> _:
+      return Error(message: checkedPostings.message);
   }
 }
 
-Result<SubTransaction> _parseSubTransaction(String line) {
+Result<Posting> _parsePosting(String line) {
   final lineParts = _splitAndClean(line, '  ');
-  final baseErrorMessage = 'Sub-transaction in line "$line" is not parsable.';
+  final baseErrorMessage = 'Posting in line "$line" is not parsable.';
 
   if (lineParts.length == 1) {
     return Error(message: baseErrorMessage);
@@ -123,7 +123,7 @@ Result<SubTransaction> _parseSubTransaction(String line) {
   }
 
   return Success(
-    value: SubTransaction(account: account, amount: parsedAmount),
+    value: Posting(account: account, amount: parsedAmount),
   );
 }
 

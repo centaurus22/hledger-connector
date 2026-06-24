@@ -7,7 +7,7 @@ void main() {
   test('Transaction list with data error', () {
     List<Transaction> transactions = List.empty(growable: true);
     transactions.add(
-      Transaction(date: DateTime(2003, 12, 05), subTransactions: List.empty()),
+      Transaction(date: DateTime(2003, 12, 05), postings: List.empty()),
     );
     final transactionResult = Success(value: transactions);
     final result = checkTransactions(transactionResult);
@@ -18,9 +18,9 @@ void main() {
     transactions.add(
       Transaction(
         date: DateTime(2003, 12, 05),
-        subTransactions: [
-          SubTransaction(account: 'assets', amount: Amount(value: -5)),
-          SubTransaction(account: 'rent', amount: Amount(value: 5)),
+        postings: [
+          Posting(account: 'assets', amount: Amount(value: -5)),
+          Posting(account: 'rent', amount: Amount(value: 5)),
         ],
       ),
     );

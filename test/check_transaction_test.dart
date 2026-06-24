@@ -4,17 +4,17 @@ import 'package:test/test.dart';
 import 'package:hledger_connector/src/check_transaction.dart';
 
 void main() {
-  test('transaction with no sub-transactions', () {
-    var transaction = Transaction(date: DateTime(2026), subTransactions: []);
+  test('transaction with no postings', () {
+    var transaction = Transaction(date: DateTime(2026), postings: []);
     var result = checkTransaction(transaction);
     expect(result.runtimeType, Error<Transaction>);
   });
   test('unbalanced transaction', () {
     var transaction = Transaction(
       date: DateTime(2026),
-      subTransactions: [
-        SubTransaction(account: 'assets', amount: Amount(value: 10)),
-        SubTransaction(account: 'expenses', amount: Amount(value: -5)),
+      postings: [
+        Posting(account: 'assets', amount: Amount(value: 10)),
+        Posting(account: 'expenses', amount: Amount(value: -5)),
       ],
     );
     var result = checkTransaction(transaction);
@@ -23,9 +23,9 @@ void main() {
   test('balanced transaction with floating point numbers', () {
     var transaction = Transaction(
       date: DateTime(2026),
-      subTransactions: [
-        SubTransaction(account: 'assets', amount: Amount(value: -0.000004)),
-        SubTransaction(account: 'expenses', amount: Amount(value: 0.000004)),
+      postings: [
+        Posting(account: 'assets', amount: Amount(value: -0.000004)),
+        Posting(account: 'expenses', amount: Amount(value: 0.000004)),
       ],
     );
     var result = checkTransaction(transaction);
@@ -34,20 +34,20 @@ void main() {
   test('balanced transaction with more than one unit', () {
     var transaction = Transaction(
       date: DateTime(2026),
-      subTransactions: [
-        SubTransaction(
+      postings: [
+        Posting(
           account: 'assets',
           amount: Amount(value: 10, unit: '€'),
         ),
-        SubTransaction(
+        Posting(
           account: 'assets',
           amount: Amount(value: 5, unit: 'USD'),
         ),
-        SubTransaction(
+        Posting(
           account: 'expenses',
           amount: Amount(value: -10, unit: '€'),
         ),
-        SubTransaction(
+        Posting(
           account: 'assets',
           amount: Amount(value: -5, unit: 'USD'),
         ),
@@ -59,12 +59,12 @@ void main() {
   test('valid conversion transaction', () {
     var transaction = Transaction(
       date: DateTime(2026),
-      subTransactions: [
-        SubTransaction(
+      postings: [
+        Posting(
           account: 'assets:bank 1',
           amount: Amount(value: 5, unit: 'USD'),
         ),
-        SubTransaction(
+        Posting(
           account: 'assets:bank 2',
           amount: Amount(value: -10, unit: '€'),
         ),
@@ -76,16 +76,16 @@ void main() {
   test('invalid multi-conversion transaction', () {
     var transaction = Transaction(
       date: DateTime(2026),
-      subTransactions: [
-        SubTransaction(
+      postings: [
+        Posting(
           account: 'assets:bank 1',
           amount: Amount(value: 5, unit: 'USD'),
         ),
-        SubTransaction(
+        Posting(
           account: 'assets:bank 1',
           amount: Amount(value: 5, unit: 'GPB'),
         ),
-        SubTransaction(
+        Posting(
           account: 'assets:bank 2',
           amount: Amount(value: -10, unit: '€'),
         ),
@@ -97,16 +97,16 @@ void main() {
   test('valid conversion transaction with one reduced value', () {
     var transaction = Transaction(
       date: DateTime(2026),
-      subTransactions: [
-        SubTransaction(
+      postings: [
+        Posting(
           account: 'assets:bank 2',
           amount: Amount(value: 9, unit: '€'),
         ),
-        SubTransaction(
+        Posting(
           account: 'assets:bank',
           amount: Amount(value: 5, unit: 'USD'),
         ),
-        SubTransaction(
+        Posting(
           account: 'assets:bank 2',
           amount: Amount(value: -10, unit: '€'),
         ),
@@ -118,9 +118,9 @@ void main() {
   test('empty account string', () {
     var transaction = Transaction(
       date: DateTime(2026, 02, 03),
-      subTransactions: [
-        SubTransaction(account: '', amount: Amount(value: 4333)),
-        SubTransaction(account: 'assets:cash', amount: Amount(value: -4333)),
+      postings: [
+        Posting(account: '', amount: Amount(value: 4333)),
+        Posting(account: 'assets:cash', amount: Amount(value: -4333)),
       ],
     );
     var realResult = checkTransaction(transaction);
@@ -129,9 +129,9 @@ void main() {
   test('account string with two following spaces', () {
     var transaction = Transaction(
       date: DateTime(2026, 02, 03),
-      subTransactions: [
-        SubTransaction(account: 'fo  od', amount: Amount(value: 4333)),
-        SubTransaction(account: 'assets:cash', amount: Amount(value: -4333)),
+      postings: [
+        Posting(account: 'fo  od', amount: Amount(value: 4333)),
+        Posting(account: 'assets:cash', amount: Amount(value: -4333)),
       ],
     );
     var realResult = checkTransaction(transaction);

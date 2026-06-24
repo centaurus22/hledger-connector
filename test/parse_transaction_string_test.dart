@@ -19,10 +19,10 @@ void main() {
     if (result is Success<List<Transaction>>) {
       var parsedTransaction = result.value.first;
       expect(parsedTransaction.date, DateTime(2025, 12, 03));
-      expect(parsedTransaction.subTransactions.first.account, 'food');
-      expect(parsedTransaction.subTransactions.first.amount.value, 3);
-      expect(parsedTransaction.subTransactions.elementAt(1).account, 'assets');
-      expect(parsedTransaction.subTransactions.elementAt(1).amount.value, -3);
+      expect(parsedTransaction.postings.first.account, 'food');
+      expect(parsedTransaction.postings.first.amount.value, 3);
+      expect(parsedTransaction.postings.elementAt(1).account, 'assets');
+      expect(parsedTransaction.postings.elementAt(1).amount.value, -3);
     }
   });
   test('parsing transaction with three accounts', () {
@@ -34,13 +34,13 @@ void main() {
     var result = toJournalObject(Success(value: transaction));
     expect(result.runtimeType, Success<List<Transaction>>);
     if (result is Success<List<Transaction>>) {
-      var subTransactions = result.value.first.subTransactions;
-      expect(subTransactions.first.account, 'food');
-      expect(subTransactions.first.amount.value, 3);
-      expect(subTransactions.elementAt(1).account, 'assets:bank');
-      expect(subTransactions.elementAt(1).amount.value, -2);
-      expect(subTransactions.elementAt(2).account, 'assets:cash');
-      expect(subTransactions.elementAt(2).amount.value, -1);
+      var postings = result.value.first.postings;
+      expect(postings.first.account, 'food');
+      expect(postings.first.amount.value, 3);
+      expect(postings.elementAt(1).account, 'assets:bank');
+      expect(postings.elementAt(1).amount.value, -2);
+      expect(postings.elementAt(2).account, 'assets:cash');
+      expect(postings.elementAt(2).amount.value, -1);
     }
   });
   test('parsing transaction with small amounts', () {
@@ -51,14 +51,14 @@ void main() {
     var result = toJournalObject(Success(value: transaction));
     expect(result.runtimeType, Success<List<Transaction>>);
     if (result is Success<List<Transaction>>) {
-      var subTransactions = result.value.first.subTransactions;
-      expect(subTransactions.first.account, 'food');
-      expect(subTransactions.first.amount.value, 0.4);
-      expect(subTransactions.elementAt(1).account, 'assets');
-      expect(subTransactions.elementAt(1).amount.value, -0.4);
+      var postings = result.value.first.postings;
+      expect(postings.first.account, 'food');
+      expect(postings.first.amount.value, 0.4);
+      expect(postings.elementAt(1).account, 'assets');
+      expect(postings.elementAt(1).amount.value, -0.4);
     }
   });
-  test('returning error if SubTransaction is not parsable', () {
+  test('returning error if a Posting is not parsable', () {
     List<String> transaction = List.empty(growable: true);
     transaction.add("2025-12-03");
     transaction.add("    food        0.4");
@@ -74,13 +74,13 @@ void main() {
     var result = toJournalObject(Success(value: transaction));
     expect(result.runtimeType, Success<List<Transaction>>);
     if (result is Success<List<Transaction>>) {
-      var subTransactions = result.value.first.subTransactions;
-      expect(subTransactions.first.account, 'food');
-      expect(subTransactions.first.amount.value, 0.4);
-      expect(subTransactions.first.amount.unit, r'$');
-      expect(subTransactions.elementAt(1).account, 'assets');
-      expect(subTransactions.elementAt(1).amount.value, -0.4);
-      expect(subTransactions.elementAt(1).amount.unit, r'$');
+      var postings = result.value.first.postings;
+      expect(postings.first.account, 'food');
+      expect(postings.first.amount.value, 0.4);
+      expect(postings.first.amount.unit, r'$');
+      expect(postings.elementAt(1).account, 'assets');
+      expect(postings.elementAt(1).amount.value, -0.4);
+      expect(postings.elementAt(1).amount.unit, r'$');
     }
   });
   test('parsing transaction with two spaces between unit and value', () {
@@ -91,13 +91,13 @@ void main() {
     var result = toJournalObject(Success(value: transaction));
     expect(result.runtimeType, Success<List<Transaction>>);
     if (result is Success<List<Transaction>>) {
-      var subTransactions = result.value.first.subTransactions;
-      expect(subTransactions.first.account, 'food');
-      expect(subTransactions.first.amount.value, 0.4);
-      expect(subTransactions.first.amount.unit, '€');
-      expect(subTransactions.elementAt(1).account, 'assets');
-      expect(subTransactions.elementAt(1).amount.value, -0.4);
-      expect(subTransactions.elementAt(1).amount.unit, '€');
+      var postings = result.value.first.postings;
+      expect(postings.first.account, 'food');
+      expect(postings.first.amount.value, 0.4);
+      expect(postings.first.amount.unit, '€');
+      expect(postings.elementAt(1).account, 'assets');
+      expect(postings.elementAt(1).amount.value, -0.4);
+      expect(postings.elementAt(1).amount.unit, '€');
     }
   });
   test('return Error when a unit contains a space', () {
@@ -116,14 +116,14 @@ void main() {
     var result = toJournalObject(Success(value: transaction));
     expect(result.runtimeType, Success<List<Transaction>>);
     if (result is Success<List<Transaction>>) {
-      var subTransactions = result.value.first.subTransactions;
-      expect(subTransactions.first.account, 'food');
-      expect(subTransactions.first.amount.value, 0.4);
-      expect(subTransactions.first.amount.unit, '€');
-      expect(subTransactions.elementAt(1).account, 'assets');
-      expect(subTransactions.elementAt(1).amount.value, -0.4);
-      expect(subTransactions.elementAt(1).amount.unit, '€');
-      expect(subTransactions.first.amount.runtimeType, SuffixedAmount);
+      var postings = result.value.first.postings;
+      expect(postings.first.account, 'food');
+      expect(postings.first.amount.value, 0.4);
+      expect(postings.first.amount.unit, '€');
+      expect(postings.elementAt(1).account, 'assets');
+      expect(postings.elementAt(1).amount.value, -0.4);
+      expect(postings.elementAt(1).amount.unit, '€');
+      expect(postings.first.amount.runtimeType, SuffixedAmount);
     }
   });
   test('returning Error when a suffix unit contains a space', () {
@@ -153,10 +153,10 @@ void main() {
       var parsedTransaction = result.value.first;
       expect(parsedTransaction.date, DateTime(2025, 12, 03));
       expect(parsedTransaction.description, 'Bought vegan milk');
-      expect(parsedTransaction.subTransactions.first.account, 'food');
-      expect(parsedTransaction.subTransactions.first.amount.value, 3);
-      expect(parsedTransaction.subTransactions.elementAt(1).account, 'assets');
-      expect(parsedTransaction.subTransactions.elementAt(1).amount.value, -3);
+      expect(parsedTransaction.postings.first.account, 'food');
+      expect(parsedTransaction.postings.first.amount.value, 3);
+      expect(parsedTransaction.postings.elementAt(1).account, 'assets');
+      expect(parsedTransaction.postings.elementAt(1).amount.value, -3);
     }
   });
   test('Returning an Error if the date is malformed', () {
@@ -187,21 +187,21 @@ void main() {
     expect(result.runtimeType, Success<List<Transaction>>);
     if (result is Success<List<Transaction>>) {
       var parsedTransaction = result.value.first;
-      var subTransactions = parsedTransaction.subTransactions;
+      var postings = parsedTransaction.postings;
       expect(parsedTransaction.date, DateTime(2026, 12, 03));
       expect(parsedTransaction.description, 'Debit bank account');
-      expect(subTransactions.first.account, 'assets:cash:cash');
-      expect(subTransactions.first.amount.value, 150);
-      expect(subTransactions.elementAt(1).account, 'assets:cash:bank');
-      expect(subTransactions.elementAt(1).amount.value, -150);
+      expect(postings.first.account, 'assets:cash:cash');
+      expect(postings.first.amount.value, 150);
+      expect(postings.elementAt(1).account, 'assets:cash:bank');
+      expect(postings.elementAt(1).amount.value, -150);
       parsedTransaction = result.value[1];
-      subTransactions = parsedTransaction.subTransactions;
+      postings = parsedTransaction.postings;
       expect(parsedTransaction.date, DateTime(2026, 12, 05));
       expect(parsedTransaction.description, 'Debit bank account');
-      expect(subTransactions.first.account, 'assets:cash:cash');
-      expect(subTransactions.first.amount.value, 200);
-      expect(subTransactions.elementAt(1).account, 'assets:cash:bank');
-      expect(subTransactions.elementAt(1).amount.value, -200);
+      expect(postings.first.account, 'assets:cash:cash');
+      expect(postings.first.amount.value, 200);
+      expect(postings.elementAt(1).account, 'assets:cash:bank');
+      expect(postings.elementAt(1).amount.value, -200);
     }
   });
   test('parsing transaction with prefixed unit', () {
@@ -212,8 +212,8 @@ void main() {
     var result = toJournalObject(Success(value: transaction));
     expect(result.runtimeType, Success<List<Transaction>>);
     if (result is Success<List<Transaction>>) {
-      var subTransactions = result.value.first.subTransactions;
-      expect(subTransactions.first.amount.runtimeType, Amount);
+      var postings = result.value.first.postings;
+      expect(postings.first.amount.runtimeType, Amount);
     }
   });
   test('Parse numbers in account names', () {
@@ -226,8 +226,8 @@ void main() {
     if (result is Success<List<Transaction>>) {
       var parsedTransaction = result.value.first;
       expect(parsedTransaction.date, DateTime(2025, 04, 30));
-      expect(parsedTransaction.subTransactions.first.account, '23');
-      expect(parsedTransaction.subTransactions.elementAt(1).account, '12');
+      expect(parsedTransaction.postings.first.account, '23');
+      expect(parsedTransaction.postings.elementAt(1).account, '12');
     }
   });
   test('Parse numbers in account names', () {
@@ -240,8 +240,8 @@ void main() {
     if (result is Success<List<Transaction>>) {
       var parsedTransaction = result.value.first;
       expect(parsedTransaction.date, DateTime(2025, 04, 30));
-      expect(parsedTransaction.subTransactions.first.account, '23');
-      expect(parsedTransaction.subTransactions.elementAt(1).account, '12');
+      expect(parsedTransaction.postings.first.account, '23');
+      expect(parsedTransaction.postings.elementAt(1).account, '12');
     }
   });
   test('Parse spaces in account names', () {
@@ -254,11 +254,11 @@ void main() {
     if (result is Success<List<Transaction>>) {
       var parsedTransaction = result.value.first;
       expect(parsedTransaction.date, DateTime(2025, 04, 30));
-      expect(parsedTransaction.subTransactions.first.account, 'f 3');
-      expect(parsedTransaction.subTransactions.elementAt(1).account, 'x 2');
+      expect(parsedTransaction.postings.first.account, 'f 3');
+      expect(parsedTransaction.postings.elementAt(1).account, 'x 2');
     }
   });
-  test('ignoring tags in SubTransactions', () {
+  test('ignoring tags in postings', () {
     List<String> transaction = List.empty(growable: true);
     transaction.add("2025-04-30");
     transaction.add("    food      3 €; tag1 ");
@@ -268,12 +268,12 @@ void main() {
     if (result is Success<List<Transaction>>) {
       var parsedTransaction = result.value.first;
       expect(parsedTransaction.date, DateTime(2025, 04, 30));
-      expect(parsedTransaction.subTransactions.first.account, 'food');
-      expect(parsedTransaction.subTransactions.first.amount.value, 3);
-      expect(parsedTransaction.subTransactions.first.amount.unit, '€');
+      expect(parsedTransaction.postings.first.account, 'food');
+      expect(parsedTransaction.postings.first.amount.value, 3);
+      expect(parsedTransaction.postings.first.amount.unit, '€');
     }
   });
-  test('ignoring tags in SubTransactions separated by two spaces', () {
+  test('ignoring tags in postings separated by two spaces', () {
     List<String> transaction = List.empty(growable: true);
     transaction.add("2025-04-30");
     transaction.add("    food      3 €  ; tag1 ");
@@ -283,12 +283,12 @@ void main() {
     if (result is Success<List<Transaction>>) {
       var parsedTransaction = result.value.first;
       expect(parsedTransaction.date, DateTime(2025, 04, 30));
-      expect(parsedTransaction.subTransactions.first.account, 'food');
-      expect(parsedTransaction.subTransactions.first.amount.value, 3);
-      expect(parsedTransaction.subTransactions.first.amount.unit, '€');
+      expect(parsedTransaction.postings.first.account, 'food');
+      expect(parsedTransaction.postings.first.amount.value, 3);
+      expect(parsedTransaction.postings.first.amount.unit, '€');
     }
   });
-  test('ignoring tags in SubTransaction with separated unit and tag', () {
+  test('ignoring tags in Posting with separated unit and tag', () {
     List<String> transaction = List.empty(growable: true);
     transaction.add("2025-04-30");
     transaction.add("    food      3  €  ; tag1 ");
@@ -298,9 +298,9 @@ void main() {
     if (result is Success<List<Transaction>>) {
       var parsedTransaction = result.value.first;
       expect(parsedTransaction.date, DateTime(2025, 04, 30));
-      expect(parsedTransaction.subTransactions.first.account, 'food');
-      expect(parsedTransaction.subTransactions.first.amount.value, 3);
-      expect(parsedTransaction.subTransactions.first.amount.unit, '€');
+      expect(parsedTransaction.postings.first.account, 'food');
+      expect(parsedTransaction.postings.first.amount.value, 3);
+      expect(parsedTransaction.postings.first.amount.unit, '€');
     }
   });
   test('ignoring tags when separated from ; by more than two spaces', () {
@@ -313,9 +313,9 @@ void main() {
     if (result is Success<List<Transaction>>) {
       var parsedTransaction = result.value.first;
       expect(parsedTransaction.date, DateTime(2025, 04, 30));
-      expect(parsedTransaction.subTransactions.first.account, 'food');
-      expect(parsedTransaction.subTransactions.first.amount.value, 3);
-      expect(parsedTransaction.subTransactions.first.amount.unit, '€');
+      expect(parsedTransaction.postings.first.account, 'food');
+      expect(parsedTransaction.postings.first.amount.value, 3);
+      expect(parsedTransaction.postings.first.amount.unit, '€');
     }
   });
   test('ignoring comments that claim a complete line', () {
@@ -329,9 +329,9 @@ void main() {
     if (result is Success<List<Transaction>>) {
       var parsedTransaction = result.value.first;
       expect(parsedTransaction.date, DateTime(2025, 3, 30));
-      expect(parsedTransaction.subTransactions.first.account, 'food');
-      expect(parsedTransaction.subTransactions.first.amount.value, 3);
-      expect(parsedTransaction.subTransactions.first.amount.unit, '€');
+      expect(parsedTransaction.postings.first.account, 'food');
+      expect(parsedTransaction.postings.first.amount.value, 3);
+      expect(parsedTransaction.postings.first.amount.unit, '€');
     }
   });
   test('sorting two transactions by date', () {
@@ -362,9 +362,9 @@ void main() {
     if (result is Success<List<Transaction>>) {
       var parsedTransaction = result.value.first;
       expect(parsedTransaction.date, DateTime(2025, 3, 30));
-      expect(parsedTransaction.subTransactions.first.account, 'food');
-      expect(parsedTransaction.subTransactions.first.amount.value, 3);
-      expect(parsedTransaction.subTransactions.first.amount.unit, '€');
+      expect(parsedTransaction.postings.first.account, 'food');
+      expect(parsedTransaction.postings.first.amount.value, 3);
+      expect(parsedTransaction.postings.first.amount.unit, '€');
     }
   });
   test('ignoring * comments', () {
@@ -378,9 +378,9 @@ void main() {
     if (result is Success<List<Transaction>>) {
       var parsedTransaction = result.value.first;
       expect(parsedTransaction.date, DateTime(2026, 1, 4));
-      expect(parsedTransaction.subTransactions.first.account, 'food');
-      expect(parsedTransaction.subTransactions.first.amount.value, 3);
-      expect(parsedTransaction.subTransactions.first.amount.unit, '€');
+      expect(parsedTransaction.postings.first.account, 'food');
+      expect(parsedTransaction.postings.first.amount.value, 3);
+      expect(parsedTransaction.postings.first.amount.unit, '€');
     }
   });
   test('simple date with period separator', () {

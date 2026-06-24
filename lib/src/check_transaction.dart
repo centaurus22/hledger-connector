@@ -2,7 +2,7 @@ import 'record.dart';
 
 /// Use Case: Check a transaction for data errors
 Result<Transaction> checkTransaction(Transaction transaction) {
-  final result = _checkSubTransactions(transaction.subTransactions);
+  final result = _checkPostings(transaction.postings);
 
   switch (result) {
     case Success<String> _:
@@ -12,15 +12,14 @@ Result<Transaction> checkTransaction(Transaction transaction) {
   }
 }
 
-Result<String> _checkSubTransactions(List<SubTransaction> subTransactions) {
-  if (subTransactions.isEmpty) {
+Result<String> _checkPostings(List<Posting> postings) {
+  if (postings.isEmpty) {
     return Error(message: 'The transactions contains no sub-transactions');
   }
 
-  for (var subTransaction in subTransactions) {
+  for (var posting in postings) {
     /// hledger does not accept empty account names.
-    if (subTransaction.account.isEmpty ||
-        subTransaction.account.contains('  ')) {
+    if (posting.account.isEmpty || posting.account.contains('  ')) {
       return Error(
         message:
             'A valid hledger account name is required. Eg: assets:cash, expenses:food:eating out.',
@@ -30,10 +29,9 @@ Result<String> _checkSubTransactions(List<SubTransaction> subTransactions) {
 
   Map<String, double> balances = {};
 
-  subTransactions.fold(
+  postings.fold(
     balances,
-    (balances, subTransaction) =>
-        _updateBalances(balances, subTransaction.amount),
+    (balances, posting) => _updateBalances(balances, posting.amount),
   );
 
   if (balances.length == 1 && balances[balances.keys.first] != 0) {

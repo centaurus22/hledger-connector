@@ -16,9 +16,9 @@ Result<String> toJournalString(Result<Transaction> transaction) {
 Result<String> _toJournalString(Transaction transaction) {
   String dateString = _formatDate(transaction.date);
   String description = _formatDescription(transaction.description);
-  String subTransactions = _formatSubTransactions(transaction.subTransactions);
+  String postings = _formatPostings(transaction.postings);
 
-  return Success(value: '\n\n$dateString$description$subTransactions');
+  return Success(value: '\n\n$dateString$description$postings');
 }
 
 String _formatDescription(String? description) {
@@ -29,31 +29,27 @@ String _formatDate(DateTime date) {
   return formatToIsoDate(date);
 }
 
-String _formatSubTransactions(List<SubTransaction> subTransactions) {
-  int maxAccountNameLength = subTransactions.fold(
+String _formatPostings(List<Posting> postings) {
+  int maxAccountNameLength = postings.fold(
     0,
-    (maxAccountNameLength, subTransaction) =>
-        max(maxAccountNameLength, subTransaction.account.length),
+    (maxAccountNameLength, posting) =>
+        max(maxAccountNameLength, posting.account.length),
   );
 
-  int maxAmountLength = subTransactions.fold(
+  int maxAmountLength = postings.fold(
     0,
-    (maxAmountLength, subTransaction) =>
-        max(maxAmountLength, _calcAmountLength(subTransaction.amount)),
+    (maxAmountLength, posting) =>
+        max(maxAmountLength, _calcAmountLength(posting.amount)),
   );
 
-  String subTransactionsString = subTransactions.fold(
+  String postingsString = postings.fold(
     '',
-    (subTransactionsString, subTransaction) =>
-        subTransactionsString +
-        _formatSubTransaction(
-          subTransaction,
-          maxAccountNameLength,
-          maxAmountLength,
-        ),
+    (postingsString, posting) =>
+        postingsString +
+        _formatPosting(posting, maxAccountNameLength, maxAmountLength),
   );
 
-  return subTransactionsString;
+  return postingsString;
 }
 
 int _calcAmountLength(Amount amount) {
@@ -67,16 +63,16 @@ int _calcAmountLength(Amount amount) {
   return valueLength + (unit != null ? unit.length : 0);
 }
 
-String _formatSubTransaction(
-  SubTransaction subTransaction,
+String _formatPosting(
+  Posting posting,
   int maxAccountNameLength,
   int maxAmountLength,
 ) {
   return '\n'
       '    '
-      '${subTransaction.account.padRight(maxAccountNameLength)}'
+      '${posting.account.padRight(maxAccountNameLength)}'
       '  '
-      '${_formatAmount(subTransaction.amount).padLeft(maxAmountLength)}';
+      '${_formatAmount(posting.amount).padLeft(maxAmountLength)}';
 }
 
 String _formatAmount(Amount amount) {
