@@ -85,9 +85,9 @@ Result<Posting> _parsePosting(String line) {
   final amount = lineParts.sublist(1).join(' ');
 
   final exp = RegExp(
-    r'(?<unit>[^0-9-]*)'
+    r'(?<preceding_symbol>[^0-9-]*)'
     r'(?<value>[-+]?[0-9][0-9]*\.?[0-9]*)'
-    r'(?<suffix_unit>[^0-9-;]*)',
+    r'(?<following_symbol>[^0-9-;]*)',
   );
   final match = exp.firstMatch(amount);
 
@@ -100,24 +100,35 @@ Result<Posting> _parsePosting(String line) {
     return Error('$baseErrorMessage The value is not parsable.');
   }
 
-  final unit = match.namedGroup('unit')?.trim();
-  final suffixUnit = match.namedGroup('suffix_unit')?.trim();
+  final precedingSymbol = match.namedGroup('preceding_symbol')?.trim();
+  final followingSymbol = match.namedGroup('following_symbol')?.trim();
   final spacesErrorMessage =
       '$baseErrorMessage The unit must not contain spaces.';
 
   Amount parsedAmount;
-  if (suffixUnit != null && unit != null && suffixUnit != '' && unit != '') {
-    return Error('$baseErrorMessage The amount must have only on unit.');
-  } else if (suffixUnit != null && suffixUnit != '') {
-    if (suffixUnit.contains(' ')) {
+  if (precedingSymbol != null &&
+      followingSymbol != null &&
+      precedingSymbol != '' &&
+      followingSymbol != '') {
+    return Error('$baseErrorMessage The amount must have only on symbol.');
+  } else if (precedingSymbol != null && precedingSymbol != '') {
+    if (precedingSymbol.contains(' ')) {
       return Error(spacesErrorMessage);
     }
-    parsedAmount = SuffixedAmount(value: double.parse(value), unit: suffixUnit);
+    parsedAmount = Amount(
+      value: double.parse(value),
+      symbol: PrecedingSymbol(precedingSymbol),
+    );
+  } else if (followingSymbol != null && followingSymbol != '') {
+    if (followingSymbol.contains(' ')) {
+      return Error(spacesErrorMessage);
+    }
+    parsedAmount = Amount(
+      value: double.parse(value),
+      symbol: FollowingSymbol(followingSymbol),
+    );
   } else {
-    if (unit != null && unit.contains(' ')) {
-      return Error(spacesErrorMessage);
-    }
-    parsedAmount = Amount(value: double.parse(value), unit: unit);
+    parsedAmount = Amount(value: double.parse(value));
   }
 
   return Ok(Posting(account: account, amount: parsedAmount));

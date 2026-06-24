@@ -53,14 +53,17 @@ String _formatPostings(List<Posting> postings) {
 }
 
 int _calcAmountLength(Amount amount) {
-  var valueLength = amount.value.toString().length;
-  var unit = amount.unit;
+  final valueLength = amount.value.toString().length;
+  final symbol = amount.symbol;
 
-  if (amount is SuffixedAmount) {
-    return valueLength + (unit != null ? unit.length + 1 : 0);
+  switch (symbol) {
+    case PrecedingSymbol _:
+      return valueLength + symbol.name.length;
+    case FollowingSymbol _:
+      return valueLength + symbol.name.length + 1;
+    default:
+      return valueLength;
   }
-
-  return valueLength + (unit != null ? unit.length : 0);
 }
 
 String _formatPosting(
@@ -76,13 +79,15 @@ String _formatPosting(
 }
 
 String _formatAmount(Amount amount) {
-  var unit = amount.unit;
+  final symbol = amount.symbol;
+  final value = amount.value.toString();
 
-  if (amount is SuffixedAmount) {
-    unit = unit != null ? ' $unit' : '';
-    return '${amount.value.toString()}$unit';
-  } else {
-    unit = unit ?? '';
-    return '$unit${amount.value.toString()}';
+  switch (symbol) {
+    case PrecedingSymbol _:
+      return '${symbol.name}$value';
+    case FollowingSymbol _:
+      return '$value ${symbol.name}';
+    default:
+      return value;
   }
 }

@@ -77,10 +77,10 @@ void main() {
       var postings = result.value.first.postings;
       expect(postings.first.account, 'food');
       expect(postings.first.amount.value, 0.4);
-      expect(postings.first.amount.unit, r'$');
+      expect(postings.first.amount.symbol?.name, r'$');
       expect(postings.elementAt(1).account, 'assets');
       expect(postings.elementAt(1).amount.value, -0.4);
-      expect(postings.elementAt(1).amount.unit, r'$');
+      expect(postings.elementAt(1).amount.symbol?.name, r'$');
     }
   });
   test('parsing transaction with two spaces between unit and value', () {
@@ -94,10 +94,10 @@ void main() {
       var postings = result.value.first.postings;
       expect(postings.first.account, 'food');
       expect(postings.first.amount.value, 0.4);
-      expect(postings.first.amount.unit, '€');
+      expect(postings.first.amount.symbol?.name, '€');
       expect(postings.elementAt(1).account, 'assets');
       expect(postings.elementAt(1).amount.value, -0.4);
-      expect(postings.elementAt(1).amount.unit, '€');
+      expect(postings.elementAt(1).amount.symbol?.name, '€');
     }
   });
   test('return Error when a unit contains a space', () {
@@ -119,11 +119,11 @@ void main() {
       var postings = result.value.first.postings;
       expect(postings.first.account, 'food');
       expect(postings.first.amount.value, 0.4);
-      expect(postings.first.amount.unit, '€');
+      expect(postings.first.amount.symbol?.name, '€');
       expect(postings.elementAt(1).account, 'assets');
       expect(postings.elementAt(1).amount.value, -0.4);
-      expect(postings.elementAt(1).amount.unit, '€');
-      expect(postings.first.amount.runtimeType, SuffixedAmount);
+      expect(postings.elementAt(1).amount.symbol?.name, '€');
+      expect(postings.first.amount.symbol.runtimeType, FollowingSymbol);
     }
   });
   test('returning Error when a suffix unit contains a space', () {
@@ -270,7 +270,7 @@ void main() {
       expect(parsedTransaction.date, DateTime(2025, 04, 30));
       expect(parsedTransaction.postings.first.account, 'food');
       expect(parsedTransaction.postings.first.amount.value, 3);
-      expect(parsedTransaction.postings.first.amount.unit, '€');
+      expect(parsedTransaction.postings.first.amount.symbol?.name, '€');
     }
   });
   test('ignoring tags in postings separated by two spaces', () {
@@ -285,7 +285,7 @@ void main() {
       expect(parsedTransaction.date, DateTime(2025, 04, 30));
       expect(parsedTransaction.postings.first.account, 'food');
       expect(parsedTransaction.postings.first.amount.value, 3);
-      expect(parsedTransaction.postings.first.amount.unit, '€');
+      expect(parsedTransaction.postings.first.amount.symbol?.name, '€');
     }
   });
   test('ignoring tags in Posting with separated unit and tag', () {
@@ -300,7 +300,7 @@ void main() {
       expect(parsedTransaction.date, DateTime(2025, 04, 30));
       expect(parsedTransaction.postings.first.account, 'food');
       expect(parsedTransaction.postings.first.amount.value, 3);
-      expect(parsedTransaction.postings.first.amount.unit, '€');
+      expect(parsedTransaction.postings.first.amount.symbol?.name, '€');
     }
   });
   test('ignoring tags when separated from ; by more than two spaces', () {
@@ -315,7 +315,7 @@ void main() {
       expect(parsedTransaction.date, DateTime(2025, 04, 30));
       expect(parsedTransaction.postings.first.account, 'food');
       expect(parsedTransaction.postings.first.amount.value, 3);
-      expect(parsedTransaction.postings.first.amount.unit, '€');
+      expect(parsedTransaction.postings.first.amount.symbol?.name, '€');
     }
   });
   test('ignoring comments that claim a complete line', () {
@@ -331,7 +331,7 @@ void main() {
       expect(parsedTransaction.date, DateTime(2025, 3, 30));
       expect(parsedTransaction.postings.first.account, 'food');
       expect(parsedTransaction.postings.first.amount.value, 3);
-      expect(parsedTransaction.postings.first.amount.unit, '€');
+      expect(parsedTransaction.postings.first.amount.symbol?.name, '€');
     }
   });
   test('sorting two transactions by date', () {
@@ -364,7 +364,7 @@ void main() {
       expect(parsedTransaction.date, DateTime(2025, 3, 30));
       expect(parsedTransaction.postings.first.account, 'food');
       expect(parsedTransaction.postings.first.amount.value, 3);
-      expect(parsedTransaction.postings.first.amount.unit, '€');
+      expect(parsedTransaction.postings.first.amount.symbol?.name, '€');
     }
   });
   test('ignoring * comments', () {
@@ -380,7 +380,7 @@ void main() {
       expect(parsedTransaction.date, DateTime(2026, 1, 4));
       expect(parsedTransaction.postings.first.account, 'food');
       expect(parsedTransaction.postings.first.amount.value, 3);
-      expect(parsedTransaction.postings.first.amount.unit, '€');
+      expect(parsedTransaction.postings.first.amount.symbol?.name, '€');
     }
   });
   test('simple date with period separator', () {

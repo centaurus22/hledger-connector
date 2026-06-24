@@ -34,19 +34,30 @@ class Amount {
   double value;
 
   /// The optional unit.
-  String? unit;
+  Symbol? symbol;
 
-  /// The [value] is required. Optionally a [unit] can be added.
-  Amount({required this.value, this.unit});
+  /// The [value] is required. Optionally a [symbol] can be added.
+  Amount({required this.value, this.symbol});
+}
+
+sealed class Symbol {
+  String name;
+
+  Symbol(this.name);
 }
 
 /// Child class of the [Amount].
 ///
 /// The difference of this and the base class ist that the unit is written after
 /// the amount.
-class SuffixedAmount extends Amount {
+class PrecedingSymbol extends Symbol {
   /// The [value] is required. Optionally a [unit] can be added.
-  SuffixedAmount({required super.value, super.unit});
+  PrecedingSymbol(super.name);
+}
+
+class FollowingSymbol extends Symbol {
+  /// The [value] is required. Optionally a [unit] can be added.
+  FollowingSymbol(super.name);
 }
 
 /// A result of a function which can be a [Ok] or an [Error].

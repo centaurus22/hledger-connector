@@ -64,11 +64,11 @@ Map<String, double> _updateBalances(
   Map<String, double> balances,
   Amount amount,
 ) {
-  var unit = amount.unit;
+  var symbol = amount.symbol?.name;
   var value = amount.value;
 
-  unit ??= ' ';
-  balances[unit] = (balances[unit] ?? 0) + value;
+  symbol ??= ' ';
+  balances[symbol] = (balances[symbol] ?? 0) + value;
 
   return balances;
 }

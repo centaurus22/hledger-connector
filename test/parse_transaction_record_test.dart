@@ -67,11 +67,11 @@ void main() {
         postings: [
           Posting(
             account: 'expenses',
-            amount: Amount(value: 4, unit: '\$'),
+            amount: Amount(value: 4, symbol: PrecedingSymbol(r'$')),
           ),
           Posting(
             account: 'assets',
-            amount: Amount(value: -4, unit: '\$'),
+            amount: Amount(value: -4, symbol: PrecedingSymbol(r'$')),
           ),
         ],
       ),
@@ -94,11 +94,11 @@ void main() {
         postings: [
           Posting(
             account: 'expenses',
-            amount: SuffixedAmount(value: -4, unit: '€'),
+            amount: Amount(value: -4, symbol: FollowingSymbol('€')),
           ),
           Posting(
             account: 'assets',
-            amount: Amount(value: 4, unit: '\$'),
+            amount: Amount(value: 4, symbol: PrecedingSymbol(r'$')),
           ),
         ],
       ),
@@ -109,27 +109,6 @@ void main() {
         '2026-02-03\n'
         '    expenses  -4.0 €\n'
         '    assets      \$4.0';
-    expect(realResult.runtimeType, Ok<String>);
-    if (realResult is Ok<String>) {
-      expect(realResult.value, expectedResult);
-    }
-  });
-  test('suffixed amount without a unit', () {
-    final transaction = Ok(
-      Transaction(
-        date: DateTime(2026, 02, 03),
-        postings: [
-          Posting(account: 'expenses', amount: SuffixedAmount(value: 4)),
-          Posting(account: 'assets', amount: SuffixedAmount(value: -4)),
-        ],
-      ),
-    );
-    var realResult = toJournalString(transaction);
-    var expectedResult =
-        '\n\n'
-        '2026-02-03\n'
-        '    expenses   4.0\n'
-        '    assets    -4.0';
     expect(realResult.runtimeType, Ok<String>);
     if (realResult is Ok<String>) {
       expect(realResult.value, expectedResult);

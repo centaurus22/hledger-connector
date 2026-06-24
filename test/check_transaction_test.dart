@@ -37,19 +37,19 @@ void main() {
       postings: [
         Posting(
           account: 'assets',
-          amount: Amount(value: 10, unit: '€'),
+          amount: Amount(value: 10, symbol: PrecedingSymbol('€')),
         ),
         Posting(
           account: 'assets',
-          amount: Amount(value: 5, unit: 'USD'),
+          amount: Amount(value: 5, symbol: PrecedingSymbol('USD')),
         ),
         Posting(
           account: 'expenses',
-          amount: Amount(value: -10, unit: '€'),
+          amount: Amount(value: -10, symbol: PrecedingSymbol('€')),
         ),
         Posting(
           account: 'assets',
-          amount: Amount(value: -5, unit: 'USD'),
+          amount: Amount(value: -5, symbol: PrecedingSymbol('USD')),
         ),
       ],
     );
@@ -62,11 +62,11 @@ void main() {
       postings: [
         Posting(
           account: 'assets:bank 1',
-          amount: Amount(value: 5, unit: 'USD'),
+          amount: Amount(value: 5, symbol: PrecedingSymbol('USD')),
         ),
         Posting(
           account: 'assets:bank 2',
-          amount: Amount(value: -10, unit: '€'),
+          amount: Amount(value: -10, symbol: FollowingSymbol('€')),
         ),
       ],
     );
@@ -79,15 +79,15 @@ void main() {
       postings: [
         Posting(
           account: 'assets:bank 1',
-          amount: Amount(value: 5, unit: 'USD'),
+          amount: Amount(value: 5, symbol: PrecedingSymbol('USD')),
         ),
         Posting(
           account: 'assets:bank 1',
-          amount: Amount(value: 5, unit: 'GPB'),
+          amount: Amount(value: 5, symbol: PrecedingSymbol('GPB')),
         ),
         Posting(
           account: 'assets:bank 2',
-          amount: Amount(value: -10, unit: '€'),
+          amount: Amount(value: -10, symbol: FollowingSymbol('€')),
         ),
       ],
     );
@@ -100,15 +100,15 @@ void main() {
       postings: [
         Posting(
           account: 'assets:bank 2',
-          amount: Amount(value: 9, unit: '€'),
+          amount: Amount(value: 9, symbol: FollowingSymbol('€')),
         ),
         Posting(
           account: 'assets:bank',
-          amount: Amount(value: 5, unit: 'USD'),
+          amount: Amount(value: 5, symbol: PrecedingSymbol('USD')),
         ),
         Posting(
           account: 'assets:bank 2',
-          amount: Amount(value: -10, unit: '€'),
+          amount: Amount(value: -10, symbol: FollowingSymbol('€')),
         ),
       ],
     );
