@@ -9,7 +9,7 @@ void main() {
     transactions.add(
       Transaction(date: DateTime(2003, 12, 05), postings: List.empty()),
     );
-    final transactionResult = Success(value: transactions);
+    final transactionResult = Ok(transactions);
     final result = checkTransactions(transactionResult);
     expect(result.runtimeType, Error<List<Transaction>>);
   });
@@ -24,14 +24,12 @@ void main() {
         ],
       ),
     );
-    final transactionResult = Success(value: transactions);
+    final transactionResult = Ok(transactions);
     final result = checkTransactions(transactionResult);
-    expect(result.runtimeType, Success<List<Transaction>>);
+    expect(result.runtimeType, Ok<List<Transaction>>);
   });
   test('Error as input', () {
-    Error<List<Transaction>> value = Error(
-      message: 'The file cannot be found.',
-    );
+    Error<List<Transaction>> value = Error('The file cannot be found.');
     var result = checkTransactions(value);
     expect(result.runtimeType, Error<List<Transaction>>);
   });

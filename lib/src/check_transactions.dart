@@ -7,7 +7,7 @@ Result<List<Transaction>> checkTransactions(
   Result<List<Transaction>> transactions,
 ) {
   switch (transactions) {
-    case Success<List<Transaction>> _:
+    case Ok<List<Transaction>> _:
       return check(transactions.value.map(checkTransaction));
     case Error<List<Transaction>> _:
       return transactions;

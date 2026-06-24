@@ -4,10 +4,10 @@ import 'record.dart';
 /// Use Case: Parse a String of Transactions to a List of Transaction Records
 Result<List<Transaction>> toJournalObject(Result<List<String>> transactions) {
   switch (transactions) {
-    case Success<List<String>> _:
+    case Ok<List<String>> _:
       return _toJournalObject(transactions.value);
     case Error<List<String>> _:
-      return Error(message: transactions.message);
+      return Error(transactions.message);
   }
 }
 
@@ -46,10 +46,10 @@ Result<Transaction> _parseTransaction(List<String> transaction) {
   final dateResult = _parseDate(dateDescription[0]);
   DateTime date;
   switch (dateResult) {
-    case Success<DateTime> _:
+    case Ok<DateTime> _:
       date = dateResult.value;
     case Error<DateTime> _:
-      return Error(message: dateResult.message);
+      return Error(dateResult.message);
   }
 
   var parsedPostings = transaction
@@ -60,16 +60,16 @@ Result<Transaction> _parseTransaction(List<String> transaction) {
   final checkedPostings = check(parsedPostings);
 
   switch (checkedPostings) {
-    case Success<List<Posting>> _:
-      return Success(
-        value: Transaction(
+    case Ok<List<Posting>> _:
+      return Ok(
+        Transaction(
           date: date,
           description: description,
           postings: checkedPostings.value,
         ),
       );
     case Error<List<Posting>> _:
-      return Error(message: checkedPostings.message);
+      return Error(checkedPostings.message);
   }
 }
 
@@ -78,7 +78,7 @@ Result<Posting> _parsePosting(String line) {
   final baseErrorMessage = 'Posting in line "$line" is not parsable.';
 
   if (lineParts.length == 1) {
-    return Error(message: baseErrorMessage);
+    return Error(baseErrorMessage);
   }
 
   final account = lineParts[0];
@@ -92,12 +92,12 @@ Result<Posting> _parsePosting(String line) {
   final match = exp.firstMatch(amount);
 
   if (match == null) {
-    return Error(message: baseErrorMessage);
+    return Error(baseErrorMessage);
   }
 
   final value = match.namedGroup('value');
   if (value == null) {
-    return Error(message: '$baseErrorMessage The value is not parsable.');
+    return Error('$baseErrorMessage The value is not parsable.');
   }
 
   final unit = match.namedGroup('unit')?.trim();
@@ -107,24 +107,20 @@ Result<Posting> _parsePosting(String line) {
 
   Amount parsedAmount;
   if (suffixUnit != null && unit != null && suffixUnit != '' && unit != '') {
-    return Error(
-      message: '$baseErrorMessage The amount must have only on unit.',
-    );
+    return Error('$baseErrorMessage The amount must have only on unit.');
   } else if (suffixUnit != null && suffixUnit != '') {
     if (suffixUnit.contains(' ')) {
-      return Error(message: spacesErrorMessage);
+      return Error(spacesErrorMessage);
     }
     parsedAmount = SuffixedAmount(value: double.parse(value), unit: suffixUnit);
   } else {
     if (unit != null && unit.contains(' ')) {
-      return Error(message: spacesErrorMessage);
+      return Error(spacesErrorMessage);
     }
     parsedAmount = Amount(value: double.parse(value), unit: unit);
   }
 
-  return Success(
-    value: Posting(account: account, amount: parsedAmount),
-  );
+  return Ok(Posting(account: account, amount: parsedAmount));
 }
 
 List<String> _splitAndClean(String line, String delimiter) {
@@ -147,17 +143,17 @@ Result<DateTime> _parseDate(String dateString) {
   dateString = dateString.replaceAll('.', '-').replaceAll('/', '-');
   final date = DateTime.tryParse(dateString);
   if (date == null) {
-    return Error(message: 'The date in line "$dateString" is not parsable.');
+    return Error('The date in line "$dateString" is not parsable.');
   } else if (dateString != formatToIsoDate(date)) {
-    return Error(message: 'The date in line "$dateString" is invalid.');
+    return Error('The date in line "$dateString" is invalid.');
   } else {
-    return Success(value: date);
+    return Ok(date);
   }
 }
 
 Result<List<Transaction>> _sort(Result<List<Transaction>> transactions) {
   switch (transactions) {
-    case Success<List<Transaction>> _:
+    case Ok<List<Transaction>> _:
       transactions.value.sort((a, b) => a.date.compareTo(b.date));
       return transactions;
     case Error<List<Transaction>> _:

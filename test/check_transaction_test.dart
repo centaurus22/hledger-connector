@@ -29,7 +29,7 @@ void main() {
       ],
     );
     var result = checkTransaction(transaction);
-    expect(result.runtimeType, Success<Transaction>);
+    expect(result.runtimeType, Ok<Transaction>);
   });
   test('balanced transaction with more than one unit', () {
     var transaction = Transaction(
@@ -54,7 +54,7 @@ void main() {
       ],
     );
     var result = checkTransaction(transaction);
-    expect(result.runtimeType, Success<Transaction>);
+    expect(result.runtimeType, Ok<Transaction>);
   });
   test('valid conversion transaction', () {
     var transaction = Transaction(
@@ -71,7 +71,7 @@ void main() {
       ],
     );
     var result = checkTransaction(transaction);
-    expect(result.runtimeType, Success<Transaction>);
+    expect(result.runtimeType, Ok<Transaction>);
   });
   test('invalid multi-conversion transaction', () {
     var transaction = Transaction(
@@ -113,7 +113,7 @@ void main() {
       ],
     );
     var result = checkTransaction(transaction);
-    expect(result.runtimeType, Success<Transaction>);
+    expect(result.runtimeType, Ok<Transaction>);
   });
   test('empty account string', () {
     var transaction = Transaction(

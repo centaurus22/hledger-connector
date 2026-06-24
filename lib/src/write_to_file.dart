@@ -6,7 +6,7 @@ import 'dart:io';
 /// Use Case: Write the transaction to file
 Result<String> writeToFile(Result<String> contentResult, String fileName) {
   switch (contentResult) {
-    case Success<String> _:
+    case Ok<String> _:
       return _writeToFile(contentResult.value, fileName);
     case Error _:
       return contentResult;
@@ -15,7 +15,7 @@ Result<String> writeToFile(Result<String> contentResult, String fileName) {
 
 Result<String> _writeToFile(String content, String fileName) {
   if (fileName == '') {
-    return Error(message: 'The file name cannot be empty.');
+    return Error('The file name cannot be empty.');
   }
 
   try {
@@ -27,10 +27,10 @@ Result<String> _writeToFile(String content, String fileName) {
 
     file.writeAsStringSync(content, mode: FileMode.append);
   } catch (e) {
-    return Error(message: '$e');
+    return Error('$e');
   }
 
-  return Success(value: content);
+  return Ok(content);
 }
 
 String fileHeader() {

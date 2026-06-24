@@ -63,12 +63,12 @@ sealed class Result<T> {
 ///
 /// It can contain additional [warnings].
 /// The sealed base class is the [Result]. The other [Result] ist a [Error].
-class Success<T> extends Result<T> {
+class Ok<T> extends Result<T> {
   /// The embedded value.
   final T value;
 
   /// This requires the embedded [value].
-  Success({required this.value});
+  Ok(this.value);
 }
 
 /// This is returned when a parameter is not valid.
@@ -81,5 +81,5 @@ class Error<T> extends Result<T> {
   final String message;
 
   /// This requires the error [message].
-  Error({required this.message});
+  Error(this.message);
 }

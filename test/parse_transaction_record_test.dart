@@ -9,26 +9,26 @@ void main() {
     Posting(account: 'expenses', amount: Amount(value: -10)),
   ];
   test('transaction starting with a date', () {
-    final transaction = Success(
-      value: Transaction(date: DateTime(2026, 01, 01), postings: basePostings),
+    final transaction = Ok(
+      Transaction(date: DateTime(2026, 01, 01), postings: basePostings),
     );
     var result = toJournalString(transaction);
-    expect(result.runtimeType, Success<String>);
-    if (result is Success<String>) {
+    expect(result.runtimeType, Ok<String>);
+    if (result is Ok<String>) {
       expect(result.value.substring(0, 13), '\n\n2026-01-01\n');
     }
   });
   test('description rendering', () {
-    final transaction = Success(
-      value: Transaction(
+    final transaction = Ok(
+      Transaction(
         date: DateTime(2026, 01, 02),
         description: 'First Transaction',
         postings: basePostings,
       ),
     );
     var result = toJournalString(transaction);
-    expect(result.runtimeType, Success<String>);
-    if (result is Success<String>) {
+    expect(result.runtimeType, Ok<String>);
+    if (result is Ok<String>) {
       expect(
         result.value.substring(0, 31),
         '\n\n2026-01-02 First Transaction\n',
@@ -36,18 +36,18 @@ void main() {
     }
   });
   test('date with only a year', () {
-    final transaction = Success(
-      value: Transaction(date: DateTime(2026), postings: basePostings),
+    final transaction = Ok(
+      Transaction(date: DateTime(2026), postings: basePostings),
     );
     var result = toJournalString(transaction);
-    expect(result.runtimeType, Success<String>);
-    if (result is Success<String>) {
+    expect(result.runtimeType, Ok<String>);
+    if (result is Ok<String>) {
       expect(result.value.substring(0, 13), '\n\n2026-01-01\n');
     }
   });
   test('posting', () {
-    final transaction = Success(
-      value: Transaction(date: DateTime(2026), postings: basePostings),
+    final transaction = Ok(
+      Transaction(date: DateTime(2026), postings: basePostings),
     );
     var realResult = toJournalString(transaction);
     var expectedResult =
@@ -55,14 +55,14 @@ void main() {
         '2026-01-01\n'
         '    assets     10.0\n'
         '    expenses  -10.0';
-    expect(realResult.runtimeType, Success<String>);
-    if (realResult is Success<String>) {
+    expect(realResult.runtimeType, Ok<String>);
+    if (realResult is Ok<String>) {
       expect(realResult.value, expectedResult);
     }
   });
   test('posting with unit', () {
-    final transaction = Success(
-      value: Transaction(
+    final transaction = Ok(
+      Transaction(
         date: DateTime(2026, 04, 03),
         postings: [
           Posting(
@@ -82,14 +82,14 @@ void main() {
         '2026-04-03\n'
         '    expenses   \$4.0\n'
         '    assets    \$-4.0';
-    expect(realResult.runtimeType, Success<String>);
-    if (realResult is Success<String>) {
+    expect(realResult.runtimeType, Ok<String>);
+    if (realResult is Ok<String>) {
       expect(realResult.value, expectedResult);
     }
   });
   test('postings with suffixed unit', () {
-    final transaction = Success(
-      value: Transaction(
+    final transaction = Ok(
+      Transaction(
         date: DateTime(2026, 02, 03),
         postings: [
           Posting(
@@ -109,14 +109,14 @@ void main() {
         '2026-02-03\n'
         '    expenses  -4.0 €\n'
         '    assets      \$4.0';
-    expect(realResult.runtimeType, Success<String>);
-    if (realResult is Success<String>) {
+    expect(realResult.runtimeType, Ok<String>);
+    if (realResult is Ok<String>) {
       expect(realResult.value, expectedResult);
     }
   });
   test('suffixed amount without a unit', () {
-    final transaction = Success(
-      value: Transaction(
+    final transaction = Ok(
+      Transaction(
         date: DateTime(2026, 02, 03),
         postings: [
           Posting(account: 'expenses', amount: SuffixedAmount(value: 4)),
@@ -130,13 +130,13 @@ void main() {
         '2026-02-03\n'
         '    expenses   4.0\n'
         '    assets    -4.0';
-    expect(realResult.runtimeType, Success<String>);
-    if (realResult is Success<String>) {
+    expect(realResult.runtimeType, Ok<String>);
+    if (realResult is Ok<String>) {
       expect(realResult.value, expectedResult);
     }
   });
   test('Error passed to function', () {
-    final transaction = Error<Transaction>(message: "transaction invalid.");
+    final transaction = Error<Transaction>("transaction invalid.");
     var realResult = toJournalString(transaction);
     expect(realResult.runtimeType, Error<String>);
   });

@@ -5,24 +5,23 @@ Result<Transaction> checkTransaction(Transaction transaction) {
   final result = _checkPostings(transaction.postings);
 
   switch (result) {
-    case Success<String> _:
-      return Success(value: transaction);
+    case Ok<String> _:
+      return Ok(transaction);
     case Error<String> _:
-      return Error(message: result.message);
+      return Error(result.message);
   }
 }
 
 Result<String> _checkPostings(List<Posting> postings) {
   if (postings.isEmpty) {
-    return Error(message: 'The transactions contains no sub-transactions');
+    return Error('The transactions contains no sub-transactions');
   }
 
   for (var posting in postings) {
     /// hledger does not accept empty account names.
     if (posting.account.isEmpty || posting.account.contains('  ')) {
       return Error(
-        message:
-            'A valid hledger account name is required. Eg: assets:cash, expenses:food:eating out.',
+        'A valid hledger account name is required. Eg: assets:cash, expenses:food:eating out.',
       );
     }
   }
@@ -35,9 +34,7 @@ Result<String> _checkPostings(List<Posting> postings) {
   );
 
   if (balances.length == 1 && balances[balances.keys.first] != 0) {
-    return Error(
-      message: 'This transaction is unbalanced. The sum should be 0.',
-    );
+    return Error('This transaction is unbalanced. The sum should be 0.');
   }
 
   var numberPositiveBalances = 0;
@@ -54,13 +51,13 @@ Result<String> _checkPostings(List<Posting> postings) {
   //hledger allows conversion transactions with exactly two participating units
   if ((numberNegativeBalances == 1 && numberPositiveBalances == 1) ||
       (numberPositiveBalances == 0 && numberNegativeBalances == 0)) {
-    return Success(value: "Check complete");
+    return Ok("Check complete");
   }
 
   var multiCommodityError =
       'This multi-commodity transaction is unbalanced. The sum should be 0.';
 
-  return Error(message: multiCommodityError);
+  return Error(multiCommodityError);
 }
 
 Map<String, double> _updateBalances(
