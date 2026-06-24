@@ -49,10 +49,10 @@ class SuffixedAmount extends Amount {
   SuffixedAmount({required super.value, super.unit});
 }
 
-/// A result of a function which can be a [Success] or an [Error].
+/// A result of a function which can be a [Ok] or an [Error].
 ///
 /// This is the sealed base class. Its children are used in functions that can
-/// return an [Error] instead of a of an expected value ([Success])
+/// return an [Error] instead of a of an expected value ([Ok])
 /// or additional [warnings].
 sealed class Result<T> {
   /// A list of warnings.
@@ -62,7 +62,7 @@ sealed class Result<T> {
 /// This is returned when functions are executed correctly.
 ///
 /// It can contain additional [warnings].
-/// The sealed base class is the [Result]. The other [Result] ist a [Error].
+/// The sealed base class is the [Result]. The other [Result] ist an [Error].
 class Ok<T> extends Result<T> {
   /// The embedded value.
   final T value;
@@ -74,7 +74,7 @@ class Ok<T> extends Result<T> {
 /// This is returned when a parameter is not valid.
 ///
 /// It can contain additional [warnings].
-/// The sealed base class ist the [Result]. The other [Result] ist a [Success].
+/// The sealed base class ist the [Result]. The other [Result] ist an [Ok].
 /// when the function executed correctly.
 class Error<T> extends Result<T> {
   /// The error message.
