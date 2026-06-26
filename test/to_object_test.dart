@@ -1,12 +1,12 @@
 import 'package:hledger_connector/src/record.dart';
 import 'package:test/test.dart';
 
-import 'package:hledger_connector/src/to_journal_object.dart';
+import 'package:hledger_connector/src/to_object.dart';
 
 void main() {
   test('returning error if the input is an Error', () {
     Error<List<String>> value = Error('The file cannot be found.');
-    var result = toJournalObject(value);
+    var result = toObject(value);
     expect(result.runtimeType, Error<List<Transaction>>);
   });
   test('parsing basic transaction', () {
@@ -14,7 +14,7 @@ void main() {
     transaction.add("2025-12-03");
     transaction.add("    food        3");
     transaction.add("    assets     -3");
-    var result = toJournalObject(Ok(transaction));
+    var result = toObject(Ok(transaction));
     expect(result.runtimeType, Ok<List<Transaction>>);
     if (result is Ok<List<Transaction>>) {
       var parsedTransaction = result.value.first;
@@ -31,7 +31,7 @@ void main() {
     transaction.add("    food            3");
     transaction.add("    assets:bank  -2.0");
     transaction.add("    assets:cash  -1.0");
-    var result = toJournalObject(Ok(transaction));
+    var result = toObject(Ok(transaction));
     expect(result.runtimeType, Ok<List<Transaction>>);
     if (result is Ok<List<Transaction>>) {
       var postings = result.value.first.postings;
@@ -48,7 +48,7 @@ void main() {
     transaction.add("2025-12-03");
     transaction.add("    food        0.4");
     transaction.add("    assets     -0.4");
-    var result = toJournalObject(Ok(transaction));
+    var result = toObject(Ok(transaction));
     expect(result.runtimeType, Ok<List<Transaction>>);
     if (result is Ok<List<Transaction>>) {
       var postings = result.value.first.postings;
@@ -63,7 +63,7 @@ void main() {
     transaction.add("2025-12-03");
     transaction.add("    food        0.4");
     transaction.add("    assets");
-    var result = toJournalObject(Ok(transaction));
+    var result = toObject(Ok(transaction));
     expect(result.runtimeType, Error<List<Transaction>>);
   });
   test('parsing amounts with a prefixed unit', () {
@@ -71,7 +71,7 @@ void main() {
     transaction.add("2025-12-03");
     transaction.add(r"    food        $0.4");
     transaction.add(r"    assets     $-0.4");
-    var result = toJournalObject(Ok(transaction));
+    var result = toObject(Ok(transaction));
     expect(result.runtimeType, Ok<List<Transaction>>);
     if (result is Ok<List<Transaction>>) {
       var postings = result.value.first.postings;
@@ -88,7 +88,7 @@ void main() {
     transaction.add("2025-12-03");
     transaction.add(r"    food      €  0.4");
     transaction.add(r"    assets    € -0.4");
-    var result = toJournalObject(Ok(transaction));
+    var result = toObject(Ok(transaction));
     expect(result.runtimeType, Ok<List<Transaction>>);
     if (result is Ok<List<Transaction>>) {
       var postings = result.value.first.postings;
@@ -105,7 +105,7 @@ void main() {
     transaction.add("2025-12-03");
     transaction.add(r"    food      a b  0.4");
     transaction.add(r"    assets    € -0.4");
-    var result = toJournalObject(Ok(transaction));
+    var result = toObject(Ok(transaction));
     expect(result.runtimeType, Error<List<Transaction>>);
   });
   test('parsing transaction with suffixed unit', () {
@@ -113,7 +113,7 @@ void main() {
     transaction.add("2025-12-03");
     transaction.add(r"    food      0.4 €");
     transaction.add(r"    assets   -0.4 €");
-    var result = toJournalObject(Ok(transaction));
+    var result = toObject(Ok(transaction));
     expect(result.runtimeType, Ok<List<Transaction>>);
     if (result is Ok<List<Transaction>>) {
       var postings = result.value.first.postings;
@@ -131,7 +131,7 @@ void main() {
     transaction.add("2025-12-03");
     transaction.add(r"    food      0.4 b a");
     transaction.add(r"    assets   -0.4 d e");
-    var result = toJournalObject(Ok(transaction));
+    var result = toObject(Ok(transaction));
     expect(result.runtimeType, Error<List<Transaction>>);
   });
   test('returning Error if an amount has a prefix and suffix unit', () {
@@ -139,7 +139,7 @@ void main() {
     transaction.add("2025-12-03");
     transaction.add(r"    food     e0.4 b");
     transaction.add(r"    assets   e-0.4 d");
-    var result = toJournalObject(Ok(transaction));
+    var result = toObject(Ok(transaction));
     expect(result.runtimeType, Error<List<Transaction>>);
   });
   test('parsing transaction with description', () {
@@ -147,7 +147,7 @@ void main() {
     transaction.add("2025-12-03 Bought vegan milk  ");
     transaction.add("    food        3");
     transaction.add("    assets     -3");
-    var result = toJournalObject(Ok(transaction));
+    var result = toObject(Ok(transaction));
     expect(result.runtimeType, Ok<List<Transaction>>);
     if (result is Ok<List<Transaction>>) {
       var parsedTransaction = result.value.first;
@@ -164,7 +164,7 @@ void main() {
     transaction.add("2025-04  Bought banana");
     transaction.add("    food        3");
     transaction.add("    assets     -3");
-    var result = toJournalObject(Ok(transaction));
+    var result = toObject(Ok(transaction));
     expect(result.runtimeType, Error<List<Transaction>>);
   });
   test('Returning an Error if the date is invalid', () {
@@ -172,7 +172,7 @@ void main() {
     transaction.add("2025-04-31  Bought banana");
     transaction.add("    assets:cash:bank      3 €");
     transaction.add("    assets:cash:cash     -3 €");
-    var result = toJournalObject(Ok(transaction));
+    var result = toObject(Ok(transaction));
     expect(result.runtimeType, Error<List<Transaction>>);
   });
   test('parsing two transactions', () {
@@ -183,7 +183,7 @@ void main() {
     transaction.add("2026-12-05 Debit bank account");
     transaction.add("    assets:cash:cash     200 €");
     transaction.add("    assets:cash:bank     -200 €");
-    var result = toJournalObject(Ok(transaction));
+    var result = toObject(Ok(transaction));
     expect(result.runtimeType, Ok<List<Transaction>>);
     if (result is Ok<List<Transaction>>) {
       var parsedTransaction = result.value.first;
@@ -209,7 +209,7 @@ void main() {
     transaction.add("2025-12-03");
     transaction.add(r"    food      € 0.4");
     transaction.add(r"    assets   € -0.4");
-    var result = toJournalObject(Ok(transaction));
+    var result = toObject(Ok(transaction));
     expect(result.runtimeType, Ok<List<Transaction>>);
     if (result is Ok<List<Transaction>>) {
       var postings = result.value.first.postings;
@@ -221,7 +221,7 @@ void main() {
     transaction.add("2025-04-30");
     transaction.add("    23      3 €");
     transaction.add("    12     -3 €");
-    var result = toJournalObject(Ok(transaction));
+    var result = toObject(Ok(transaction));
     expect(result.runtimeType, Ok<List<Transaction>>);
     if (result is Ok<List<Transaction>>) {
       var parsedTransaction = result.value.first;
@@ -235,7 +235,7 @@ void main() {
     transaction.add("2025-04-30");
     transaction.add("    23      3 €");
     transaction.add("    12     -3 €");
-    var result = toJournalObject(Ok(transaction));
+    var result = toObject(Ok(transaction));
     expect(result.runtimeType, Ok<List<Transaction>>);
     if (result is Ok<List<Transaction>>) {
       var parsedTransaction = result.value.first;
@@ -249,7 +249,7 @@ void main() {
     transaction.add("2025-04-30");
     transaction.add("    f 3      3 €");
     transaction.add("    x 2     -3 €");
-    var result = toJournalObject(Ok(transaction));
+    var result = toObject(Ok(transaction));
     expect(result.runtimeType, Ok<List<Transaction>>);
     if (result is Ok<List<Transaction>>) {
       var parsedTransaction = result.value.first;
@@ -263,7 +263,7 @@ void main() {
     transaction.add("2025-04-30");
     transaction.add("    food      3 €; tag1 ");
     transaction.add("    assets   -3 €");
-    var result = toJournalObject(Ok(transaction));
+    var result = toObject(Ok(transaction));
     expect(result.runtimeType, Ok<List<Transaction>>);
     if (result is Ok<List<Transaction>>) {
       var parsedTransaction = result.value.first;
@@ -278,7 +278,7 @@ void main() {
     transaction.add("2025-04-30");
     transaction.add("    food      3 €  ; tag1 ");
     transaction.add("    assets   -3€ ");
-    var result = toJournalObject(Ok(transaction));
+    var result = toObject(Ok(transaction));
     expect(result.runtimeType, Ok<List<Transaction>>);
     if (result is Ok<List<Transaction>>) {
       var parsedTransaction = result.value.first;
@@ -293,7 +293,7 @@ void main() {
     transaction.add("2025-04-30");
     transaction.add("    food      3  €  ; tag1 ");
     transaction.add("    assets   -3€ ");
-    var result = toJournalObject(Ok(transaction));
+    var result = toObject(Ok(transaction));
     expect(result.runtimeType, Ok<List<Transaction>>);
     if (result is Ok<List<Transaction>>) {
       var parsedTransaction = result.value.first;
@@ -308,7 +308,7 @@ void main() {
     transaction.add("2025-04-30");
     transaction.add("    food      3  €  ;  tag1 ");
     transaction.add("    assets   -3€ ");
-    var result = toJournalObject(Ok(transaction));
+    var result = toObject(Ok(transaction));
     expect(result.runtimeType, Ok<List<Transaction>>);
     if (result is Ok<List<Transaction>>) {
       var parsedTransaction = result.value.first;
@@ -324,7 +324,7 @@ void main() {
     transaction.add("    food            3  €  ;  tag1 ");
     transaction.add(" ; I am a comment");
     transaction.add("    assets:bank   -3€ ");
-    var result = toJournalObject(Ok(transaction));
+    var result = toObject(Ok(transaction));
     expect(result.runtimeType, Ok<List<Transaction>>);
     if (result is Ok<List<Transaction>>) {
       var parsedTransaction = result.value.first;
@@ -342,7 +342,7 @@ void main() {
     transaction.add("2026-12-05 Debit bank account");
     transaction.add("    assets:cash:cash     200 €");
     transaction.add("    assets:cash:bank     -200 €");
-    var result = toJournalObject(Ok(transaction));
+    var result = toObject(Ok(transaction));
     expect(result.runtimeType, Ok<List<Transaction>>);
     if (result is Ok<List<Transaction>>) {
       var parsedTransaction = result.value.first;
@@ -357,7 +357,7 @@ void main() {
     transaction.add("    food            3  €  ;  tag1 ");
     transaction.add(" # I am a comment too");
     transaction.add("    assets:bank   -3€ ");
-    var result = toJournalObject(Ok(transaction));
+    var result = toObject(Ok(transaction));
     expect(result.runtimeType, Ok<List<Transaction>>);
     if (result is Ok<List<Transaction>>) {
       var parsedTransaction = result.value.first;
@@ -373,7 +373,7 @@ void main() {
     transaction.add("    food            3  €  ;  tag1 ");
     transaction.add(" * I am a comment too");
     transaction.add("    assets:bank   -3€ ");
-    var result = toJournalObject(Ok(transaction));
+    var result = toObject(Ok(transaction));
     expect(result.runtimeType, Ok<List<Transaction>>);
     if (result is Ok<List<Transaction>>) {
       var parsedTransaction = result.value.first;
@@ -388,7 +388,7 @@ void main() {
     transaction.add("2025.12.03");
     transaction.add("    food      € 0.4");
     transaction.add("    assets   € -0.4");
-    var result = toJournalObject(Ok(transaction));
+    var result = toObject(Ok(transaction));
     expect(result.runtimeType, Ok<List<Transaction>>);
     if (result is Ok<List<Transaction>>) {
       expect(result.value.first.date, DateTime(2025, 12, 3));
@@ -399,7 +399,7 @@ void main() {
     transaction.add("2027/08/02");
     transaction.add("    food      € 0.4");
     transaction.add("    assets   € -0.4");
-    var result = toJournalObject(Ok(transaction));
+    var result = toObject(Ok(transaction));
     expect(result.runtimeType, Ok<List<Transaction>>);
     if (result is Ok<List<Transaction>>) {
       expect(result.value.first.date, DateTime(2027, 8, 2));

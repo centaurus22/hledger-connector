@@ -1,7 +1,7 @@
 import 'package:hledger_connector/src/record.dart';
 import 'package:test/test.dart';
 
-import 'package:hledger_connector/src/to_journal_string.dart';
+import 'package:hledger_connector/src/to_string.dart';
 
 void main() {
   final basePostings = [
@@ -12,7 +12,7 @@ void main() {
     final transaction = Ok(
       Transaction(date: DateTime(2026, 01, 01), postings: basePostings),
     );
-    var result = toJournalString(transaction);
+    var result = toString(transaction);
     expect(result.runtimeType, Ok<String>);
     if (result is Ok<String>) {
       expect(result.value.substring(0, 13), '\n\n2026-01-01\n');
@@ -26,7 +26,7 @@ void main() {
         postings: basePostings,
       ),
     );
-    var result = toJournalString(transaction);
+    var result = toString(transaction);
     expect(result.runtimeType, Ok<String>);
     if (result is Ok<String>) {
       expect(
@@ -39,7 +39,7 @@ void main() {
     final transaction = Ok(
       Transaction(date: DateTime(2026), postings: basePostings),
     );
-    var result = toJournalString(transaction);
+    var result = toString(transaction);
     expect(result.runtimeType, Ok<String>);
     if (result is Ok<String>) {
       expect(result.value.substring(0, 13), '\n\n2026-01-01\n');
@@ -49,7 +49,7 @@ void main() {
     final transaction = Ok(
       Transaction(date: DateTime(2026), postings: basePostings),
     );
-    var realResult = toJournalString(transaction);
+    var realResult = toString(transaction);
     var expectedResult =
         '\n\n'
         '2026-01-01\n'
@@ -76,7 +76,7 @@ void main() {
         ],
       ),
     );
-    var realResult = toJournalString(transaction);
+    var realResult = toString(transaction);
     var expectedResult =
         '\n\n'
         '2026-04-03\n'
@@ -103,7 +103,7 @@ void main() {
         ],
       ),
     );
-    var realResult = toJournalString(transaction);
+    var realResult = toString(transaction);
     var expectedResult =
         '\n\n'
         '2026-02-03\n'
@@ -116,7 +116,7 @@ void main() {
   });
   test('Error passed to function', () {
     final transaction = Error<Transaction>("transaction invalid.");
-    var realResult = toJournalString(transaction);
+    var realResult = toString(transaction);
     expect(realResult.runtimeType, Error<String>);
   });
 }

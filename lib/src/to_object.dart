@@ -2,7 +2,7 @@ import 'functions.dart';
 import 'record.dart';
 
 /// Use Case: Parse a String of Transactions to a List of Transaction Records
-Result<List<Transaction>> toJournalObject(Result<List<String>> transactions) {
+Result<List<Transaction>> toObject(Result<List<String>> transactions) {
   switch (transactions) {
     case Ok<List<String>> _:
       return _toJournalObject(transactions.value);
