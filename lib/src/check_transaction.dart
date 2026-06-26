@@ -14,7 +14,7 @@ Result<Transaction> checkTransaction(Transaction transaction) {
 
 Result<String> _checkPostings(List<Posting> postings) {
   if (postings.isEmpty) {
-    return Error('The transactions contains no sub-transactions');
+    return Error('The transactions contains no postings');
   }
 
   for (var posting in postings) {
