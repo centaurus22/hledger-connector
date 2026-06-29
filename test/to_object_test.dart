@@ -126,6 +126,18 @@ void main() {
       expect(postings.first.amount.symbol.runtimeType, FollowingSymbol);
     }
   });
+    test('parsing transaction with preceding symbol', () {
+    List<String> transaction = List.empty(growable: true);
+    transaction.add("2025-12-03");
+    transaction.add(r"    food      $0.4");
+    transaction.add(r"    assets   $-0.4");
+    var result = toObjects(Ok(transaction));
+    expect(result.runtimeType, Ok<List<Transaction>>);
+    if (result is Ok<List<Transaction>>) {
+      var postings = result.value.first.postings;
+      expect(postings.first.amount.symbol.runtimeType, PrecedingSymbol);
+    }
+  });
   test('returning Error when a suffix unit contains a space', () {
     List<String> transaction = List.empty(growable: true);
     transaction.add("2025-12-03");
