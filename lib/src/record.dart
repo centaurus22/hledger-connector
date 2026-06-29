@@ -18,7 +18,7 @@ class Posting {
   /// The [account] the units are transferred from or to.
   String account;
 
-  /// The amount which is transferred.
+  /// The [Amount] which is transferred.
   Amount amount;
 
   /// This requires an [account] and an [Amount].
@@ -26,37 +26,53 @@ class Posting {
 }
 
 /// The amount transferred in a [Posting].
-///
-/// In this base class the optional unit is written in front of the amount. In
-/// the child class [SuffixedAmount], the unit is written behind the amount.
 class Amount {
   /// The amount that is transferred.
   double value;
 
-  /// The optional unit.
+  /// The optional symbol.
   Symbol? symbol;
 
-  /// The [value] is required. Optionally a [symbol] can be added.
+  /// The [value] is required. Optionally a [Symbol] can be added.
   Amount({required this.value, this.symbol});
 }
 
+/// This can be optionally added to an amount. You probably want to do this.
+///
+/// I represents a commodity symbol or a currency symbol.
+/// 
+/// You cannot initialize this object directly. Instead, use one of the two
+/// subclasses: [PrecedingSymbol] where the unit or symbol stands
+/// in front of the numerical value, and [FollowingSymbol] where
+/// the symbol appears after the number.
 sealed class Symbol {
+  /// The actual symbol as [String].
   String name;
 
+  /// This requires the [name].
   Symbol(this.name);
 }
 
-/// Child class of the [Amount].
+/// Child class of the [Symbol].
 ///
-/// The difference of this and the base class ist that the unit is written after
-/// the amount.
+/// This represents a symbol that appears after the numerical value with no
+/// space between the number and the symbol.
+/// 
+/// The other subclass is the [FollowingSymbol].
 class PrecedingSymbol extends Symbol {
-  /// The [value] is required. Optionally a [unit] can be added.
+  /// This requires the [name].
   PrecedingSymbol(super.name);
 }
 
+/// Child class of the [Symbol].
+///
+/// This represents a symbol that appears before the numerical value with one
+/// space between the value and the symbol. It is useful for most currency
+/// symbols.
+/// 
+/// The other subclass is the [FollowingSymbol].
 class FollowingSymbol extends Symbol {
-  /// The [value] is required. Optionally a [unit] can be added.
+  /// This requires the [name].
   FollowingSymbol(super.name);
 }
 
