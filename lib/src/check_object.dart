@@ -1,7 +1,7 @@
 import 'record.dart';
 
 /// Use Case: Check a transaction for data errors
-Result<Transaction> checkTransaction(Transaction transaction) {
+Result<Transaction> checkObject(Transaction transaction) {
   final result = _checkPostings(transaction.postings);
 
   switch (result) {

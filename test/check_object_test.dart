@@ -1,12 +1,12 @@
 import 'package:hledger_connector/src/record.dart';
 import 'package:test/test.dart';
 
-import 'package:hledger_connector/src/check_transaction.dart';
+import 'package:hledger_connector/src/check_object.dart';
 
 void main() {
   test('transaction with no postings', () {
     var transaction = Transaction(date: DateTime(2026), postings: []);
-    var result = checkTransaction(transaction);
+    var result = checkObject(transaction);
     expect(result.runtimeType, Error<Transaction>);
   });
   test('unbalanced transaction', () {
@@ -17,7 +17,7 @@ void main() {
         Posting(account: 'expenses', amount: Amount(value: -5)),
       ],
     );
-    var result = checkTransaction(transaction);
+    var result = checkObject(transaction);
     expect(result.runtimeType, Error<Transaction>);
   });
   test('balanced transaction with floating point numbers', () {
@@ -28,7 +28,7 @@ void main() {
         Posting(account: 'expenses', amount: Amount(value: 0.000004)),
       ],
     );
-    var result = checkTransaction(transaction);
+    var result = checkObject(transaction);
     expect(result.runtimeType, Ok<Transaction>);
   });
   test('balanced transaction with more than one unit', () {
@@ -53,7 +53,7 @@ void main() {
         ),
       ],
     );
-    var result = checkTransaction(transaction);
+    var result = checkObject(transaction);
     expect(result.runtimeType, Ok<Transaction>);
   });
   test('valid conversion transaction', () {
@@ -70,7 +70,7 @@ void main() {
         ),
       ],
     );
-    var result = checkTransaction(transaction);
+    var result = checkObject(transaction);
     expect(result.runtimeType, Ok<Transaction>);
   });
   test('invalid multi-conversion transaction', () {
@@ -91,7 +91,7 @@ void main() {
         ),
       ],
     );
-    var result = checkTransaction(transaction);
+    var result = checkObject(transaction);
     expect(result.runtimeType, Error<Transaction>);
   });
   test('valid conversion transaction with one reduced value', () {
@@ -112,7 +112,7 @@ void main() {
         ),
       ],
     );
-    var result = checkTransaction(transaction);
+    var result = checkObject(transaction);
     expect(result.runtimeType, Ok<Transaction>);
   });
   test('empty account string', () {
@@ -123,7 +123,7 @@ void main() {
         Posting(account: 'assets:cash', amount: Amount(value: -4333)),
       ],
     );
-    var realResult = checkTransaction(transaction);
+    var realResult = checkObject(transaction);
     expect(realResult.runtimeType, Error<Transaction>);
   });
   test('account string with two following spaces', () {
@@ -134,7 +134,7 @@ void main() {
         Posting(account: 'assets:cash', amount: Amount(value: -4333)),
       ],
     );
-    var realResult = checkTransaction(transaction);
+    var realResult = checkObject(transaction);
     expect(realResult.runtimeType, Error<Transaction>);
   });
 }
