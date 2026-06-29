@@ -1,8 +1,10 @@
 # Examples
 
-A few usage examples for the `hledger_connector`.
+A few usage examples how to use the `hledger_connector` library.
 
 ## Base example
+
+Convert a Transaction object to a hledger journal entry and back to an object. 
 
 The following Dart record structure
 
@@ -11,19 +13,20 @@ import 'package:hledger_connector/hledger_connector.dart';
 
 var transaction = Transaction(
   description: 'Example transaction',
-  date: DateTime(2026,1,1),
-  subTransactions: [
-    SubTransaction(
+  date: DateTime(2026, 1, 1),
+  postings: [
+    Posting(
       account: 'assets:cash',
-      amount: Amount(value: -5, unit: r'$')
+      amount: Amount(value: -5, symbol: PrecedingSymbol(r'$')),
     ),
-    SubTransaction(
+    Posting(
       account: 'expenses:food',
-      amount: Amount(value: 5, unit: r'$')
-    )
-]);
+      amount: Amount(value: 5, symbol: PrecedingSymbol(r'$')),
+    ),
+  ],
+);
 
-final writeResult = addTransaction(transaction, 'test.journal');
+final writeResult = addTransaction(transaction, 'example.journal');
 ```
 
 adds the following transaction to the journal:
@@ -37,9 +40,9 @@ adds the following transaction to the journal:
 You can read the information back with
 
 ```dart
-final readResult = readTransactions('test.journal');
+final readResult = readTransactions('example.journal');
 
-if (readResult is Success) {
+if (readResult is Ok<List<Transaction>>) {
   final transaction = readResult.value.first;
 }
 ```
@@ -55,19 +58,13 @@ import 'package:hledger_connector/hledger_connector.dart';
 
 var transaction = Transaction(
   date: DateTime(2026, 1, 1),
-  subTransactions: [
-    SubTransaction(
-      account: 'assets',
-      amount: Amount(value: 5),
-    ),
-    SubTransaction(
-      account: 'expenses',
-      amount: Amount(value: -5),
-    ),
+  postings: [
+    Posting(account: 'assets', amount: Amount(value: 5)),
+    Posting(account: 'expenses', amount: Amount(value: -5)),
   ],
 );
 
-final result = addTransaction(transaction, 'test.journal');
+final result = addTransaction(transaction, 'example.journal');
 ```
 And this is the resulting journal entry:
 
@@ -85,20 +82,21 @@ This is an example with unit conversion:
 import 'package:hledger_connector/hledger_connector.dart';
 
 var transaction = Transaction(
-  date: DateTime(2026,1,1),
+  date: DateTime(2026, 1, 1),
   description: 'Conversion example',
-  subTransactions: [
-    SubTransaction(
+  postings: [
+    Posting(
       account: 'assets:account1',
-      amount: Amount(value: -5, unit: '\$')
+      amount: Amount(value: -5, symbol: PrecedingSymbol(r'$')),
     ),
-    SubTransaction(
+    Posting(
       account: 'expenses:account2',
-      amount: SuffixedAmount(value: 4.28, unit: '€')
-    )
-  ]);
+      amount: Amount(value: 4.28, symbol: FollowingSymbol(r'€')),
+    ),
+  ],
+);
 
-  var result = addTransaction(transaction, 'test.journal');
+var result = addTransaction(transaction, 'example.journal');
 ```
 
 The result is the following:
@@ -117,20 +115,44 @@ This is an example with a unbalanced Transaction. The parser returns an Error:
 import 'package:hledger_connector/hledger_connector.dart';
 
 var transaction = Transaction(
-  date: DateTime(2026,1,1),
+  date: DateTime(2026, 1, 1),
   description: 'Unbalanced example',
-  subTransactions: [
-    SubTransaction(
+  postings: [
+    Posting(
       account: 'assets:account1',
-      amount: Amount(value: -5, unit: '\$')
+      amount: Amount(value: -5, symbol: PrecedingSymbol(r'\$')),
     ),
-  ]);
+  ],
+);
 
-  var result = addTransaction(transaction, 'test.journal');
+var result = addTransaction(transaction, 'example.journal');
 
-  if  (result is Error) {
-    print(result.message);
-  }
+if (result is Error<String>) {
+  print(result.message);
+}
 ```
 
 prints out `This transaction is unbalanced. The sum should be 0.`
+
+## Direct conversion example
+
+One can directly convert an Transaction object to a hledger journal entry and than
+back to a Transaction object.
+
+```dart
+var transaction = Transaction(
+  date: DateTime(2026, 1, 1),
+  postings: [
+    Posting(account: 'assets', amount: Amount(value: 5)),
+    Posting(account: 'expenses', amount: Amount(value: -5)),
+  ],
+);
+
+final journalEntry = toJournalString(transaction);
+
+if (journalEntry is Ok<String>) {
+  Result<List<Transaction>> transactions = toJournalObject(
+    journalEntry.value.split('\n'),
+  );
+}
+```

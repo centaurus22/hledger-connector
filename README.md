@@ -15,20 +15,22 @@ the LICENSE file for the full text.
   * simple conversion transactions.
 * Write them to file or read them from a file.
 * Creates a new journal files if necessary.
-* Returns a Success when everything has worked correctly or an Error which
+* Returns a `Ok` when everything has worked correctly or an `Error` which
   contains an error message.
+* Transform a Transaction from and to a string without any file access. To send
+  it over the net or save it in a database for example.
 
 ### Planned features
 
 * Filter a List of Transactions by account names, dates etc.
 * Write a list of Transactions with one file access instead one access for
   every Transaction.
-* Transform a Transaction from and to a string without any file access for
-  example to send it over the net or save it in a database.
 * Add a warning if a journal contains an ignored feature.
 
 ### List
-Supported features according to the [data formats page](https://hledger.org/1.52/hledger.html#part-2-data-formats) on [hledger.org](hledger.org)
+Supported features according to the
+[data formats page](https://hledger.org/1.52/hledger.html#part-2-data-formats)
+on [hledger.org](hledger.org).
 
 | Feature | Supported | Future dev?|
 |---------|-----------|--------|
@@ -66,7 +68,8 @@ Supported features according to the [data formats page](https://hledger.org/1.52
 1. Is part of description 
 2. Is deprecated by hledger
 
-* '👻 Ignored' means: The content of this element will be silently dropped if present in a journal. It cannot be added to a Transaction record.
+* '👻 Ignored' means: The content of this element will be silently dropped if
+  present in a journal. It cannot be added to a Transaction record.
 * '❌ Not Supported' means: This element will cause an error.
 
 ## Usage
@@ -78,19 +81,20 @@ import 'package:hledger_connector/hledger_connector.dart';
 
 var transaction = Transaction(
   description: 'Example transaction',
-  date: DateTime(2026,1,1),
-  subTransactions: [
-    SubTransaction(
+  date: DateTime(2026, 1, 1),
+  postings: [
+    Posting(
       account: 'assets:cash',
-      amount: Amount(value: -5, unit: r'$')
+      amount: Amount(value: -5, symbol: PrecedingSymbol(r'$')),
     ),
-    SubTransaction(
+    Posting(
       account: 'expenses:food',
-      amount: Amount(value: 5, unit: r'$')
-    )
-]);
+      amount: Amount(value: 5, symbol: PrecedingSymbol(r'$')),
+    ),
+  ],
+);
 
-final writeResult = addTransaction(transaction, 'test.journal');
+final writeResult = addTransaction(transaction, 'example.journal');
 ```
 
 adds the following transaction to the journal:
@@ -104,9 +108,9 @@ adds the following transaction to the journal:
 You can read the information back with
 
 ```dart
-final readResult = readTransactions('test.journal');
+final readResult = readTransactions('example.journal');
 
-if (readResult is Success) {
+if (readResult is Ok<List<Transaction>>) {
   final transaction = readResult.value.first;
 }
 ```

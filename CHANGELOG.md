@@ -15,3 +15,16 @@
 - I am happy to introduce the journal parser that reads a file and returns a Transaction object.
 - I added a large list to the Readme where you can see which ledger journal feature is already supported.
 - Improvements of other parts of the code.
+
+## 0.4.0
+
+- Add functions to directly convert transactions from a journal entry to an
+      object and vice versa – without writing them to a file.
+- Other Improvements
+    * Improve the record structure: The `Amount` object no longer has
+      subclasses. Instead, the optional `Symbol` is now a sealed class with the
+      two subclasses `PrecedingSymbol` and `FollowingSymbol`.
+    * Rename the `SubTransaction` object to `Posting`.
+    * Shorten the name of the `Success` object to just `Ok`.
+    * Improve the naming of the primary functions and use cases.
+    * Further improvements.

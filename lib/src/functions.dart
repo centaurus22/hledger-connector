@@ -11,9 +11,9 @@ String _padLeft(int value) {
 Result<List<T>> check<T>(Iterable<Result<T>> elements) {
   final errorElements = elements.whereType<Error<T>>();
   if (errorElements.isNotEmpty) {
-    return Error(message: errorElements.first.message);
+    return Error(errorElements.first.message);
   }
 
-  final successElements = (elements.whereType<Success<T>>());
-  return Success(value: successElements.map((e) => e.value).toList());
+  final successElements = (elements.whereType<Ok<T>>());
+  return Ok(successElements.map((e) => e.value).toList());
 }

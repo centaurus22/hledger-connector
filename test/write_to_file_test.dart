@@ -5,14 +5,14 @@ import 'package:hledger_connector/src/write_to_file.dart';
 
 void main() {
   test('throwing error if the file name is empty', () {
-    Result<String> result = writeToFile(Success(value: ''), '');
+    Result<String> result = writeToFile(Ok(''), '');
     expect(result.runtimeType, Error<String>);
     if (result is Error<String>) {
       expect(result.message, 'The file name cannot be empty.');
     }
   });
   test('Error passed to function', () {
-    final transaction = Error<String>(message: "transaction invalid.");
+    final transaction = Error<String>("transaction invalid.");
     var realResult = writeToFile(transaction, '');
     expect(realResult.runtimeType, Error<String>);
   });
