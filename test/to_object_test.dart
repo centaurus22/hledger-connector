@@ -242,20 +242,6 @@ void main() {
       expect(parsedTransaction.postings.elementAt(1).account, '12');
     }
   });
-  test('Parse numbers in account names', () {
-    List<String> transaction = List.empty(growable: true);
-    transaction.add("2025-04-30");
-    transaction.add("    23      3 €");
-    transaction.add("    12     -3 €");
-    var result = toObjects(Ok(transaction));
-    expect(result.runtimeType, Ok<List<Transaction>>);
-    if (result is Ok<List<Transaction>>) {
-      var parsedTransaction = result.value.first;
-      expect(parsedTransaction.date, DateTime(2025, 04, 30));
-      expect(parsedTransaction.postings.first.account, '23');
-      expect(parsedTransaction.postings.elementAt(1).account, '12');
-    }
-  });
   test('Parse spaces in account names', () {
     List<String> transaction = List.empty(growable: true);
     transaction.add("2025-04-30");

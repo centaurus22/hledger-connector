@@ -4,11 +4,11 @@ import 'package:test/test.dart';
 import 'package:hledger_connector/src/write_to_file.dart';
 
 void main() {
-  test('throwing error if the file name is empty', () {
+  test('throwing error if the file path is empty', () {
     Result<String> result = writeToFile(Ok(''), '');
     expect(result.runtimeType, Error<String>);
     if (result is Error<String>) {
-      expect(result.message, 'The file name cannot be empty.');
+      expect(result.message, 'The file path cannot be empty.');
     }
   });
   test('Error passed to function', () {
