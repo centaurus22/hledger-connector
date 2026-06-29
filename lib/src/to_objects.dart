@@ -1,7 +1,7 @@
 import 'functions.dart';
 import 'record.dart';
 
-/// Use Case: Parse a String of Transactions to a List of Transaction Records
+/// Use Case: Convert transactions to a list of [Transaction]s.
 Result<List<Transaction>> toObjects(Result<List<String>> transactions) {
   switch (transactions) {
     case Ok<List<String>> _:

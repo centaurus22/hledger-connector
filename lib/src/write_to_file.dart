@@ -3,23 +3,23 @@ import 'record.dart';
 
 import 'dart:io';
 
-/// Use Case: Write the transaction to file
-Result<String> writeToFile(Result<String> contentResult, String fileName) {
+/// Use Case: Write the [Transaction] to file with the path [filePath].
+Result<String> writeToFile(Result<String> contentResult, String filePath) {
   switch (contentResult) {
     case Ok<String> _:
-      return _writeToFile(contentResult.value, fileName);
+      return _writeToFile(contentResult.value, filePath);
     case Error _:
       return contentResult;
   }
 }
 
-Result<String> _writeToFile(String content, String fileName) {
-  if (fileName == '') {
-    return Error('The file name cannot be empty.');
+Result<String> _writeToFile(String content, String filePath) {
+  if (filePath == '') {
+    return Error('The file path cannot be empty.');
   }
 
   try {
-    final file = File(fileName);
+    final file = File(filePath);
 
     if (file.existsSync() == false || file.lengthSync() == 0) {
       file.writeAsStringSync(fileHeader());

@@ -1,6 +1,6 @@
 import 'record.dart';
 
-/// Use Case: Check a transaction for data errors
+/// Use Case: Check a [Transaction] for data errors.
 Result<Transaction> checkObject(Transaction transaction) {
   final result = _checkPostings(transaction.postings);
 
@@ -18,7 +18,8 @@ Result<String> _checkPostings(List<Posting> postings) {
   }
 
   for (var posting in postings) {
-    /// hledger does not accept empty account names.
+    /// hledger does not accept empty account names or account names with
+    /// more than one space in a row
     if (posting.account.isEmpty || posting.account.contains('  ')) {
       return Error(
         'A valid hledger account name is required. Eg: assets:cash, expenses:food:eating out.',
