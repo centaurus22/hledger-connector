@@ -31,7 +31,7 @@ void main() {
     var result = checkObject(transaction);
     expect(result.runtimeType, Ok<Transaction>);
   });
-  test('balanced transaction with more than one unit', () {
+  test('balanced transaction with more than one symbol', () {
     var transaction = Transaction(
       date: DateTime(2026),
       postings: [

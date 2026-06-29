@@ -60,7 +60,7 @@ void main() {
       expect(realResult.value, expectedResult);
     }
   });
-  test('posting with unit', () {
+  test('posting with symbol', () {
     final transaction = Ok(
       Transaction(
         date: DateTime(2026, 04, 03),
@@ -87,7 +87,7 @@ void main() {
       expect(realResult.value, expectedResult);
     }
   });
-  test('postings with suffixed unit', () {
+  test('postings with following symbol', () {
     final transaction = Ok(
       Transaction(
         date: DateTime(2026, 02, 03),

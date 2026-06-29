@@ -66,7 +66,7 @@ void main() {
     var result = toObjects(Ok(transaction));
     expect(result.runtimeType, Error<List<Transaction>>);
   });
-  test('parsing amounts with a prefixed unit', () {
+  test('parsing amounts with a preceding symbol', () {
     List<String> transaction = List.empty(growable: true);
     transaction.add("2025-12-03");
     transaction.add(r"    food        $0.4");
@@ -83,7 +83,7 @@ void main() {
       expect(postings.elementAt(1).amount.symbol?.name, r'$');
     }
   });
-  test('parsing transaction with two spaces between unit and value', () {
+  test('parsing transaction with two spaces between symbol and value', () {
     List<String> transaction = List.empty(growable: true);
     transaction.add("2025-12-03");
     transaction.add(r"    food      €  0.4");
@@ -108,7 +108,7 @@ void main() {
     var result = toObjects(Ok(transaction));
     expect(result.runtimeType, Error<List<Transaction>>);
   });
-  test('parsing transaction with suffixed unit', () {
+  test('parsing transaction with following symbol', () {
     List<String> transaction = List.empty(growable: true);
     transaction.add("2025-12-03");
     transaction.add(r"    food      0.4 €");
@@ -126,7 +126,7 @@ void main() {
       expect(postings.first.amount.symbol.runtimeType, FollowingSymbol);
     }
   });
-    test('parsing transaction with preceding symbol', () {
+  test('parsing transaction with preceding symbol', () {
     List<String> transaction = List.empty(growable: true);
     transaction.add("2025-12-03");
     transaction.add(r"    food      $0.4");
@@ -138,7 +138,7 @@ void main() {
       expect(postings.first.amount.symbol.runtimeType, PrecedingSymbol);
     }
   });
-  test('returning Error when a suffix unit contains a space', () {
+  test('returning Error when a following symbol contains a space', () {
     List<String> transaction = List.empty(growable: true);
     transaction.add("2025-12-03");
     transaction.add(r"    food      0.4 b a");
@@ -146,7 +146,7 @@ void main() {
     var result = toObjects(Ok(transaction));
     expect(result.runtimeType, Error<List<Transaction>>);
   });
-  test('returning Error if an amount has a prefix and suffix unit', () {
+  test('returning Error if an amount has a preceding and following symbol', () {
     List<String> transaction = List.empty(growable: true);
     transaction.add("2025-12-03");
     transaction.add(r"    food     e0.4 b");
@@ -216,7 +216,7 @@ void main() {
       expect(postings.elementAt(1).amount.value, -200);
     }
   });
-  test('parsing transaction with prefixed unit', () {
+  test('parsing transaction with preceding symbol', () {
     List<String> transaction = List.empty(growable: true);
     transaction.add("2025-12-03");
     transaction.add(r"    food      € 0.4");
@@ -300,7 +300,7 @@ void main() {
       expect(parsedTransaction.postings.first.amount.symbol?.name, '€');
     }
   });
-  test('ignoring tags in Posting with separated unit and tag', () {
+  test('ignoring tags in Posting with separated symbol and tag', () {
     List<String> transaction = List.empty(growable: true);
     transaction.add("2025-04-30");
     transaction.add("    food      3  €  ; tag1 ");
