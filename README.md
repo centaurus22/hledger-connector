@@ -81,19 +81,20 @@ import 'package:hledger_connector/hledger_connector.dart';
 
 var transaction = Transaction(
   description: 'Example transaction',
-  date: DateTime(2026,1,1),
-  subTransactions: [
-    SubTransaction(
+  date: DateTime(2026, 1, 1),
+  postings: [
+    Posting(
       account: 'assets:cash',
-      amount: Amount(value: -5, unit: r'$')
+      amount: Amount(value: -5, symbol: PrecedingSymbol(r'$')),
     ),
-    SubTransaction(
+    Posting(
       account: 'expenses:food',
-      amount: Amount(value: 5, unit: r'$')
-    )
-]);
+      amount: Amount(value: 5, symbol: PrecedingSymbol(r'$')),
+    ),
+  ],
+);
 
-final writeResult = addTransaction(transaction, 'test.journal');
+final writeResult = addTransaction(transaction, 'example.journal');
 ```
 
 adds the following transaction to the journal:
@@ -107,9 +108,9 @@ adds the following transaction to the journal:
 You can read the information back with
 
 ```dart
-final readResult = readTransactions('test.journal');
+final readResult = readTransactions('example.journal');
 
-if (readResult is Success) {
+if (readResult is Ok<List<Transaction>>) {
   final transaction = readResult.value.first;
 }
 ```
