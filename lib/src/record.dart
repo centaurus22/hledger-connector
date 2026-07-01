@@ -40,7 +40,7 @@ class Amount {
 /// This can be optionally added to an amount. You probably want to do this.
 ///
 /// I represents a commodity symbol or a currency symbol.
-/// 
+///
 /// You cannot initialize this object directly. Instead, use one of the two
 /// subclasses: [PrecedingSymbol] where the unit or symbol stands
 /// in front of the numerical value, and [FollowingSymbol] where
@@ -57,7 +57,7 @@ sealed class Symbol {
 ///
 /// This represents a symbol that appears after the numerical value with no
 /// space between the number and the symbol.
-/// 
+///
 /// The other subclass is the [FollowingSymbol].
 class PrecedingSymbol extends Symbol {
   /// This requires the [name].
@@ -69,7 +69,7 @@ class PrecedingSymbol extends Symbol {
 /// This represents a symbol that appears before the numerical value with one
 /// space between the value and the symbol. It is useful for most currency
 /// symbols.
-/// 
+///
 /// The other subclass is the [FollowingSymbol].
 class FollowingSymbol extends Symbol {
   /// This requires the [name].

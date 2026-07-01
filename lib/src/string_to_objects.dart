@@ -2,16 +2,16 @@ import 'functions.dart';
 import 'record.dart';
 
 /// Use Case: Convert transactions to a list of [Transaction]s.
-Result<List<Transaction>> toObjects(Result<List<String>> transactions) {
+Result<List<Transaction>> stringToObjects(Result<List<String>> transactions) {
   switch (transactions) {
     case Ok<List<String>> _:
-      return _toJournalObject(transactions.value);
+      return _stringToObjects(transactions.value);
     case Error<List<String>> _:
       return Error(transactions.message);
   }
 }
 
-Result<List<Transaction>> _toJournalObject(List<String> lines) {
+Result<List<Transaction>> _stringToObjects(List<String> lines) {
   List<List<String>> transactions = List.empty(growable: true);
   List<String> transaction = List.empty(growable: true);
   int? firstChar;

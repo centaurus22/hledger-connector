@@ -28,3 +28,8 @@
     * Shorten the name of the `Success` object to just `Ok`.
     * Improve the naming of the primary functions and use cases.
     * Further improvements.
+
+## 0.5.0
+
+- Add a function to convert a list of transactions to a string containing the
+  corresponding journal entries.

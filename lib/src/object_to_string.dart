@@ -4,16 +4,16 @@ import 'functions.dart';
 import 'record.dart';
 
 /// Use Case: Convert a [Transaction] to a hledger journal entry.
-Result<String> toString(Result<Transaction> transaction) {
+Result<String> objectToString(Result<Transaction> transaction) {
   switch (transaction) {
     case Ok<Transaction> _:
-      return _toJournalString(transaction.value);
+      return _objectToString(transaction.value);
     case Error<Transaction> _:
       return Error(transaction.message);
   }
 }
 
-Result<String> _toJournalString(Transaction transaction) {
+Result<String> _objectToString(Transaction transaction) {
   String dateString = _formatDate(transaction.date);
   String description = _formatDescription(transaction.description);
   String postings = _formatPostings(transaction.postings);
