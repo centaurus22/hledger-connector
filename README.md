@@ -23,8 +23,6 @@ the LICENSE file for the full text.
 ### Planned features
 
 * Filter a List of Transactions by account names, dates etc.
-* Write a list of Transactions with one file access instead one access for
-  every Transaction.
 * Add a warning if a journal contains an ignored feature.
 
 ### List

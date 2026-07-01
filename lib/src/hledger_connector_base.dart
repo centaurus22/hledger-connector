@@ -23,8 +23,8 @@ Result<String> addTransaction(Transaction transaction, String file) {
   return writeToFile(objectToString(checkObject(transaction)), file);
 }
 
-/// Checks a list of [Transaction] for data errors, than converts it into
-/// hledger journal entry and appends it to a file.
+/// Checks a list of [Transaction]s for data errors, than converts it into
+/// hledger journal entries and append them to a file.
 ///
 /// If the file does not exist it creates a new one.
 ///
@@ -39,7 +39,7 @@ Result<String> addTransactions(List<Transaction> transactions, String file) {
   return writeToFile(objectsToString(checkObjects(Ok(transactions))), file);
 }
 
-/// Just checks a [Transaction] for data errors, than converts it into hledger
+/// Checks a [Transaction] for data errors, than converts it into hledger
 /// journal entry.
 ///
 /// The checks are:
@@ -65,7 +65,7 @@ Result<List<Transaction>> readTransactions(String file) {
   return checkObjects(stringToObjects(readFromFile(file)));
 }
 
-/// Just converts a [journal] to a list of [Transaction]s and than checks every
+/// Converts a [journal] to a list of [Transaction]s and than checks every
 /// [Transaction].
 ///
 /// The checks are:
