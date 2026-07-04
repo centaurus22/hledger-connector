@@ -1,3 +1,6 @@
+/// This represents a hledger journal entry
+/// 
+/// It contains a [date], optionally a [description] and a list of [postings].
 class Transaction {
   /// An optional description
   String? description;
