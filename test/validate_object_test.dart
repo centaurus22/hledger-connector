@@ -1,13 +1,13 @@
 import 'package:hledger_connector/src/record.dart';
 import 'package:test/test.dart';
 
-import 'package:hledger_connector/src/check_object.dart';
+import 'package:hledger_connector/src/validate_object.dart';
 
 void main() {
   test('transaction with no postings', () {
     var transaction = Transaction(date: DateTime(2026), postings: []);
-    var result = checkObject(transaction);
-    expect(result.runtimeType, Error<Transaction>);
+    var result = validateObject(transaction);
+    expect(result.runtimeType, Invalid);
   });
   test('unbalanced transaction', () {
     var transaction = Transaction(
@@ -17,8 +17,8 @@ void main() {
         Posting(account: 'expenses', amount: Amount(value: -5)),
       ],
     );
-    var result = checkObject(transaction);
-    expect(result.runtimeType, Error<Transaction>);
+    var result = validateObject(transaction);
+    expect(result.runtimeType, Invalid);
   });
   test('balanced transaction with floating point numbers', () {
     var transaction = Transaction(
@@ -28,8 +28,8 @@ void main() {
         Posting(account: 'expenses', amount: Amount(value: 0.000004)),
       ],
     );
-    var result = checkObject(transaction);
-    expect(result.runtimeType, Ok<Transaction>);
+    var result = validateObject(transaction);
+    expect(result.runtimeType, Valid);
   });
   test('balanced transaction with more than one symbol', () {
     var transaction = Transaction(
@@ -53,8 +53,8 @@ void main() {
         ),
       ],
     );
-    var result = checkObject(transaction);
-    expect(result.runtimeType, Ok<Transaction>);
+    var result = validateObject(transaction);
+    expect(result.runtimeType, Valid);
   });
   test('valid conversion transaction', () {
     var transaction = Transaction(
@@ -70,8 +70,8 @@ void main() {
         ),
       ],
     );
-    var result = checkObject(transaction);
-    expect(result.runtimeType, Ok<Transaction>);
+    var result = validateObject(transaction);
+    expect(result.runtimeType, Valid);
   });
   test('invalid multi-conversion transaction', () {
     var transaction = Transaction(
@@ -91,8 +91,8 @@ void main() {
         ),
       ],
     );
-    var result = checkObject(transaction);
-    expect(result.runtimeType, Error<Transaction>);
+    var result = validateObject(transaction);
+    expect(result.runtimeType, Invalid);
   });
   test('valid conversion transaction with one reduced value', () {
     var transaction = Transaction(
@@ -112,8 +112,8 @@ void main() {
         ),
       ],
     );
-    var result = checkObject(transaction);
-    expect(result.runtimeType, Ok<Transaction>);
+    var result = validateObject(transaction);
+    expect(result.runtimeType, Valid);
   });
   test('empty account string', () {
     var transaction = Transaction(
@@ -123,8 +123,8 @@ void main() {
         Posting(account: 'assets:cash', amount: Amount(value: -4333)),
       ],
     );
-    var realResult = checkObject(transaction);
-    expect(realResult.runtimeType, Error<Transaction>);
+    var realResult = validateObject(transaction);
+    expect(realResult.runtimeType, Invalid);
   });
   test('account string with two following spaces', () {
     var transaction = Transaction(
@@ -134,7 +134,7 @@ void main() {
         Posting(account: 'assets:cash', amount: Amount(value: -4333)),
       ],
     );
-    var realResult = checkObject(transaction);
-    expect(realResult.runtimeType, Error<Transaction>);
+    var realResult = validateObject(transaction);
+    expect(realResult.runtimeType, Invalid);
   });
 }

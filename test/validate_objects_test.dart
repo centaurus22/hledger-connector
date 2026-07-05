@@ -1,7 +1,7 @@
 import 'package:hledger_connector/src/record.dart';
 import 'package:test/test.dart';
 
-import 'package:hledger_connector/src/check_objects.dart';
+import 'package:hledger_connector/src/validate_objects.dart';
 
 void main() {
   test('Transaction list with data error', () {
@@ -9,9 +9,8 @@ void main() {
     transactions.add(
       Transaction(date: DateTime(2003, 12, 05), postings: List.empty()),
     );
-    final transactionResult = Ok(transactions);
-    final result = checkObjects(transactionResult);
-    expect(result.runtimeType, Error<List<Transaction>>);
+    final result = validateObjects(transactions);
+    expect(result.runtimeType, Invalid);
   });
   test('Transaction list without data error', () {
     List<Transaction> transactions = List.empty(growable: true);
@@ -24,13 +23,7 @@ void main() {
         ],
       ),
     );
-    final transactionResult = Ok(transactions);
-    final result = checkObjects(transactionResult);
-    expect(result.runtimeType, Ok<List<Transaction>>);
-  });
-  test('Error as input', () {
-    Error<List<Transaction>> value = Error('The file cannot be found.');
-    var result = checkObjects(value);
-    expect(result.runtimeType, Error<List<Transaction>>);
+    final result = validateObjects(transactions);
+    expect(result.runtimeType, Valid);
   });
 }

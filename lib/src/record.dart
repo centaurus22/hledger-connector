@@ -1,5 +1,5 @@
 /// This represents a hledger journal entry
-/// 
+///
 /// It contains a [date], optionally a [description] and a list of [postings].
 class Transaction {
   /// An optional description
@@ -79,37 +79,14 @@ class FollowingSymbol extends Symbol {
   FollowingSymbol(super.name);
 }
 
-/// A result of a function which can be a [Ok] or an [Error].
-///
-/// This is the sealed base class. Its children are used in functions that can
-/// return an [Error] instead of a of an expected value ([Ok])
-/// or additional [warnings].
-sealed class Result<T> {
-  /// A list of warnings.
-  final List<String> warnings = [];
+sealed class Result {
+  Result();
 }
 
-/// This is returned when functions are executed correctly.
-///
-/// It can contain additional [warnings].
-/// The sealed base class is the [Result]. The other [Result] ist an [Error].
-class Ok<T> extends Result<T> {
-  /// The embedded value.
-  final T value;
+class Valid extends Result {}
 
-  /// This requires the embedded [value].
-  Ok(this.value);
-}
+class Invalid extends Result {
+  final String error;
 
-/// This is returned when a parameter is not valid.
-///
-/// It can contain additional [warnings].
-/// The sealed base class ist the [Result]. The other [Result] ist an [Ok].
-/// when the function executed correctly.
-class Error<T> extends Result<T> {
-  /// The error message.
-  final String message;
-
-  /// This requires the error [message].
-  Error(this.message);
+  Invalid(this.error);
 }
