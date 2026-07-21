@@ -6,6 +6,7 @@ import 'string_to_objects.dart';
 import 'write_to_file.dart';
 import 'read_from_file.dart';
 import 'record.dart';
+import 'dart:io';
 
 /// Checks a [Transaction] for data errors, than converts it into hledger
 /// journal entry and appends it to a file.
@@ -17,8 +18,10 @@ import 'record.dart';
 /// * test if the [Transaction] contains any [Posting],
 /// * test if the [Transaction] is balanced.
 ///
-/// It requires the [Transaction] and a the [file] path. This returns [Ok] or
-/// [Error].
+/// Requires the [Transaction] and a the [file] path.
+/// Throws a [FormatException] if the [Transaction] has data errors.
+/// Throws an [ArgumentError] if the [file] path is empty or an
+/// [FileSystemException] if accessing the file fails for any other reason.
 void addTransaction(Transaction transaction, String file) {
   final validationResult = validateObject(transaction);
 
