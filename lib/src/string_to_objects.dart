@@ -6,10 +6,12 @@ Ok stringToObjects(List<String> lines) {
   List<List<String>> transactions = List.empty(growable: true);
   List<String> transaction = List.empty(growable: true);
   int? firstChar;
+  final List<String> warnings = [];
 
   for (var line in lines) {
     //filter lines with a comment
     if ([';', '#', '*'].contains(line.trimLeft()[0])) {
+      warnings.add('The comment in line "${line.trim()}" is ignored.');
       continue;
     }
 
@@ -27,7 +29,7 @@ Ok stringToObjects(List<String> lines) {
       transactions.sublist(1).map(_parseTransaction).toList()
         ..sort((a, b) => a.date.compareTo(b.date));
 
-  return Ok(transactions: parsedTransactions);
+  return Ok(transactions: parsedTransactions, warnings: warnings);
 }
 
 Transaction _parseTransaction(List<String> transaction) {

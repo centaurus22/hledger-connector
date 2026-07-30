@@ -327,4 +327,14 @@ void main() {
     var result = stringToObjects(transaction);
     expect(result.transactions.first.date, DateTime(2027, 8, 2));
   });
+  test('ignoring * comments', () {
+    List<String> transaction = List.empty(growable: true);
+    transaction.add("2026-01-04");
+    transaction.add("    food            3  €  ;  tag1 ");
+    transaction.add(" * I am a comment too");
+    transaction.add("    assets:bank   -3€ ");
+    var result = stringToObjects(transaction);
+    expect(result.warnings == null, false);
+    expect(result.warnings?.length, 1);
+  });
 }
