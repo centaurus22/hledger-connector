@@ -327,7 +327,7 @@ void main() {
     var result = stringToObjects(transaction);
     expect(result.transactions.first.date, DateTime(2027, 8, 2));
   });
-  test('ignoring * comments', () {
+  test('adding warnings when ignoring comments', () {
     List<String> transaction = List.empty(growable: true);
     transaction.add("2026-01-04");
     transaction.add("    food            3  €  ;  tag1 ");
