@@ -57,6 +57,9 @@ Posting _parsePosting(String line) {
   final account = lineParts[0];
   final amount = lineParts.sublist(1).join(' ');
 
+  // Todo: Regexp allows more than one values. Only the first one is processed.
+  // A semicolon in front of the value is interpreted as a symbol.
+  // This Should throw an error.
   final exp = RegExp(
     r'(?<preceding_symbol>[^0-9-]*)'
     r'(?<value>[-+]?[0-9][0-9]*\.?[0-9]*)'
