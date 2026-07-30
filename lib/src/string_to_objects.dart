@@ -2,7 +2,7 @@ import 'functions.dart';
 import 'record.dart';
 
 /// Use Case: Convert transactions to a list of [Transaction]s.
-List<Transaction> stringToObjects(List<String> lines) {
+Ok stringToObjects(List<String> lines) {
   List<List<String>> transactions = List.empty(growable: true);
   List<String> transaction = List.empty(growable: true);
   int? firstChar;
@@ -23,8 +23,11 @@ List<Transaction> stringToObjects(List<String> lines) {
   }
   transactions.add(transaction);
 
-  return transactions.sublist(1).map(_parseTransaction).toList()
-    ..sort((a, b) => a.date.compareTo(b.date));
+  final parsedTransactions =
+      transactions.sublist(1).map(_parseTransaction).toList()
+        ..sort((a, b) => a.date.compareTo(b.date));
+
+  return Ok(transactions: parsedTransactions);
 }
 
 Transaction _parseTransaction(List<String> transaction) {

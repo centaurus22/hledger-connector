@@ -98,10 +98,10 @@ String toJournalString(Transaction transaction) {
 /// [FileSystemException] if reading the file fails for any other reason.
 /// Throws a [FormatException] if the file content is not parsable or has data
 /// errors.
-List<Transaction> readTransactions(String file) {
+Ok readTransactions(String file) {
   try {
     final transactions = stringToObjects(readFromFile(file));
-    final validationResult = validateObjects(transactions);
+    final validationResult = validateObjects(transactions.transactions);
 
     switch (validationResult) {
       case Valid _:
@@ -125,9 +125,9 @@ List<Transaction> readTransactions(String file) {
 /// Requires the [journal] as a list of strings.
 /// Throws a [FormatException] if the journal is not parsable or has data
 /// errors.
-List<Transaction> toJournalObject(List<String> journal) {
+Ok toJournalObject(List<String> journal) {
   final translations = stringToObjects(journal);
-  final validationResult = validateObjects(translations);
+  final validationResult = validateObjects(translations.transactions);
 
   switch (validationResult) {
     case Valid _:

@@ -78,6 +78,13 @@ class FollowingSymbol extends Symbol {
   FollowingSymbol(super.name);
 }
 
+class Ok {
+  final List<String>? warnings;
+  final List<Transaction> transactions;
+
+  Ok({required this.transactions, this.warnings});
+}
+
 /// Represents the result of a [Transaction] validation.
 ///
 /// It can be either a [Valid] or an [Invalid] result.
