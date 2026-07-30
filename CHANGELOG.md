@@ -33,3 +33,11 @@
 
 - Add a function to convert a list of transactions to a string containing the
   corresponding journal entries.
+
+## 0.6.0
+
+- Remove the Error object and throw Errors and Exceptions instead. Keep the Ok
+  object as a default return value for some functions, to be able to attach
+  warnings to it.
+- Add warning when a comment is ignored.
+- Other improvements
