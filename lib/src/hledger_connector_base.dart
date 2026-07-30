@@ -47,8 +47,9 @@ void addTransaction(Transaction transaction, String file) {
 /// * test if the [Transaction] contains any [Posting],
 /// * test if the [Transaction] is balanced.
 ///
-/// It requires the [Transaction] and a the [file] path. This returns [Ok] or
-/// [Error].
+/// Throws a [FormatException] if the [Transaction] has data errors.
+/// Throws an [ArgumentError] if the [file] path is empty or an
+/// [FileSystemException] if accessing the file fails for any other reason.
 void addTransactions(List<Transaction> transactions, String file) {
   final validationResult = validateObjects(transactions);
 
@@ -72,7 +73,7 @@ void addTransactions(List<Transaction> transactions, String file) {
 /// * test if the [Transaction] contains any [Posting],
 /// * test if the [Transaction] is balanced.
 ///
-/// It requires the [Transaction] and returns [Ok] or [Error].
+/// Throws a [FormatException] if the [Transaction] has data errors.
 String toJournalString(Transaction transaction) {
   final validationResult = validateObject(transaction);
 
@@ -92,15 +93,19 @@ String toJournalString(Transaction transaction) {
 /// * test if the [Transaction] contains any [Posting],
 /// * test if the [Transaction] is balanced.
 ///
-/// It requires the [file] path and returns [Ok] or [Error].
+/// Requires the [file] path.
+/// Throws an [ArgumentError] if the [file] path is empty or an
+/// [FileSystemException] if reading the file fails for any other reason.
+/// Throws a [FormatException] if the file content is not parsable or has data
+/// errors.
 List<Transaction> readTransactions(String file) {
   try {
-    final translations = stringToObjects(readFromFile(file));
-    final validationResult = validateObjects(translations);
+    final transactions = stringToObjects(readFromFile(file));
+    final validationResult = validateObjects(transactions);
 
     switch (validationResult) {
       case Valid _:
-        return translations;
+        return transactions;
       case Invalid _:
         throw FormatException(validationResult.error);
     }
@@ -117,7 +122,9 @@ List<Transaction> readTransactions(String file) {
 /// * test if the [Transaction] contains any [Posting],
 /// * test if the [Transaction] is balanced.
 ///
-/// It requires the [journal] and returns [Ok] or [Error].
+/// Requires the [journal] as a list of strings.
+/// Throws a [FormatException] if the journal is not parsable or has data
+/// errors.
 List<Transaction> toJournalObject(List<String> journal) {
   final translations = stringToObjects(journal);
   final validationResult = validateObjects(translations);

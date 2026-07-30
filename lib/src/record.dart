@@ -1,6 +1,6 @@
-/// This represents a hledger journal entry
+/// Represents a hledger journal entry
 ///
-/// It contains a [date], optionally a [description] and a list of [postings].
+/// Contains a [date], optionally a [description] and a list of [postings].
 class Transaction {
   /// An optional description
   String? description;
@@ -8,15 +8,14 @@ class Transaction {
   /// The date of the [Transaction]
   DateTime date;
 
-  /// A list of [Posting]s, this [Transaction] is composed of.
+  /// A [Transaction] is composed of a list of [Posting]s.
   List<Posting> postings;
 
-  /// Requires a [date], a list of [Posting]s and an optional
-  /// description.
+  /// Requires a [date], a list of [Posting]s and an optional description.
   Transaction({this.description, required this.date, required this.postings});
 }
 
-/// A [Transaction] is composed of two or more of this.
+/// A [Transaction] is composed of two or more [Posting]s.
 class Posting {
   /// The [account] the units are transferred from or to.
   String account;
@@ -40,14 +39,14 @@ class Amount {
   Amount({required this.value, this.symbol});
 }
 
-/// This can be optionally added to an amount. You probably want to do this.
+/// Can be optionally added to an amount. You probably want to do this.
 ///
-/// I represents a commodity symbol or a currency symbol.
+/// Represents a commodity symbol or a currency symbol.
 ///
-/// You cannot initialize this object directly. Instead, use one of the two
+/// Cannot be initialized directly. Instead, use one of the two
 /// subclasses: [PrecedingSymbol] where the unit or symbol stands
-/// in front of the numerical value, and [FollowingSymbol] where
-/// the symbol appears after the number.
+/// in front of the numerical value, or [FollowingSymbol] where
+/// the symbol appears after the numerical value.
 sealed class Symbol {
   /// The actual symbol as [String].
   String name;
@@ -58,7 +57,7 @@ sealed class Symbol {
 
 /// Child class of the [Symbol].
 ///
-/// This represents a symbol that appears after the numerical value with no
+/// Represents a symbol that appears after the numerical value with no
 /// space between the number and the symbol.
 ///
 /// The other subclass is the [FollowingSymbol].
@@ -69,7 +68,7 @@ class PrecedingSymbol extends Symbol {
 
 /// Child class of the [Symbol].
 ///
-/// This represents a symbol that appears before the numerical value with one
+/// Represents a symbol that appears before the numerical value with one
 /// space between the value and the symbol. It is useful for most currency
 /// symbols.
 ///
@@ -79,12 +78,19 @@ class FollowingSymbol extends Symbol {
   FollowingSymbol(super.name);
 }
 
+/// Represents the result of a [Transaction] validation.
+///
+/// It can be either a [Valid] or an [Invalid] result.
 sealed class Result {
   Result();
 }
 
+/// Represents the valid result of a [Transaction] validation.
 class Valid extends Result {}
 
+/// Represents the invalid result of a [Transaction] validation.
+///
+/// It requires a string containing the [error] message.
 class Invalid extends Result {
   final String error;
 
