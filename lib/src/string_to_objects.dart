@@ -48,7 +48,7 @@ Transaction _parseTransaction(List<String> transaction) {
 
 Posting _parsePosting(String line) {
   final lineParts = _splitAndClean(line, '  ');
-  final baseErrorMessage = 'Posting in line "$line" is not parsable.';
+  final baseErrorMessage = 'Posting in line "${line.trim()}" is not parsable.';
 
   if (lineParts.length == 1) {
     return throw FormatException(baseErrorMessage);
