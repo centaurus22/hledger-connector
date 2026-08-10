@@ -37,8 +37,8 @@ on [hledger.org](hledger.org).
 | Feature | Supported | Future dev?|
 |---------|-----------|--------|
 | Basic transaction | ✅ Supported |
+| Symbols in double quotes | ❌ Not Supported | 🗒️ On request |
 | Tag | 👻 Ignored | 🗒️ On request |
-| Group values by spaces | ❌ Not Supported | 🗒️ On request |
 | Pending status | ❌ Not Supported | 🗒️ On request |
 | Cleared status | ❌ Not Supported | 🗒️ On request |
 | (code) | ❌ Not Supported | 🗒️ On request |

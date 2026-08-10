@@ -60,6 +60,9 @@ Posting _parsePosting(String line) {
   // Todo: Regexp allows more than one values. Only the first one is processed.
   // A semicolon in front of the value is interpreted as a symbol.
   // This Should throw an error.
+
+  // transaction with comment
+  //^(?<preceding_symbol>[^0-9;@*]*)[ ]*(?<value>[-+]?[0-9][0-9]*\.?[0-9]*)[ ]*(?<following_symbol>[^0-9;@*]*)[ ]*(?:;.*?)?$
   final exp = RegExp(
     r'(?<preceding_symbol>[^0-9-]*)'
     r'(?<value>[-+]?[0-9][0-9]*\.?[0-9]*)'
