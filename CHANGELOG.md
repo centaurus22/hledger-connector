@@ -41,3 +41,8 @@
   warnings to it.
 - Add warning when a comment is ignored.
 - Other improvements
+
+## 0.6.1
+
+- Fix regexp which parses the amount and symbol. In some cases the symbol could
+not be parsed correctly.
