@@ -3,7 +3,8 @@ A dart library to connect with the
 
 After releasing this version I will port the whole library to Python because I
 want to make it (and other software that will utilize this lib) available to a
-larger variety of operating systems . 
+larger variety of operating systems. Please watch my GitHub profile for new 
+repositories. 
 
 Please contact me if you need more features. Bugs will continue to be fixed.
 
