@@ -269,7 +269,7 @@ void main() {
     expect(parsedTransaction.postings.first.account, 'food');
     expect(parsedTransaction.postings.first.amount.value, 3);
     expect(parsedTransaction.postings.first.amount.symbol?.name, '€');
-    //expect(result.warnings.length, 1);
+    expect(result.warnings!.length, 1);
   });
   test('sorting two transactions by date', () {
     List<String> transaction = List.empty(growable: true);
@@ -336,5 +336,12 @@ void main() {
     var result = stringToObjects(transaction);
     expect(result.warnings == null, false);
     expect(result.warnings?.length, 1);
+  });
+  test('; as preceding symbol is throwing an error', () {
+    List<String> transaction = List.empty(growable: true);
+    transaction.add("2026-01-04");
+    transaction.add("    food           ; 3");
+    transaction.add("    assets:bank   -3");
+    expect(() => stringToObjects(transaction), throwsFormatException);
   });
 }
